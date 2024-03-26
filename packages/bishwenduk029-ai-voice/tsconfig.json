@@ -1,0 +1,8 @@
+{
+  "extends": "@bishwenduk029/tsconfig/react-library.json",
+  "compilerOptions": {
+    "target": "ES2018"
+  },
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
+}

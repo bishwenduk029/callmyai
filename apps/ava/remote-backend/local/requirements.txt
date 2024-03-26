@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+-e git+https://github.com/bishwenduk029/MeloTTS.git#egg=MeloTTS
+faster-whisper
