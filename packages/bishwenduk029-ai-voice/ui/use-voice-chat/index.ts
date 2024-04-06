@@ -1,25 +1,44 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   type ReactRealTimeVADOptions,
   useMicVAD,
   utils,
 } from "@ricky0123/vad-react";
 
+interface VoiceChatOptions {
+  api: string;
+  transcribeAPI: string;
+  body: any;
+  initialMessages: any;
+  speakerPause: number;
+  onSpeechCompletion: () => Promise<void>;
+}
+
+export type UseVoiceChatHelpers = {
+  speaking: boolean;
+  listening: boolean;
+  thinking: boolean;
+  initialized: boolean;
+  messages: any;
+  setMessages: any;
+};
+
 function useVoiceChat({
   api,
   transcribeAPI,
+  body,
+  initialMessages,
   speakerPause,
-}: {
-  api: string;
-  transcribeAPI: string;
-  speakerPause: number;
-}) {
+  onSpeechCompletion: onCompletion,
+}: VoiceChatOptions): UseVoiceChatHelpers {
   const [speaking, setSpeaking] = useState(false);
   const [thinking, setThinking] = useState(false);
   const [listening, setListening] = useState(false);
+  const [messages, setMessages] = useState(initialMessages);
   const [accumulatedText, setAccumulatedText] = useState<string>("");
   const [speechEndTimeout, setSpeechEndTimeout] = useState<any | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement>();
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const newAudio = new Audio();
@@ -43,7 +62,6 @@ function useVoiceChat({
     modelURL: "/silero_vad.onnx",
     workletURL: "/vad.worklet.bundle.min.js",
     onSpeechStart: () => {
-      console.log("Speech Start detected", speechEndTimeout);
       setSpeaking(false);
       setThinking(false);
       setListening(true);
@@ -56,8 +74,7 @@ function useVoiceChat({
     },
     // Inside the `onSpeechEnd` callback
     onSpeechEnd: async (audio: Float32Array) => {
-      console.log("Speech End detected", speechEndTimeout);
-      let updatedAccumulatedText = accumulatedText
+      let updatedAccumulatedText = accumulatedText;
       const wavBuffer = utils.encodeWAV(audio);
       const blob = new Blob([wavBuffer], { type: "audio/mpeg" });
 
@@ -72,7 +89,6 @@ function useVoiceChat({
       }
 
       response.json().then(({ transcript }: { transcript: string }) => {
-        console.log("In speech end transcript is", transcript);
         if (transcript) {
           updatedAccumulatedText = accumulatedText + " " + transcript;
           setAccumulatedText(updatedAccumulatedText);
@@ -97,8 +113,10 @@ function useVoiceChat({
       setListening(false);
       setThinking(true);
       await think(accumulatedText);
+      setSpeaking(false);
       setAccumulatedText("");
       setListening(true);
+      await onCompletion();
     }
   }
 
@@ -106,7 +124,8 @@ function useVoiceChat({
     const response = await fetch(api, {
       method: "POST",
       body: JSON.stringify({
-        message: text.trim(),
+        ...body,
+        messages: [...messages, { role: "user", content: text.trim() }],
       }),
     });
 
@@ -171,7 +190,18 @@ function useVoiceChat({
     return formData;
   };
 
-  return [speaking, listening, thinking, vad.listening] as const;
+  useEffect(() => {
+    setInitialized(vad.listening);
+  }, [vad]);
+
+  return {
+    speaking,
+    listening,
+    thinking,
+    initialized,
+    messages,
+    setMessages,
+  } as UseVoiceChatHelpers;
 }
 
 export default useVoiceChat;

@@ -16,9 +16,6 @@ export default defineConfig([
   {
     entry: ['server/index.ts'],
     outDir: 'server/dist',
-    banner: {
-      js: "'use server'",
-    },
     format: ['cjs', 'esm'],
     external: ['react'],
     dts: true,
