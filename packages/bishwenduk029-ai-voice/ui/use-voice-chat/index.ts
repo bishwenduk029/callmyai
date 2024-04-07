@@ -108,7 +108,6 @@ function useVoiceChat({
   } as Partial<ReactRealTimeVADOptions>);
 
   async function processSpeechEnd(accumulatedText: string) {
-    console.log("About to start thinking", accumulatedText);
     if (accumulatedText.length > 0) {
       setListening(false);
       setThinking(true);
@@ -135,6 +134,7 @@ function useVoiceChat({
     }
 
     setThinking(false);
+    setListening(false);
     setSpeaking(true);
 
     const reader: ReadableStreamDefaultReader<Uint8Array> | undefined =
