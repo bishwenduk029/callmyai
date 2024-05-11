@@ -2,7 +2,7 @@ import OpenAI from 'openai'
 
 const speechBackend = new OpenAI({
   baseURL: process.env.OPENAI_SPEECH_TO_TEXT_URL,
-})
+});
 
 export async function POST(req: Request) {
   const formData = await req.formData()

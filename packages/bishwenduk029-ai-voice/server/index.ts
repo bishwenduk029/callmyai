@@ -1,9 +1,13 @@
-import { ElevenLabsStreamingSpeechResponse } from "./elevenlabs.speech.stream";
-import { OpenAIStreamingSpeechResponse } from "./openai.speech.stream";
-import { DeepgramStreamingSpeechResponse } from "./deepgram.speech.stream";
+import { streamSpeech } from '../core/generate-speech/stream-speech';
+import { deepgramSpeech } from '../deepgram/deepgram-provider';
+import { elevenlabsSpeech } from '../elevenlabs/elevenlabs-provider';
+import { playhtSpeech } from '../playht/playht-provider';
+import { openaiSpeech } from '../openai/openai-provider';
 
 export {
-  ElevenLabsStreamingSpeechResponse,
-  OpenAIStreamingSpeechResponse,
-  DeepgramStreamingSpeechResponse,
+  streamSpeech,
+  deepgramSpeech,
+  elevenlabsSpeech,
+  playhtSpeech,
+  openaiSpeech
 };

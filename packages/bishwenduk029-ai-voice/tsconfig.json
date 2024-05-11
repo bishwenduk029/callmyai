@@ -1,8 +1,11 @@
 {
   "extends": "@bishwenduk029/tsconfig/react-library.json",
   "compilerOptions": {
-    "target": "ES2018"
+    "lib": [
+      "ES2022", "DOM"
+    ],
+    "target": "ES2022"
   },
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
+  "exclude": ["dist", "build", "node_modules"],
 }
