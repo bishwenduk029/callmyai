@@ -1,23 +1,17 @@
 import 'server-only'
-import { OpenAIStream } from 'ai'
-import OpenAI from 'openai'
+import { ollama, createOllama } from 'ollama-ai-provider'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { Database } from '@/lib/db_types'
-import { ElevenLabsStreamingSpeechResponse } from '@bishwenduk029/ai-voice/server'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
+import { streamText } from 'ai'
+import { openaiSpeech, playhtSpeech, streamSpeech } from '@bishwenduk029/ai-voice/server'
 
 export const runtime = 'edge'
 
-const openai = new OpenAI({
-  baseURL: process.env.OPENAI_API_URL,
-  apiKey: process.env.OPENAI_API_KEY
-})
-
-const DEEPGRAM_API_KEY = process.env.TTS_ELEVENLABS_API_KEY
-const DEEPGRAM_VOICE_ID = process.env.TTS_ELEVENLABS_VOICEID
+const model = ollama('llama3:latest')
 
 export async function POST(req: Request) {
   const cookieStore = cookies()
@@ -26,22 +20,20 @@ export async function POST(req: Request) {
   })
   const json = await req.json()
   const { messages } = json
-  const userId = (await auth({ cookieStore }))?.user.id
+  // const userId = (await auth({ cookieStore }))?.user.id
 
-  if (!userId) {
-    return new Response('Unauthorized', {
-      status: 401
-    })
-  }
+  // if (!userId) {
+  //   return new Response('Unauthorized', {
+  //     status: 401
+  //   })
+  // }
 
   const systemPrompt = `
   Your role is to act as a friendly human assistant by the user preferred name. Your given name is Nova.
   `
 
-  // @ts-ignore
-  const res = await openai.chat.completions.create({
-    // @ts-ignore
-    model: process.env.OPENAI_MODEL,
+  const result = await streamText({
+    model,
     messages: [
       {
         role: 'system',
@@ -51,42 +43,36 @@ export async function POST(req: Request) {
         role: message.role,
         content: message.content
       }))
-    ],
-    temperature: 0.4,
-    stream: true
+    ]
   })
 
-  const textStream = OpenAIStream(res, {
-    onCompletion: async completion => {
-      const title = json.messages[0].content.substring(0, 100)
-      const id = json.id ?? nanoid()
-      const createdAt = Date.now()
-      const path = `/chat/${id}`
-      const payload = {
-        id,
-        title,
-        userId,
-        createdAt,
-        path,
-        messages: [
-          ...messages,
-          {
-            content: completion,
-            role: 'assistant'
-          }
-        ]
-      }
-      // Insert chat into database.
-      await supabase.from('chats').upsert({ id, payload }).throwOnError()
-    }
-  })
+  // OpenAI - env:OPENAI_API_KEY
+  const speechModel = openaiSpeech(
+    'tts-1',
+    'nova'
+  )
+
+  // ElevenLabsIO - env:ELEVENLABS_API_KEY
+  // const speechModel = elevenlabsSpeech(
+  //   'eleven_turbo_v2',
+  //   'DIBkDE5u33APYlfhjihh'
+  // )
+
+    // PlayHt - env:PLAYHT_API_KEY
+  // const speechModel = playhtSpeech(
+  //   'PlayHT2.0-turbo',
+  //   'oiozxjvmdFRSqTvbKm2tL2TvMr03',
+  //   "s3://voice-cloning-zero-shot/1afba232-fae0-4b69-9675-7f1aac69349f/delilahsaad/manifest.json"
+  // )
+
+  // Deepgram - env:DEEPGRAM_API_KEY
+  // const speechModel = deepgramSpeech("aura-asteria-en")
 
   try {
-    return new ElevenLabsStreamingSpeechResponse(
-      textStream,
-      DEEPGRAM_API_KEY || '',
-      DEEPGRAM_VOICE_ID
-    )
+    const speech = await streamSpeech(speechModel)(result.textStream)
+    return new Response(speech, {
+      headers: { 'Content-Type': 'audio/mpeg' }
+    })
   } catch (error) {
     console.log(error)
     return new Response(null, {

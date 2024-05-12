@@ -31,23 +31,23 @@ export async function generateMetadata({
   }
 }
 
-export default async function ChatPage({ params }: ChatPageProps) {
-  const cookieStore = cookies()
-  const session = await auth({ cookieStore })
+export default async function ChatPage() {
+  // const cookieStore = cookies()
+  // const session = await auth({ cookieStore })
 
-  if (!session?.user) {
-    redirect(`/sign-in?next=/chat/${params.id}`)
-  }
+  // if (!session?.user) {
+  //   redirect(`/sign-in?next=/chat/${params.id}`)
+  // }
 
-  const chat = await getChat(params.id)
+  // const chat = await getChat(params.id)
 
-  if (!chat) {
-    notFound()
-  }
+  // if (!chat) {
+  //   notFound()
+  // }
 
-  if (chat?.userId !== session?.user?.id) {
-    notFound()
-  }
+  // if (chat?.userId !== session?.user?.id) {
+  //   notFound()
+  // }
 
-  return <Chat id={chat.id} initialMessages={chat.messages} />
+  return <Chat id={"2"} initialMessages={[]} />
 }
