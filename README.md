@@ -1,24 +1,47 @@
 # AI-Voice
 
-The AI voice SDK is a library for easily integrating AI powered streaming voice and transcriptions into your AI applications. Build low latency voice chatbots.
+## Description
+Inspired by Vercel's Language Model Specification, this is a proposal for introducing a Speech Model Specification to streamline the integration of various speech providers into our platform. This specification aims to provide a standardized interface for interacting with different speech models, eliminating the complexity of dealing with unique APIs and reducing the risk of vendor lock-in.
+
+## Problem Statement
+Currently, there are numerous speech providers available, each with its own distinct method for interfacing with their models. This lack of standardization complicates the process of switching providers and increases the likelihood of vendor lock-in. Developers are required to learn and implement different APIs for each provider, leading to increased development time and maintenance overhead.
+
+The open-source community has created the following providers:
+
+- OpenAI Provider (@bishwenduk029-ai-voice/openai)
+
+- Elevenlabs Provider (@bishwenduk029-ai-voice/elevenlabs)
+
+- Deepgram Provider (@bishwenduk029-ai-voice/deepgram)
+
+- PlayHt Provider (@bishwenduk029-ai-voice/playht)
 
 ## Features
 
 1. React Hook `useVoiceChat` for easy transcription and streaming voice chat in client side.
-2. Streaming Speech response for various AI voice providers like OpenAI, Elevenlabs, ELEVENLABSs and more coming soon.
-   1. ElevenLabsStreamingSpeechResponse
-   2. ELEVENLABSStreamingSpeechResponse
-3. Works well with streaming text responses generated using ai package from [Vercel](https://vercel.com/).
+2. Consistent API for streaming speech response from various AI speech providers.
+3. Works well with `streamText` from [Vercel AI SDK](https://sdk.vercel.ai/docs/ai-sdk-core/providers-and-models).
 
 ## Installation
 
 ```sh
 pnpm install @bishwenduk029/ai-voice
 ```
+![alt text](spec_v1.png)
 
 ## Usage
 
-### Client Side setup
+### Client Side React Hook
+🎙️ Real-Time Speech Transcription React Hook
+Seamlessly integrate real-time speech transcription into your React applications with this powerful and efficient hook! 🚀
+
+✨ Hook Capabilities
+
+- 🎤 Detect human speech end or silence using the robust @ricky0123/vad-react library
+- ⏱️ Intelligently debounce speech input, ensuring continuous recording and transcription as long as the user speaks within a configurable time frame (e.g., 500ms)
+- 🗣️ Gracefully handle speech interruptions, allowing users to pause and resume speaking naturally
+- 🌐 Efficiently trigger REST calls for transcription, optimizing performance by waiting for the user to pause before sending requests
+- 🔌 Easy to integrate into your existing React projects, with a simple and intuitive API
 ```ts
 ...
 import { useVoiceChat } from '@bishwenduk029/ai-voice/ui'
@@ -72,20 +95,14 @@ export default function Chat({ id, initialMessages, className }: ChatProps) {
 ```ts
 import 'server-only'
 ...
-import { OpenAIStream } from 'ai'
-import OpenAI from 'openai'
-import { ElevenLabsStreamingSpeechResponse } from '@bishwenduk029/ai-voice/server'
+import { streamText } from 'ai'
+import { ollama, createOllama } from 'ollama-ai-provider'
+import { openaiSpeech, playhtSpeech, streamSpeech } from '@bishwenduk029/ai-voice/server'
 ...
 
 export const runtime = 'edge'
 
-const openai = new OpenAI({
-  baseURL: process.env.OPENAI_API_URL,
-  apiKey: process.env.OPENAI_API_KEY
-})
-
-const ELEVENLABS_API_KEY = process.env.TTS_ELEVENLABS_API_KEY
-const ELEVENLABS_VOICE_ID = process.env.TTS_ELEVENLABS_VOICEID
+const model = ollama('llama3:latest')
 
 export async function POST(req: Request) {
   const cookieStore = cookies()
@@ -94,22 +111,20 @@ export async function POST(req: Request) {
   })
   const json = await req.json()
   const { messages } = json
-  const userId = (await auth({ cookieStore }))?.user.id
+  // const userId = (await auth({ cookieStore }))?.user.id
 
-  if (!userId) {
-    return new Response('Unauthorized', {
-      status: 401
-    })
-  }
+  // if (!userId) {
+  //   return new Response('Unauthorized', {
+  //     status: 401
+  //   })
+  // }
 
   const systemPrompt = `
   Your role is to act as a friendly human assistant by the user preferred name. Your given name is Nova.
   `
 
-  // @ts-ignore
-  const res = await openai.chat.completions.create({
-    // @ts-ignore
-    model: process.env.OPENAI_MODEL,
+  const result = await streamText({
+    model,
     messages: [
       {
         role: 'system',
@@ -119,42 +134,36 @@ export async function POST(req: Request) {
         role: message.role,
         content: message.content
       }))
-    ],
-    temperature: 0.4,
-    stream: true
+    ]
   })
 
-  const textStream = OpenAIStream(res, {
-    onCompletion: async completion => {
-      const title = json.messages[0].content.substring(0, 100)
-      const id = json.id ?? nanoid()
-      const createdAt = Date.now()
-      const path = `/chat/${id}`
-      const payload = {
-        id,
-        title,
-        userId,
-        createdAt,
-        path,
-        messages: [
-          ...messages,
-          {
-            content: completion,
-            role: 'assistant'
-          }
-        ]
-      }
-      // Insert chat into database.
-      await supabase.from('chats').upsert({ id, payload }).throwOnError()
-    }
-  })
+  // OpenAI - env:OPENAI_API_KEY
+  const speechModel = openaiSpeech(
+    'tts-1',   //openai_speech_model
+    'nova'     //openai_voice_id
+  )
+
+  // ElevenLabsIO - env:ELEVENLABS_API_KEY
+  // const speechModel = elevenlabsSpeech(
+  //   'eleven_turbo_v2',   //elevenlabs_speech_model
+  //   'DIBkDE5u33APYlfhjihh' //elevenlabs_voice_id
+  // )
+
+    // PlayHt - env:PLAYHT_API_KEY
+  // const speechModel = playhtSpeech(
+  //   'PlayHT2.0-turbo', //playht_speech_model
+  //   '<your-playht-user-id>',  
+  //   "s3://voice-cloning-zero-shot/1afba232-fae0-4b69-9675-7f1aac69349f/delilahsaad/manifest.json"   //playht_voice_id
+  // )
+
+  // Deepgram - env:DEEPGRAM_API_KEY
+  // const speechModel = deepgramSpeech("aura-asteria-en")
 
   try {
-    return new ElevenLabsStreamingSpeechResponse(
-      textStream,
-      ELEVENLABS_API_KEY || '',
-      ELEVENLABS_VOICE_ID
-    )
+    const speech = await streamSpeech(speechModel)(result.textStream)
+    return new Response(speech, {
+      headers: { 'Content-Type': 'audio/mpeg' }
+    })
   } catch (error) {
     console.log(error)
     return new Response(null, {
@@ -163,41 +172,12 @@ export async function POST(req: Request) {
   }
 }
 ```
-`/api/transcribe`
-```ts
-import OpenAI from 'openai'
-
-const speechBackend = new OpenAI({
-  baseURL: process.env.OPENAI_SPEECH_TO_TEXT_URL,
-})
-
-export async function POST(req: Request) {
-  const formData = await req.formData()
-
-  try {
-    // Create transcription from a video file
-    const transcriptionResponse =
-      await speechBackend.audio.transcriptions.create({
-        // @ts-ignore
-        file: formData.get('audio'),
-        model: 'whisper-1',
-        language: 'en'
-      })
-
-    const transcript = transcriptionResponse?.text
-
-    // Return the transcript if no inappropriate content is detected
-    return new Response(JSON.stringify({ transcript }), {
-      status: 200
-    })
-  } catch (error) {
-    console.error('server error', error)
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
-      status: 500
-    })
-  }
-}
-```
 
 ## Limitations
 Currently the speech streaming only works for english text streams. Multi-lingual support in future.
+
+## Roadmap
+- [x] Speech Model Specification Done
+- [ ] Improve the implementation of sentence-boundary detection algorithm for the text stream to sentence stream conversion
+- [ ] Add more tests
+- [ ] Enhance the specification to also take case of WebSocket-based Speech Providers
