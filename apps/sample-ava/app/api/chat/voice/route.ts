@@ -48,21 +48,21 @@ export async function POST(req: Request) {
 
   // OpenAI - env:OPENAI_API_KEY
   const speechModel = openaiSpeech(
-    'tts-1',
-    'nova'
+    'tts-1',   //openai_speech_model
+    'nova'     //openai_voice_id
   )
 
   // ElevenLabsIO - env:ELEVENLABS_API_KEY
   // const speechModel = elevenlabsSpeech(
-  //   'eleven_turbo_v2',
-  //   'DIBkDE5u33APYlfhjihh'
+  //   'eleven_turbo_v2',   //elevenlabs_speech_model
+  //   'DIBkDE5u33APYlfhjihh' //elevenlabs_voice_id
   // )
 
     // PlayHt - env:PLAYHT_API_KEY
   // const speechModel = playhtSpeech(
-  //   'PlayHT2.0-turbo',
-  //   'oiozxjvmdFRSqTvbKm2tL2TvMr03',
-  //   "s3://voice-cloning-zero-shot/1afba232-fae0-4b69-9675-7f1aac69349f/delilahsaad/manifest.json"
+  //   'PlayHT2.0-turbo', //playht_speech_model
+  //   '<your-playht-user-id>',  
+  //   "s3://voice-cloning-zero-shot/1afba232-fae0-4b69-9675-7f1aac69349f/delilahsaad/manifest.json"   //playht_voice_id
   // )
 
   // Deepgram - env:DEEPGRAM_API_KEY
