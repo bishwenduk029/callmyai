@@ -7,7 +7,7 @@ import { Database } from '@/lib/db_types'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 import { streamText } from 'ai'
-import { openaiSpeech, playhtSpeech, streamSpeech } from '@bishwenduk029/ai-voice/server'
+import { openaiSpeech, playhtSpeech, streamSpeech, createOpenAI } from '@bishwenduk029/ai-voice/server'
 
 export const runtime = 'edge'
 
@@ -47,10 +47,10 @@ export async function POST(req: Request) {
   })
 
   // OpenAI - env:OPENAI_API_KEY
-  const speechModel = openaiSpeech(
-    'tts-1',   //openai_speech_model
-    'nova'     //openai_voice_id
-  )
+  const speechModel =createOpenAI({
+    baseURL: "http://localhost:8002",
+    voiceId: "EN-Default"
+  })
 
   // ElevenLabsIO - env:ELEVENLABS_API_KEY
   // const speechModel = elevenlabsSpeech(
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
   // const speechModel = deepgramSpeech("aura-asteria-en")
 
   try {
-    const speech = await streamSpeech(speechModel)(result.textStream)
+    const speech = await streamSpeech(speechModel.speech("tts-1"))(result.textStream)
     return new Response(speech, {
       headers: { 'Content-Type': 'audio/mpeg' }
     })

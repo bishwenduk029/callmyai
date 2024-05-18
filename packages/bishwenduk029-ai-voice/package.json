@@ -39,6 +39,9 @@
     "@ai-sdk/provider-utils": "^0.0.6",
     "@ricky0123/vad-react": "^0.0.22",
     "ai": "3.1.5",
+    "natural": "^7.0.5",
+    "nltk": "^0.0.1",
+    "node-emoji": "^2.1.3",
     "zod": "^3.23.8"
   },
   "exports": {
