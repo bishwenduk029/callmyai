@@ -3,7 +3,6 @@
 import { useChat, type Message } from 'ai/react'
 
 import { cn } from '@/lib/utils'
-import { ChatList } from '@/components/chat-list'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
 import ChatPanel from './chat-panel'
@@ -38,7 +37,7 @@ export default function Chat({ id, initialMessages, className }: ChatProps) {
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
         {messages.length ? (
           <>
-            <ChatList messages={messages} />
+            
             <ChatScrollAnchor trackVisibility={initialized} />
           </>
         ) : (

@@ -24,8 +24,9 @@ export type UseVoiceChatHelpers = {
     start: () => void;
     toggle: () => void;
 };
-  setStartRecording: any;
   text: string;
+  isTranscribing: boolean;
+  setAccumulatedText: any;
 };
 
 function useTranscription({
@@ -33,11 +34,10 @@ function useTranscription({
   speakerPause = 60000,
   onSpeechCompletion: onCompletion,
 }: VoiceChatOptions): UseVoiceChatHelpers {
-  const [startRecording, setStartRecording] = useState(false);
   const [listening, setListening] = useState(false);
   const [accumulatedText, setAccumulatedText] = useState<string>("");
   const [speechEndTimeout, setSpeechEndTimeout] = useState<any | null>(null);
-  const [initialized, setInitialized] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
 
   const vad: {
     listening: boolean;
@@ -56,6 +56,7 @@ function useTranscription({
     modelURL: "/silero_vad.onnx",
     workletURL: "/vad.worklet.bundle.min.js",
     onSpeechStart: () => {
+      console.log("Yes I deteted speech start and I am processing the speech")
       setListening(true);
 
       if (speechEndTimeout) {
@@ -65,14 +66,18 @@ function useTranscription({
     },
     // Inside the `onSpeechEnd` callback
     onSpeechEnd: async (audio: Float32Array) => {
+      console.log("Yes I deteted speech end and I am processing the speech")
       let updatedAccumulatedText = accumulatedText;
       const wavBuffer = utils.encodeWAV(audio);
       const blob = new Blob([wavBuffer], { type: "audio/mpeg" });
+      setIsTranscribing(true)
 
       const response = await fetch(api, {
         method: "POST",
         body: createBody(blob),
       });
+
+      setIsTranscribing(false)
 
       if (!response.ok) {
         console.error("Error fetching audio:", response.statusText);
@@ -111,21 +116,12 @@ function useTranscription({
     return formData;
   };
 
-  useEffect(() => {
-    if (startRecording) {
-      console.log("I am about to start vad")
-      vad.start();
-      console.log("VAD starterd", vad.listening)
-      return;
-    }
-    vad.pause();
-  }, [startRecording]);
-
   return {
     listening,
     vad,
-    setStartRecording,
     text: accumulatedText,
+    isTranscribing,
+    setAccumulatedText
   } as UseVoiceChatHelpers;
 }
 

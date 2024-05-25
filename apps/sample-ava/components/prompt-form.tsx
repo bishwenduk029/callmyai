@@ -25,7 +25,6 @@ export function PromptForm({
   setInput,
   isLoading
 }: PromptProps) {
-  const { formRef, onKeyDown } = useEnterSubmit()
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
 
   React.useEffect(() => {
@@ -44,16 +43,15 @@ export function PromptForm({
         setInput('')
         await onSubmit(input)
       }}
-      ref={formRef}
     >
-      <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">
+      <div className="bg-background relative flex max-h-60 w-full grow flex-col overflow-hidden px-8 sm:rounded-md sm:border sm:px-12">
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
               href="/"
               className={cn(
                 buttonVariants({ size: 'sm', variant: 'outline' }),
-                'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
+                'bg-background absolute left-0 top-4 h-8 w-8 rounded-full p-0 sm:left-4'
               )}
             >
               <IconPlus />
@@ -65,7 +63,6 @@ export function PromptForm({
         <Textarea
           ref={inputRef}
           tabIndex={0}
-          onKeyDown={onKeyDown}
           rows={1}
           value={input}
           onChange={e => setInput(e.target.value)}

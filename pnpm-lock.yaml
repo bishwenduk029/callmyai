@@ -122,6 +122,9 @@ importers:
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.2.3(react-dom@18.3.1(react@18.2.0))(react@18.2.0))(react-dom@18.3.1(react@18.2.0))(react@18.2.0)
+      ollama-ai-provider:
+        specifier: ^0.4.0
+        version: 0.4.0(zod@3.23.8)
       onnxruntime-web:
         specifier: ^1.17.0
         version: 1.17.1
@@ -13266,6 +13269,13 @@ snapshots:
       '@ai-sdk/provider-utils': 0.0.6(zod@3.22.4)
     optionalDependencies:
       zod: 3.22.4
+
+  ollama-ai-provider@0.4.0(zod@3.23.8):
+    dependencies:
+      '@ai-sdk/provider': 0.0.3
+      '@ai-sdk/provider-utils': 0.0.6(zod@3.23.8)
+    optionalDependencies:
+      zod: 3.23.8
 
   once@1.4.0:
     dependencies:

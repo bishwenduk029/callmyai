@@ -3,7 +3,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
-import { Input } from './input'
 import { Textarea } from './textarea'
 
 export function PlaceholdersAndVanishInput({
@@ -26,7 +25,7 @@ export function PlaceholdersAndVanishInput({
     const startAnimation = () => {
       const interval = setInterval(() => {
         setCurrentPlaceholder(prev => (prev + 1) % placeholders.length)
-      }, 1500)
+      }, 2000)
       return () => clearInterval(interval)
     }
 
