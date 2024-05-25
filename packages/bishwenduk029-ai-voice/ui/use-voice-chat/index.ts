@@ -28,7 +28,7 @@ function useVoiceChat({
   transcribeAPI,
   body,
   initialMessages,
-  speakerPause,
+  speakerPause = 60000,
   onSpeechCompletion: onCompletion,
 }: VoiceChatOptions): UseVoiceChatHelpers {
   const [speaking, setSpeaking] = useState(false);
