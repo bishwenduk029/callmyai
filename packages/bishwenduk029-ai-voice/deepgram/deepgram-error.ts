@@ -1,4 +1,3 @@
-import { APICallError } from 'ai';
 import { createJsonErrorResponseHandler } from '@ai-sdk/provider-utils';
 import { z } from 'zod';
 
@@ -10,7 +9,7 @@ const deepgramSpeechErrorDataSchema = z.object({
 
 export type DeepgramSpeechErrorData = z.infer<typeof deepgramSpeechErrorDataSchema>;
 
-export const deepgramSpeechFailedResponseHandler = createJsonErrorResponseHandler({
+export const deepgramSpeechFailedResponseHandler: any = createJsonErrorResponseHandler({
   errorSchema: deepgramSpeechErrorDataSchema,
   errorToMessage: data => data.err_msg,
 });

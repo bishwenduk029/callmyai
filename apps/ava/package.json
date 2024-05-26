@@ -52,7 +52,7 @@
     "next-themes": "^0.2.1",
     "ollama-ai-provider": "^0.4.0",
     "onnxruntime-web": "^1.17.0",
-    "openai": "^4.24.7",
+    "openai": "^4.42.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.5.3",

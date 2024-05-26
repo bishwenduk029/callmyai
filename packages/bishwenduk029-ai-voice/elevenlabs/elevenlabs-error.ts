@@ -12,7 +12,7 @@ const elevenlabsSpeechErrorDataSchema = z.object({
 
 export type ElevenlabsSpeechErrorData = z.infer<typeof elevenlabsSpeechErrorDataSchema>;
 
-export const elevenlabsSpeechFailedResponseHandler = createJsonErrorResponseHandler({
+export const elevenlabsSpeechFailedResponseHandler: any = createJsonErrorResponseHandler({
   errorSchema: elevenlabsSpeechErrorDataSchema,
   errorToMessage: data => data.detail.msg,
 });

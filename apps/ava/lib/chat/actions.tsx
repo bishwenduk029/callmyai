@@ -1,19 +1,65 @@
 import 'server-only'
 
-import {
-  createAI,
-  createStreamableUI,
-  getMutableAIState,
-  getAIState,
-  streamUI,
-  createStreamableValue
-} from 'ai/rsc'
+import { createAI, createStreamableUI, createStreamableValue } from 'ai/rsc'
 
 import { z } from 'zod'
-import { CoreMessage, DeepPartial, generateObject, streamObject } from 'ai'
+import { CoreMessage, DeepPartial, streamObject } from 'ai'
 import { Task } from '@/components/task'
 import { nanoid } from 'nanoid'
-import { ollama } from 'ollama-ai-provider';
+import { openai } from '@ai-sdk/openai'
+
+const systemPrompt = `You are an organizational assistant. Given a piece of content, you need to 
+categorize and label it appropriately. Create your own categories based on the 
+content and return a JSON response with the original content, appropriate tags, and 
+the assigned category. Re-purpose the content to be suitable note , task or anthing else without loosing the meaning.
+
+Your response should be formatted as follows:
+
+"{
+  "content": "<re-purposed content>",
+  "tags": "<appropriate tags>",
+  "category": "<assigned category>"
+}"
+
+Examples:
+
+**Content:**
+
+"Remind me to call the plumber tomorrow."
+
+**Response:**
+
+"{
+  "content": "Need to call the plumber tomorrow.",
+  "tags": "call, plumber, tomorrow",
+  "category": "Reminder"
+}"
+
+**Content:**
+
+"Need to research about quantum computing."
+
+**Response:**
+
+"{
+  "content": "Need to research about quantum computing.",
+  "tags": "research, quantum computing",
+  "category": "Task"
+}"
+
+**Content:**
+
+"I think I should start a blog about my travel experiences."
+
+**Response:**
+
+"{
+  "content": "I should start a blog about my travel experiences.",
+  "tags": "blog, travel experiences",
+  "category": "Idea"
+}"
+
+Use this prompt to ensure the content is categorized and labeled correctly.`
 
 export const taskSchema = z.object({
   content: z.string(),
@@ -26,9 +72,12 @@ export type TaskSchema = z.infer<typeof taskSchema>
 
 async function submitUserMessage(userContent: string) {
   'use server'
-  console.log('I am here now', userContent)
 
-  const objectStream = createStreamableValue<PartialTaskSchema>()
+  const uiStream = createStreamableUI()
+
+  const objectStream = createStreamableValue<PartialTaskSchema>({})
+
+  uiStream.append(<Task task={objectStream.value} />)
   const messages: CoreMessage[] = [
     {
       role: 'user',
@@ -36,80 +85,39 @@ async function submitUserMessage(userContent: string) {
     }
   ]
 
-  console.log(messages)
-  const result = await generateObject({
-    model: ollama('llama3:latest'),
-    system: `You are an organizational assistant. Given a piece of content, you need to 
-    categorize and label it appropriately. Create your own categories based on the 
-    content and return a JSON response with the original content, appropriate tags, and 
-    the assigned category. Re-purpose the content to be suitable note , task or anthing else without loosing the meaning.
-
-    Your response should be formatted as follows:
-
-    "{
-      "content": "<re-purposed content>",
-      "tags": "<appropriate tags>",
-      "category": "<assigned category>"
-    }"
-
-    Examples:
-
-    **Content:**
-
-    "Remind me to call the plumber tomorrow."
-
-    **Response:**
-
-    "{
-      "content": "Need to call the plumber tomorrow.",
-      "tags": "call, plumber, tomorrow",
-      "category": "Reminder"
-    }"
-
-    **Content:**
-
-    "Need to research about quantum computing."
-
-    **Response:**
-
-    "{
-      "content": "Need to research about quantum computing.",
-      "tags": "research, quantum computing",
-      "category": "Task"
-    }"
-
-    **Content:**
-
-    "I think I should start a blog about my travel experiences."
-
-    **Response:**
-
-    "{
-      "content": "I should start a blog about my travel experiences.",
-      "tags": "blog, travel experiences",
-      "category": "Idea"
-    }"
-
-    Use this prompt to ensure the content is categorized and labeled correctly.`,
+  await streamObject({
+    model: openai.chat('gpt-4o'),
+    system: systemPrompt,
     messages,
+    maxRetries: 0,
+    mode: 'json',
     schema: z.object({
       content: z.string(),
       tags: z.string(),
       category: z.string()
-    }),
+    })
   })
-
-  const { content, tags, category } = result.object
+    .then(async result => {
+      for await (const obj of result.partialObjectStream) {
+        if (Object.keys(obj).length !== 0) {
+          objectStream.update(obj)
+        }
+      }
+    })
+    .finally(() => {
+      objectStream.done()
+      uiStream.done()
+    })
 
   return {
     id: nanoid(),
-    display: <Task content={content} tags={tags} category={category} />
+    display: uiStream.value
   }
 }
 
 export type UIState = {
   id: string
-  display: React.ReactNode | Iterable<React.ReactNode>
+  display: React.ReactNode | Iterable<React.ReactNode> | JSX.Element
 }[]
 
 export const AI = createAI<null, UIState>({

@@ -9,7 +9,7 @@ const openAISpeechErrorDataSchema = z.object({
 
 export type ElevenlabsSpeechErrorData = z.infer<typeof openAISpeechErrorDataSchema>;
 
-export const platHtSpeechFailedResponseHandler = createJsonErrorResponseHandler({
+export const platHtSpeechFailedResponseHandler: any = createJsonErrorResponseHandler({
   errorSchema: openAISpeechErrorDataSchema,
   errorToMessage: data => data.error_message,
 });
