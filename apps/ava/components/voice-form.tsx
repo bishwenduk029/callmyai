@@ -22,7 +22,7 @@ export function VoiceForm({
 }: any) {
   return (
     <form
-      className="bg-white text-black border-neutral-200 flex align-middle justify-center"
+      className="text-black border-neutral-200 flex align-middle justify-center"
       ref={formRef}
       onSubmit={async (e: any) => {
         e.preventDefault()
@@ -32,11 +32,8 @@ export function VoiceForm({
           e.target['message']?.blur()
         }
 
-        const value = (
-          text ||
-          "make a note that life will get easier from here. I am the best. I can do whatever I can do. I feel the best for some more life. I'm thankful."
-        ).trim()
-        // if (!value) return
+        const value = text.trim()
+        if (!value) return
 
         // Optimistically add user message UI
 
@@ -88,10 +85,11 @@ export function VoiceForm({
               <Button
                 type="submit"
                 size="icon"
+                disabled={isTranscribing}
                 className=" bg-green-400 hover:bg-green-200"
                 onClick={() => setVoiceMode(true)}
               >
-                {isTranscribing ? <ClipLoader size={3} /> : <CircleCheck />}
+                {isTranscribing ? <ClipLoader size={5} /> : <CircleCheck />}
                 <span className="sr-only">Speak With Ava</span>
               </Button>
             </TooltipTrigger>

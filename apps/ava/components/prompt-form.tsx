@@ -47,7 +47,7 @@ export function PromptForm({
   }, [voiceMode])
 
   return (
-    <>
+    <div className=''>
       {voiceMode ? (
         <VoiceForm
           vad={vad}
@@ -67,6 +67,6 @@ export function PromptForm({
           setVoiceMode={setVoiceMode}
         />
       )}
-    </>
+    </div>
   )
 }

@@ -164,7 +164,7 @@ export function PlaceholdersAndVanishInput({
   }
 
   return (
-    <div>
+    <div className='w-full'>
       <canvas
         className={cn(
           'absolute pointer-events-none border-0  text-base scale-50 top-[20%] left-2 sm:left-4 origin-top-left invert dark:invert-0 pr-20',
@@ -176,7 +176,7 @@ export function PlaceholdersAndVanishInput({
       <Textarea
         tabIndex={0}
         ref={inputRef}
-        className="min-h-[60px] border-0 w-full resize-none bg-transparent px-2 py-[1.3rem] focus:ring-0 focus:border-0 focus:shadow-none focus-visible:outline-none shadow-none sm:text-sm focus-visible:ring-0"
+        className="min-h-[60px] border-0 w-full text-foreground text-2xl resize-none bg-transparent px-2 py-[1.3rem] focus:ring-0 focus:border-0 focus:shadow-none focus-visible:outline-none shadow-none focus-visible:ring-0"
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"
