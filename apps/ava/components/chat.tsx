@@ -19,6 +19,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useScrollAnchor } from '@/lib/hooks/use-scroll-anchor'
 import { toast } from 'sonner'
 import { AnimatedList } from './ui/animated-list'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
@@ -64,18 +65,18 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
   console.log(messages)
 
   return (
-    <div className="px-8 sm:px-12 pt-12 md:pt-14 pb-14 md:pb-24 flex flex-col space-y-3 md:space-y-4 w-full">
+    <div
+      className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
+      ref={scrollRef}
+    >
       <div
-        className="max-w-3xl mx-auto group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
-        ref={scrollRef}
+        className={cn(
+          'pb-[200px] pt-4 md:pt-10 px-4 sm:px-1 flex flex-col space-y-8 sm:w-1/2 mx-auto',
+          className
+        )}
+        ref={messagesRef}
       >
-        <div
-          className={cn(
-            'pb-[200px] pt-4 md:pt-10 flex flex-col space-y-8',
-            className
-          )}
-          ref={messagesRef}
-        >
+        <AnimatePresence>
           {messages.map(
             (message: {
               id: any
@@ -91,19 +92,28 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
                 | null
                 | undefined
             }) => {
-              return <div key={`${message.id}`}>{message.display}</div>
+              return (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  key={`${message.id}`}
+                >
+                  {message.display}
+                </motion.div>
+              )
             }
           )}
-          <div className="w-full h-px" ref={visibilityRef} />
-        </div>
-        <ChatPanel
-          id={id}
-          input={input}
-          setInput={setInput}
-          isAtBottom={isAtBottom}
-          scrollToBottom={scrollToBottom}
-        />
+        </AnimatePresence>
+        <div className="w-full h-px" ref={visibilityRef} />
       </div>
+      <ChatPanel
+        id={id}
+        input={input}
+        setInput={setInput}
+        isAtBottom={isAtBottom}
+        scrollToBottom={scrollToBottom}
+      />
     </div>
   )
 }

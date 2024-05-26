@@ -25,7 +25,6 @@ export function VoiceForm({
       className="bg-white text-black border-neutral-200 flex align-middle justify-center"
       ref={formRef}
       onSubmit={async (e: any) => {
-        console.log('O am here')
         e.preventDefault()
 
         // Blur focus on mobile
@@ -33,7 +32,10 @@ export function VoiceForm({
           e.target['message']?.blur()
         }
 
-        const value = text.trim() || "make a note that life will get easier from here. I am the best. I can do whatever I can do. I feel the best for some more life. I'm thankful."
+        const value = (
+          text ||
+          "make a note that life will get easier from here. I am the best. I can do whatever I can do. I feel the best for some more life. I'm thankful."
+        ).trim()
         // if (!value) return
 
         // Optimistically add user message UI
@@ -89,7 +91,7 @@ export function VoiceForm({
                 className=" bg-green-400 hover:bg-green-200"
                 onClick={() => setVoiceMode(true)}
               >
-                {isTranscribing ? <ClipLoader /> : <CircleCheck />}
+                {isTranscribing ? <ClipLoader size={3} /> : <CircleCheck />}
                 <span className="sr-only">Speak With Ava</span>
               </Button>
             </TooltipTrigger>
