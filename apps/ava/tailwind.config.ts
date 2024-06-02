@@ -53,12 +53,7 @@ module.exports = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
-        },
-        'popins-black': '#111111',
-        'popins-light-green': '#C7EBB3',
-        'popins-peach': '#F4DFCD',
-        'popins-pink': '#FFD5F8',
-        'popins-white': '#FFFFFF',
+        }
       },
       borderRadius: {
         lg: 'var(--radius)',

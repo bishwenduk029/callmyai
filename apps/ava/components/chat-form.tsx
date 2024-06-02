@@ -25,7 +25,7 @@ export function ChatForm({
     const { formRef, onKeyDown } = useEnterSubmit()
   return (
     <form
-      className="text-black dark:text-white"
+      className="text-black dark:text-white bg-white"
       ref={formRef}
       onSubmit={async (e: any) => {
         e.preventDefault()
@@ -49,43 +49,27 @@ export function ChatForm({
         ])
       }}
     >
-      <div className="relative flex max-h-60 w-full grow flex-row overflow-hidden px-4 sm:rounded-md sm:px-6">
+      <div className="relative flex max-h-260 w-full grow flex-row overflow-hidden px-4 sm:rounded-md sm:px-6">
         <PlaceholdersAndVanishInput
           placeholders={placeholders}
           onKeyDown={onKeyDown}
           onChange={e => setInput(e.target.value)}
         />
 
-        <div className="absolute right-0 top-[13px] sm:right-4 flex-row justify-center">
-          {/* <Tooltip>
+        <div className="absolute right-0 top-[20px] sm:right-4 flex-row justify-center">
+          <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 type="submit"
-                size="lg"
+                size="icon"
                 disabled={input === ''}
-                className="mr-2 p-4"
+                className="p-1"
               >
                 <IconArrowElbow />
                 <span className="sr-only">Send message</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent>Send message</TooltipContent>
-          </Tooltip> */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="lg"
-                className="p-5 flex flex-row space-x-2"
-                onClick={e => {
-                  e.preventDefault()
-                  setVoiceMode(true)
-                }}
-              >
-                <IconMic className=' text-orange-600' />
-                <span className="hidden text-lg sm:inline">Record</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Speak With Ava</TooltipContent>
           </Tooltip>
         </div>
       </div>

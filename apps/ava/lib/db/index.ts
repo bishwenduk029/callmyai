@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/bun-sqlite';
-import Database from 'better-sqlite3';
+import { drizzle } from 'drizzle-orm/libsql';
+import { createClient } from '@libsql/client';
 
-const sqlite = new Database(process.env.DB_URL!);
-export const db = drizzle(sqlite);
+const client = createClient({ url: 'libsql://ava-db-bishwenduk029.turso.io', authToken: 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3MTY3OTY3ODEsImlkIjoiYWY0ZGQ0ZTAtZjkxMS00OTdhLTljODUtNmQzMzViYTNhYzM3In0.MI98oR6gB57y6eFP8NMbNRMTz2QXS-3nW-k4UrlpE-LxFu8h3_GEhyhTt1iDpggSNwCbvQXM79QYt5Vp3CM0AQ' });
+export const db = drizzle(client)

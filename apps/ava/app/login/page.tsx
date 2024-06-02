@@ -1,6 +1,6 @@
-import { auth } from '@/auth'
 import LoginForm from '@/components/login-form'
-import { Session } from '@/lib/types'
+import { auth } from '@/auth'
+import { Session } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 export default async function LoginPage() {
@@ -9,10 +9,11 @@ export default async function LoginPage() {
   if (session) {
     redirect('/')
   }
-
   return (
-    <main className="flex flex-col p-4">
-      <LoginForm />
-    </main>
+    <div className="w-full lg:grid lg:min-h-[600px] xl:min-h-[800px]">
+      <div className="flex items-center justify-center container mt-5 sm:w-[450px] mx-auto">
+        <LoginForm />
+      </div>
+    </div>
   )
 }

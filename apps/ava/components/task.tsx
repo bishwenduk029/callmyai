@@ -1,8 +1,19 @@
 'use client'
-import { PartialTaskSchema, taskSchema } from '../lib/chat/actions'
+import { PartialTaskSchema, TaskSchema, taskSchema } from '../lib/chat/actions'
 import { useStreamableValue } from 'ai/rsc'
 import { Badge } from './ui/badge'
 import { Skeleton } from './ui/skeleton'
+import { motion } from 'framer-motion'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from './ui/card'
+import { Button } from './ui/button'
+import { Key } from 'react'
 
 export interface TaskProps {
   task: PartialTaskSchema
@@ -22,48 +33,48 @@ const SkeletonCard = () => {
 export const Task: React.FC<TaskProps> = ({ task }) => {
   const [data, error, pending] = useStreamableValue<PartialTaskSchema>(task)
   return (
-    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0 bg-popins-peach">
+    <>
       {!pending && data ? (
         <>
-          <span className="flex size-2 translate-y-1 rounded-full bg-sky-500" />
-          <div className="space-y-1">
-            {!data.category ? (
-              <Skeleton className="h-4 w-[250px]" />
-            ) : (
-              <p className="text-lg font-medium leading-none">
-                {data?.category}
-              </p>
-            )}
-            <p className="text-lg text-muted-foreground">{data?.content}</p>
-            {data?.tags?.split(',')?.map((tag, index) => (
-              <Badge className="mx-1" key={index}>
-                {tag}
-              </Badge>
-            ))}
-          </div>
+          <SimpleTask
+            category={data?.category}
+            content={data?.content}
+            tags={data?.tags}
+          />
         </>
       ) : (
         <SkeletonCard />
       )}
-    </div>
+    </>
   )
 }
 
-export const SimpleTask: React.FC<TaskProps> = ({ task }) => {
+export const SimpleTask: React.FC<PartialTaskSchema> = ({
+  category,
+  content,
+  tags
+}) => {
   return (
-    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 p-2 last:mb-0 last:pb-0 border-black border-2 rounded-lg bg-background">
-      <>
-        <span className="flex size-3 translate-y-1 rounded-full bg-foreground" />
-        <div className="space-y-3">
-          <p className="text-lg font-medium leading-none">{task?.category}</p>
-          <p className="text-lg text-foreground">{task?.content}</p>
-          {task?.tags?.split(',')?.map((tag, index) => (
-            <Badge className="mx-1 cursor-pointer" key={index}>
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      </>
-    </div>
+    <motion.div
+      whileHover={{
+        scale: 1.02
+      }}
+    >
+      <Card className="mb-4 w-full last:mb-0 last:pb-0 border-mute-foreground border-2 rounded-xl shadow-md bg-white">
+        <CardHeader className="w-full">
+          <CardTitle className="w-full">{category}</CardTitle>
+          <CardDescription className="w-full">{content}</CardDescription>
+        </CardHeader>
+        <CardFooter className="w-full flex flex-row flex-wrap space-x-2">
+          {tags
+            ?.split(',')
+            ?.map((tag: string, index: Key | null | undefined) => (
+              <Button className="p-0 text-slate-500" variant="link" key={index}>
+                {`#${tag.trim().split(' ').join('-')}`}
+              </Button>
+            ))}
+        </CardFooter>
+      </Card>
+    </motion.div>
   )
 }

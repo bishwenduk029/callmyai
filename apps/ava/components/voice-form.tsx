@@ -17,12 +17,12 @@ export function VoiceForm({
   formRef,
   setMessages,
   submitUserMessage,
-  setVoiceMode,
+  onCancel,
   isTranscribing
 }: any) {
   return (
     <form
-      className="text-black border-neutral-200 flex align-middle justify-center"
+      className="text-black border-neutral-200 flex align-middle justify-center w-fill"
       ref={formRef}
       onSubmit={async (e: any) => {
         e.preventDefault()
@@ -32,8 +32,11 @@ export function VoiceForm({
           e.target['message']?.blur()
         }
 
-        const value = text.trim()
-        if (!value) return
+        const value = (
+          text ||
+          'Summarize this for me: Life is a battleground that I need to win on a daily basis'
+        ).trim()
+        // if (!value) return
 
         // Optimistically add user message UI
 
@@ -43,28 +46,29 @@ export function VoiceForm({
           ...currentMessages,
           responseMessage
         ])
-        setVoiceMode(false)
+        onCancel()
         vad.pause()
       }}
     >
       <AnimatePresence mode="wait">
         <motion.div
           initial={{ y: 10, opacity: 0, width: '10%' }}
-          animate={{ y: 0, opacity: 1, width: '66.67%' }}
+          animate={{ y: 0, opacity: 1, width: '100%' }}
           exit={{ y: -10, opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="relative p-1 flex max-h-60 shrink flex-row justify-between rounded-md overflow-hidden sm:rounded-md border align-middle"
+          className="relative flex shrink flex-row justify-between rounded-md overflow-hidden sm:rounded-md border align-middle bg-white"
         >
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                variant={'default'}
                 size="icon"
                 onClick={e => {
                   e.preventDefault()
                   vad.pause()
-                  setVoiceMode(false)
+                  onCancel()
                 }}
-                className="mr-2 bg-slate-500 hover:bg-slate-200"
+                className="mr-2 bg-slate-200 hover:bg-slate-200"
               >
                 <EarOff />
                 <span className="sr-only">Cancel Recording</span>
@@ -83,17 +87,18 @@ export function VoiceForm({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                variant={'default'}
                 type="submit"
                 size="icon"
                 disabled={isTranscribing}
-                className=" bg-green-400 hover:bg-green-200"
-                onClick={() => setVoiceMode(true)}
+                className=" bg-green-200 hover:bg-green-200"
+                onClick={() => onCancel()}
               >
                 {isTranscribing ? <ClipLoader size={5} /> : <CircleCheck />}
-                <span className="sr-only">Speak With Ava</span>
+                <span className="sr-only">Done Recording</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Speak With Ava</TooltipContent>
+            <TooltipContent>Done Recording</TooltipContent>
           </Tooltip>
         </motion.div>
       </AnimatePresence>

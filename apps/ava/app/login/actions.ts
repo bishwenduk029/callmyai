@@ -4,13 +4,11 @@ import { signIn } from '@/auth'
 import { User } from '@/lib/types'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
-import { kv } from '@vercel/kv'
 import { ResultCode } from '@/lib/utils'
-
-export async function getUser(email: string) {
-  const user = await kv.hgetall<User>(`user:${email}`)
-  return user
-}
+import { db } from '@/lib/db'
+import { users } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 
 interface Result {
   type: string
@@ -19,40 +17,21 @@ interface Result {
 
 export async function authenticate(
   _prevState: Result | undefined,
-  formData: FormData
+  formData: FormData | undefined
 ): Promise<Result | undefined> {
+  console.log('I am here in login')
   try {
-    const email = formData.get('email')
-    const password = formData.get('password')
+    const result = await signIn('google')
+    console.log('what happened', result)
 
-    const parsedCredentials = z
-      .object({
-        email: z.string().email(),
-        password: z.string().min(6)
-      })
-      .safeParse({
-        email,
-        password
-      })
-
-    if (parsedCredentials.success) {
-      await signIn('credentials', {
-        email,
-        password,
-        redirect: false
-      })
-
-      return {
-        type: 'success',
-        resultCode: ResultCode.UserLoggedIn
-      }
-    } else {
-      return {
-        type: 'error',
-        resultCode: ResultCode.InvalidCredentials
-      }
+    return {
+      type: 'success',
+      resultCode: ResultCode.UserLoggedIn
     }
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':

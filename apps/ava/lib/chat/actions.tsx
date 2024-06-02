@@ -5,11 +5,15 @@ import {
   StreamableValue
 } from 'ai/rsc'
 
-import { z } from 'zod'
+import { string, z } from 'zod'
 import { CoreMessage, DeepPartial, streamObject } from 'ai'
 import { Task } from '@/components/task'
 import { nanoid } from 'nanoid'
 import { openai } from '@ai-sdk/openai'
+import { Ollama, ollama } from 'ollama-ai-provider'
+import { auth } from '@/auth'
+import { db } from '../db'
+import { contents } from '../db/schema'
 
 const systemPrompt = `You are a personal and organizational assistant.
 
@@ -85,12 +89,11 @@ Examples:
   "category": "Idea"
 }
 
-Use this prompt to ensure the content is categorized and labeled correctly while automatically repurposing or reformatting the content as needed.`;
-
+Use this prompt to ensure the content is categorized and labeled correctly while automatically repurposing or reformatting the content as needed.`
 
 export const taskSchema = z.object({
   content: z.string(),
-  tags: z.string(),
+  tags: z.string().nullable(),
   category: z.string()
 })
 
@@ -112,8 +115,10 @@ async function submitUserMessage(userContent: string) {
     }
   ]
 
+  let finalContent: any = null
+
   await streamObject({
-    model: openai.chat('gpt-4o'),
+    model: ollama('llama3:latest'),
     system: systemPrompt,
     messages,
     maxRetries: 0,
@@ -128,12 +133,20 @@ async function submitUserMessage(userContent: string) {
       for await (const obj of result.partialObjectStream) {
         if (Object.keys(obj).length !== 0) {
           objectStream.update(obj)
+          finalContent = obj
         }
       }
     })
-    .finally(() => {
+    .finally(async () => {
       objectStream.done()
       uiStream.done()
+
+      const session = await auth()
+      await db.insert(contents).values({
+        id: nanoid(),
+        userId: session?.user?.id,
+        ...finalContent
+      })
     })
 
   return {
