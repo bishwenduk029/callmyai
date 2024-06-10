@@ -10,6 +10,14 @@ import React from 'react'
 import Image from 'next/image'
 import { HeartFilledIcon } from '@radix-ui/react-icons'
 import { Avatar, AvatarImage } from './ui/avatar'
+import {
+  Brain,
+  BrainCircuit,
+  Currency,
+  CurrencyIcon,
+  Wallet,
+  Wallet2
+} from 'lucide-react'
 
 const features = [
   {
@@ -18,13 +26,10 @@ const features = [
       'Speak your thoughts out loud and Ava will automatically organize them for you.',
     icon: () => (
       <Avatar
-        className="absolute left-1 top-1 size-7 text-muted-foreground"
+        className="absolute left-1 top-1 size-7 text-primary/90"
         aria-hidden="true"
       >
-        <AvatarImage
-          src="https://blush.design/api/download?shareUri=GRS5_tajEAqiPGmh&c=Skin_0%7Eedb98a&w=800&h=800&fm=png"
-          alt="@shadcn"
-        />
+        <Brain />
       </Avatar>
     )
   },
@@ -34,32 +39,26 @@ const features = [
       'All transcriptions are automatically tagged for efficient organization.',
     icon: () => (
       <Avatar
-        className="absolute left-1 top-1 size-7 text-muted-foreground"
+        className="absolute left-1 top-1 size-7 text-primary/90"
         aria-hidden="true"
       >
-        <AvatarImage
-          src="https://blush.design/api/download?shareUri=dFs5ZiM3tGi_cEFI&c=Skin_0%7Eedb98a&w=800&h=800&fm=png"
-          alt="@shadcn"
-        />
+        <BrainCircuit />
       </Avatar>
     )
   },
   {
-    name: 'Record anything notes, summary, tasks and more.',
+    name: 'Refer More, Pay Less',
     description:
-      'All transcriptions are automatically tagged for efficient organization.',
+      'Just $4 per month, or only $1 per month for every friend who subscribes!',
     icon: () => (
       <Avatar
-        className="absolute left-1 top-1 size-7 text-muted-foreground"
+        className="absolute left-1 top-1 size-7 text-primary/90"
         aria-hidden="true"
       >
-        <AvatarImage
-          src="https://blush.design/api/download?shareUri=dFs5ZiM3tGi_cEFI&c=Skin_0%7Eedb98a&w=800&h=800&fm=png"
-          alt="@shadcn"
-        />
+        <Wallet />
       </Avatar>
     )
-  },
+  }
 ]
 
 export default function Info() {
@@ -98,9 +97,9 @@ export default function Info() {
                     <motion.div
                       key={feature.name}
                       variants={FADE_DOWN_ANIMATION_VARIANTS}
-                      className="relative pl-9 text-lg"
+                      className="relative pl-9 text-lg font-medium"
                     >
-                      <dt className="inline font-semibold">
+                      <dt className="inline font-bold">
                         <feature.icon />
                         {feature.name}
                       </dt>{' '}

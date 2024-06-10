@@ -60,16 +60,16 @@ export const SimpleTask: React.FC<PartialTaskSchema> = ({
         scale: 1.02
       }}
     >
-      <Card className="mb-4 w-full last:mb-0 last:pb-0 border-mute-foreground border-2 rounded-xl shadow-md bg-white">
-        <CardHeader className="w-full">
-          <CardTitle className="w-full">{category}</CardTitle>
-          <CardDescription className="w-full">{content}</CardDescription>
+      <Card className="mb-4 w-full last:mb-0 last:pb-0 border-mute-foreground border-2 rounded-lg shadow-lg bg-white">
+        <CardHeader className="w-full  -mb-5">
+          <CardTitle className="w-full font-extrabold italic">{category}</CardTitle>
+          <CardDescription className="w-full font-medium text-lg">{content}</CardDescription>
         </CardHeader>
         <CardFooter className="w-full flex flex-row flex-wrap space-x-2">
           {tags
             ?.split(',')
             ?.map((tag: string, index: Key | null | undefined) => (
-              <Button className="p-0 text-slate-500" variant="link" key={index}>
+              <Button className="p-0 text-slate-500 hover:text-primary" variant="link" key={index}>
                 {`#${tag.trim().split(' ').join('-')}`}
               </Button>
             ))}

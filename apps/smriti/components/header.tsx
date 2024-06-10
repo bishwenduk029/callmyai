@@ -6,6 +6,9 @@ import { buttonVariants } from '@/components/ui/button'
 import { UserMenu } from '@/components/user-menu'
 import { Session } from '@/lib/types'
 import Image from 'next/image'
+import Link from 'next/link'
+import SparklesText from './sparkles-text'
+import { Brain } from 'lucide-react'
 
 async function UserOrLogin() {
   const session = (await auth()) as Session
@@ -38,17 +41,15 @@ async function UserOrLogin() {
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 border-b shrink-0 bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl">
-      <div className="flex items-center">
-        <a>
-          <Image
-            className="rounded-full mt-4 shadow-sm"
-            src="/SuperMemory.png"
-            alt="SuperMemory"
-            width="120"
-            height="120"
-          />
-        </a>
+    <header className="sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 border-b shrink-0 bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl shadow-md">
+      <div className="flex items-center hover:text-primary">
+        <Link
+          className="w-full italic font-extrabold text-3xl flex flex-row align-middle group text-foreground"
+          href="/"
+        >
+          <Brain className="text-inherit group-hover:text-primary" size={35} />
+          Smriti
+        </Link>
       </div>
 
       <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>

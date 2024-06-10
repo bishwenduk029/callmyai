@@ -34,7 +34,7 @@ export default function LoginForm() {
     >
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Welcome Back</h1>
-        <p className="text-balance text-muted-foreground">to SuperMemory</p>
+        <p className="text-balance text-muted-foreground">to Smriti</p>
       </div>
       <div className="grid gap-4">
         <LoginButton />

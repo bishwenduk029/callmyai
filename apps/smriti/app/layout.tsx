@@ -11,7 +11,7 @@ import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
 
 const fonts = Nunito({
-  subsets: ["cyrillic-ext", ]
+  subsets: ["latin-ext", ]
 })
 
 export const metadata = {
@@ -19,10 +19,10 @@ export const metadata = {
     ? new URL(`https://${process.env.VERCEL_URL}`)
     : undefined,
   title: {
-    default: 'Next.js AI Chatbot',
-    template: `%s - Next.js AI Chatbot`
+    default: 'Smriti | Your personal AI Powered Memory',
+    template: `%s - Smriti`
   },
-  description: 'An AI-powered chatbot template built with Next.js and Vercel.',
+  description: 'An AI-powered Memory Organizer',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',

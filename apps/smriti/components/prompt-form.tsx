@@ -82,7 +82,7 @@ export function PromptForm({
               >
                 {recorderOpen ? <IconClose /> : <IconMic className="" />}
                 <span className="hidden text-lg sm:inline">
-                  {recorderOpen ? 'Close' : 'Records'}
+                  {recorderOpen ? 'Close' : 'Record'}
                 </span>
               </Button>
             </PopoverTrigger>

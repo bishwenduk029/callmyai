@@ -150,10 +150,10 @@ export function Chat({ className, session, initialMessages }: ChatProps) {
       ref={scrollRef}
     >
       {messages.length + initialMessages.length == 0 && (
-        <>
+        <div className='flex flex-col justify-center align-middle'>
           <IntroText />
           <Info />
-        </>
+        </div>
       )}
       <div
         className={cn(

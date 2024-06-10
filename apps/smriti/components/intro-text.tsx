@@ -42,13 +42,13 @@ export default function IntroText() {
         >
           <motion.h1
             variants={FADE_DOWN_ANIMATION_VARIANTS}
-            className="text-xl font-bold tracking-tight sm:text-4xl"
+            className="text-xl font-extrabold italic tracking-tight sm:text-4xl"
           >
             Organize Your Mind
           </motion.h1>
           <motion.p
             variants={FADE_DOWN_ANIMATION_VARIANTS}
-            className="mt-6 text-lg leading-8"
+            className="mt-6 text-lg leading-8 font-bold italic"
           >
             Your personal AI powered memory organizer.
           </motion.p>

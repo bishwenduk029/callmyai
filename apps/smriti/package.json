@@ -1,5 +1,5 @@
 {
-  "name": "supermemory-app",
+  "name": "smriti",
   "version": "0.0.3",
   "private": true,
   "scripts": {
@@ -42,7 +42,6 @@
     "@vercel/og": "^0.6.2",
     "ai": "^3.1.5",
     "bcrypt-ts": "^5.0.2",
-    "better-sqlite3": "^10.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "d3-scale": "^4.0.2",
@@ -68,7 +67,6 @@
     "react-textarea-autosize": "^8.5.3",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
-    "simplex-noise": "^4.0.1",
     "sonner": "^1.4.3",
     "usehooks-ts": "^2.16.0",
     "zod": "^3.22.4"

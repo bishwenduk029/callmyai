@@ -50,7 +50,7 @@ export function ChatPanel({
 
         <div className="mx-auto sm:max-w-4xl sm:px-4">
           {messages?.length >= 2 ? (
-            <div className="flex h-12 items-center justify-center">
+            <div className="flex h-12 items-center justify-center  bg-white">
               <div className="flex space-x-2">
                 {title ? (
                   <>
