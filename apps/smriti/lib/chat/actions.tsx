@@ -14,6 +14,7 @@ import { Ollama, ollama } from 'ollama-ai-provider'
 import { auth } from '@/auth'
 import { db } from '../db'
 import { contents } from '../db/schema'
+import { InferModelFromColumns } from 'drizzle-orm'
 
 const systemPrompt = `You are a personal and organizational assistant.
 
@@ -102,6 +103,7 @@ export type TaskSchema = z.infer<typeof taskSchema>
 
 async function submitUserMessage(userContent: string) {
   'use server'
+  const id = nanoid()
 
   const uiStream = createStreamableUI()
 
@@ -142,15 +144,16 @@ async function submitUserMessage(userContent: string) {
       uiStream.done()
 
       const session = await auth()
-      await db.insert(contents).values({
-        id: nanoid(),
+      const content = {
+        id,
         userId: session?.user?.id,
         ...finalContent
-      })
+      }
+      await db.insert(contents).values(content)
     })
 
   return {
-    id: nanoid(),
+    id,
     display: uiStream.value
   }
 }
