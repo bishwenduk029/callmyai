@@ -27,7 +27,7 @@ async function UserOrLogin() {
               >
                 <span className="hidden ml-2 md:flex">Login</span>
               </a>
-              <a href="/signup" className={cn(buttonVariants())}>
+              <a href="/register" className={cn(buttonVariants())}>
                 <span className="hidden sm:block">Sign Up</span>
                 <span className="sm:hidden">Deploy</span>
               </a>

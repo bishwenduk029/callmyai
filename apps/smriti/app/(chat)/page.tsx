@@ -4,7 +4,6 @@ import { AI } from '@/lib/chat/actions'
 import { auth } from '@/auth'
 import { Session } from '@/lib/types'
 import { getContents } from '@/app/actions'
-import { redirect } from 'next/navigation'
 
 export const metadata = {
   title: 'Smriti - AI Memory Organizer'

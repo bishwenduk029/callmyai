@@ -1,17 +1,15 @@
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
-import { Nunito } from 'next/font/google'
+import localFont from 'next/font/local'
 
 
 import '@/app/globals.css'
-import { cn } from '@/lib/utils'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Providers } from '@/components/providers'
 import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
 
-const fonts = Nunito({
-  subsets: ["latin-ext", ]
+const fonts = localFont({
+  src: './fonts/SNPro/SNPro-Variable.woff2',
+  display: 'swap',
 })
 
 export const metadata = {

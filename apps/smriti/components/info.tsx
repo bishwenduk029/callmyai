@@ -99,7 +99,7 @@ export default function Info() {
                       variants={FADE_DOWN_ANIMATION_VARIANTS}
                       className="relative pl-9 text-lg font-medium"
                     >
-                      <dt className="inline font-bold">
+                      <dt className="inline font-semibold">
                         <feature.icon />
                         {feature.name}
                       </dt>{' '}
