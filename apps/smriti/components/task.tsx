@@ -1,5 +1,5 @@
 'use client'
-import { PartialTaskSchema, TaskSchema, taskSchema } from '../lib/chat/actions'
+import { PartialDisplayTaskSchema, PartialTaskSchema, TaskSchema, taskSchema } from '../lib/chat/actions'
 import { useStreamableValue } from 'ai/rsc'
 import { Badge } from './ui/badge'
 import { Skeleton } from './ui/skeleton'
@@ -31,7 +31,7 @@ const SkeletonCard = () => {
 }
 
 export const Task: React.FC<TaskProps> = ({ task }) => {
-  const [data, error, pending] = useStreamableValue<PartialTaskSchema>(task)
+  const [data, error, pending] = useStreamableValue<PartialDisplayTaskSchema>(task)
   return (
     <>
       {!pending && data ? (
@@ -49,7 +49,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
   )
 }
 
-export const SimpleTask: React.FC<PartialTaskSchema> = ({
+export const SimpleTask: React.FC<PartialDisplayTaskSchema> = ({
   category,
   content,
   tags
@@ -60,17 +60,15 @@ export const SimpleTask: React.FC<PartialTaskSchema> = ({
         scale: 1.02
       }}
     >
-      <Card className="mb-4 w-full last:mb-0 last:pb-0 border-mute-foreground border-2 rounded-lg shadow-lg bg-white">
+      <Card className="mb-4 w-full last:mb-0 last:pb-0 border-mute-foreground rounded-lg bg-white">
         <CardHeader className="w-full  -mb-5">
           <CardTitle className="w-full font-extrabold italic">{category}</CardTitle>
           <CardDescription className="w-full font-medium text-lg">{content}</CardDescription>
         </CardHeader>
         <CardFooter className="w-full flex flex-row flex-wrap space-x-2">
-          {tags
-            ?.split(',')
-            ?.map((tag: string, index: Key | null | undefined) => (
+          {tags?.map((tag, index) => (
               <Button className="p-0 text-slate-500 hover:text-primary" variant="link" key={index}>
-                {`#${tag.trim().split(' ').join('-')}`}
+                {`#${tag?.trim().split(' ').join('-')}`}
               </Button>
             ))}
         </CardFooter>

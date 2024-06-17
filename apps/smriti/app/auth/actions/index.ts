@@ -1,6 +1,26 @@
 'use server';
 
-import createSupabaseServerClient from '@/lib/supabase/server';
+import {createSupabaseServerClient} from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+
+export async function oauthSignIn(){
+  const supabase = await createSupabaseServerClient();
+
+  const {data, error} = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${process.env.NEXT_APP_URL!}/auth/callback`
+    }
+  })
+
+  if(data.url) {
+    redirect(data.url)
+  }
+
+  if(error) {
+    return {data, error}
+  }
+}
 
 export async function signUpWithEmailAndPassword(values: {
   email: string;
@@ -12,7 +32,7 @@ export async function signUpWithEmailAndPassword(values: {
     email: values.email,
     password: values.password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_APP_URL!}/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_APP_URL!}/auth/confirm`,
     },
   });
 
@@ -41,7 +61,7 @@ export async function signInWithEmail(email: string) {
   return supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: `${process.env.NEXT_APP_URL!}/auth/welcome`,
+      emailRedirectTo: `${process.env.NEXT_APP_URL!}/`,
     },
   });
 }
@@ -67,9 +87,9 @@ export async function updatePassword(password: string) {
 export async function getCurrentUser() {
   const supabase = await createSupabaseServerClient();
 
-  const { data } = await supabase.auth.getSession();
+  const { data } = await supabase.auth.getUser();
 
-  return data.session?.user;
+  return data.user;
 }
 
 export async function signOut() {

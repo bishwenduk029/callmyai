@@ -1,7 +1,13 @@
 'use client'
 
-import { AnimatePresence, motion, useInView } from 'framer-motion'
+import { AnimatePresence, delay, motion, useInView } from 'framer-motion'
+import Image from 'next/image'
 import React from 'react'
+
+const FADE_IN_ANIMATION_VARIANTS = {
+  hidden: { opacity: 0, y: 0 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring' }, delay: 3000 }
+}
 
 export default function IntroText() {
   const ref = React.useRef(null)
@@ -12,11 +18,8 @@ export default function IntroText() {
     show: { opacity: 1, y: 0, transition: { type: 'spring' } }
   }
   return (
-    <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-5">
-      <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
-        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div>
-      </div>
-      <div className="mx-auto max-w-2xl text-center">
+    <div className="m-auto max-w-8xl px-6 lg:px-8 mt-5">
+      <div className="w-full text-center">
         <motion.div
           initial="hidden"
           ref={ref}
@@ -31,19 +34,27 @@ export default function IntroText() {
             }
           }}
         >
-          <motion.h1
+          <motion.header
             variants={FADE_DOWN_ANIMATION_VARIANTS}
-            className="text-2xl font-bold italic tracking-tight sm:text-3xl"
+            className="font-bold italic tracking-tight text-4xl z-10"
           >
             Organize Your Mind
-          </motion.h1>
+          </motion.header>
           <motion.p
             variants={FADE_DOWN_ANIMATION_VARIANTS}
-            className="mt-6 text-xl leading-8 font-semibold italic"
+            className="mt-6 text-xl leading-8 font-semibold italic z-10"
           >
             Your personal AI powered memory organizer.
           </motion.p>
         </motion.div>
+        <motion.img
+            alt="text"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.75, type: "tween" }}
+            className="relaitve rounded-full p-0 -mb-10"
+            src="/Diary.gif"
+          />
       </div>
     </div>
   )

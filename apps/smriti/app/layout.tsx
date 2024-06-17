@@ -1,5 +1,5 @@
 import localFont from 'next/font/local'
-
+import { Alegreya, Cormorant, DM_Sans, Eczar, Fraunces, Neuton, Playfair, Poppins, Raleway, Raleway_Dots } from 'next/font/google'
 
 import '@/app/globals.css'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -7,9 +7,15 @@ import { Providers } from '@/components/providers'
 import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
 
-const fonts = localFont({
-  src: './fonts/SNPro/SNPro-Variable.woff2',
+// const fonts = localFont({
+//   src: './fonts/SNPro/SNPro-Variable.woff2',
+//   display: 'swap'
+// })
+
+const fonts = Raleway({
+  weight: "variable",
   display: 'swap',
+  subsets: ['latin']
 })
 
 export const metadata = {
@@ -42,9 +48,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={fonts.className}
-      >
+      <body className={fonts.className}>
         <Toaster position="top-center" />
         <Providers
           attribute="class"

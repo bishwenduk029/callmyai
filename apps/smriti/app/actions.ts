@@ -1,27 +1,23 @@
 'use server'
-
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { kv } from '@vercel/kv'
-
-import { auth } from '@/auth'
-import { type Chat } from '@/lib/types'
-import { db } from '@/lib/db'
-import { users, contents } from '../lib/db/schema'
-import { eq } from 'drizzle-orm'
+import {createSupabaseServerClient} from '@/lib/supabase/server'
+import { InitialMessage, InitialMessages } from '@/components/user-board';
 
 export async function getContents(userId?: string | null) {
   if (!userId) {
     return []
   }
 
-  try {
-    const results = await db
-      .select()
-      .from(contents)
-      .where(eq(contents.userId, userId))
+  const supabase = await createSupabaseServerClient();
 
-    return results
+  try {
+    const results = await supabase.from("content")
+    .select().returns<InitialMessages>()
+    if(results.error) {
+      console.error("Error fetching the content for the user")
+      return []
+    }
+
+    return results.data
   } catch (error) {
     return []
   }

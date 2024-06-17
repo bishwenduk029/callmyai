@@ -22,7 +22,7 @@ export function VoiceForm({
 }: any) {
   return (
     <form
-      className="text-black border-neutral-200 flex align-middle justify-center w-fill"
+      className="text-black border-neutral-200 flex align-middle justify-center sm:w-fill"
       ref={formRef}
       onSubmit={async (e: any) => {
         e.preventDefault()
@@ -53,7 +53,7 @@ export function VoiceForm({
       <AnimatePresence mode="wait">
         <motion.div
           initial={{ y: 10, opacity: 0, width: '10%' }}
-          animate={{ y: 0, opacity: 1, width: '100%' }}
+          animate={{ y: 0, opacity: 1, width: '95%' }}
           exit={{ y: -10, opacity: 0 }}
           transition={{ duration: 0.4 }}
           className="relative flex shrink flex-row justify-between rounded-md overflow-hidden sm:rounded-md border align-middle bg-white"
@@ -91,7 +91,7 @@ export function VoiceForm({
                 type="submit"
                 size="icon"
                 disabled={isTranscribing}
-                className=" bg-green-200 hover:bg-green-200"
+                className=" bg-green-300 hover:bg-green-100"
                 onClick={() => onCancel()}
               >
                 {isTranscribing ? <ClipLoader size={5} /> : <CircleCheck />}

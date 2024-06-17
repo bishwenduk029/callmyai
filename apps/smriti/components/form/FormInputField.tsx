@@ -34,7 +34,6 @@ export function FormInputField<T extends FieldValues>({
     <FormFieldset<T> label={label} path={path}>
       <Input
         id={path}
-        invalid={fieldState.invalid}
         placeholder={placeholder}
         type={type}
         {...rest}

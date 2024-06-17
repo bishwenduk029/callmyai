@@ -1,11 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { signIn } from 'next-auth/react'
 
 import { cn } from '@/lib/utils'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { IconGoogle, IconSpinner } from '@/components/ui/icons'
+import { oauthSignIn } from '@/app/auth/actions'
 
 interface LoginButtonProps extends ButtonProps {
   showGithubIcon?: boolean
@@ -13,7 +13,7 @@ interface LoginButtonProps extends ButtonProps {
 }
 
 export function LoginButton({
-  text = 'Login with Google',
+  text = 'Google',
   showGithubIcon = true,
   className,
   ...props
@@ -22,10 +22,10 @@ export function LoginButton({
   return (
     <Button
       variant="outline"
-      onClick={() => {
+      onClick={async () => {
         setIsLoading(true)
         // next-auth signIn() function doesn't work yet at Edge Runtime due to usage of BroadcastChannel
-        signIn('google', { callbackUrl: `/` })
+        await oauthSignIn()
       }}
       disabled={isLoading}
       className={cn(className)}

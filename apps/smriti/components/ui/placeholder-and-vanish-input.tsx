@@ -141,7 +141,6 @@ export function PlaceholdersAndVanishInput({
   }
 
   const handleKeyDown = (e: any) => {
-    console.log('I am not a hook', e)
     if (e.key === 'Enter' && !animating) {
       vanishAndSubmit()
     }

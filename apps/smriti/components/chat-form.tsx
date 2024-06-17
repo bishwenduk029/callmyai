@@ -12,14 +12,13 @@ import {
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholder-and-vanish-input'
 import { useActions } from 'ai/rsc'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
+import { AutosizeTextarea } from './ui/autosize-textarea'
 
 export function ChatForm({
   vad,
   setInput,
   input,
   setMessages,
-  placeholders,
-  setVoiceMode
 }: any) {
     const { submitUserMessage } = useActions()
     const { formRef, onKeyDown } = useEnterSubmit()
@@ -49,9 +48,9 @@ export function ChatForm({
         ])
       }}
     >
-      <div className="relative flex max-h-260 w-full grow flex-row overflow-hidden px-4 sm:rounded-md sm:px-6">
-        <PlaceholdersAndVanishInput
-          placeholders={placeholders}
+      <div className="relative flex max-h-560 sm:w-full grow flex-row overflow-hidden sm:rounded-md">
+        <AutosizeTextarea
+          placeholder={"Make a note of ...."}
           onKeyDown={onKeyDown}
           onChange={e => setInput(e.target.value)}
         />

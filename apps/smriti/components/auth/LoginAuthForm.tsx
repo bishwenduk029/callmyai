@@ -1,83 +1,77 @@
-'use client';
+'use client'
 
-import type { FC } from 'react';
-import { Suspense, lazy, useState } from 'react';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { Skeleton } from '../ui/skeleton';
+import type { FC } from 'react'
+import { Suspense, lazy, useState } from 'react'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { Skeleton } from '../ui/skeleton'
+import { LoginButton } from '../login-button'
 
 enum AuthFormType {
   EmailAndPassword = 'emailAndPassword',
-  MagicLink = 'magicLink',
+  MagicLink = 'magicLink'
 }
 
 const LoginWithEmailAndPasswordAuthForm = lazy(
-  () => import('./LoginWithEmailAndPasswordAuthForm'),
-);
-const LoginWithEmailAuthForm = lazy(() => import('./LoginWithEmailAuthForm')); // Assuming you also have a component for this
+  () => import('./LoginWithEmailAndPasswordAuthForm')
+)
+const LoginWithEmailAuthForm = lazy(() => import('./LoginWithEmailAuthForm')) // Assuming you also have a component for this
 
 const authFormMapper: Record<AuthFormType, JSX.Element> = {
   emailAndPassword: <LoginWithEmailAndPasswordAuthForm />,
-  magicLink: <LoginWithEmailAuthForm />,
-};
+  magicLink: <LoginWithEmailAuthForm />
+}
 
 export const LoginAuthFormLoading: FC = () => {
   return (
-    <div className='flex flex-col gap-4'>
-      <Skeleton className='h-8' />
-      <Skeleton className='h-8' />
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-8" />
+      <Skeleton className="h-8" />
     </div>
-  );
-};
+  )
+}
 
 export const LoginAuthForm: FC = () => {
   const [currentForm, setCurrentForm] = useState<AuthFormType>(
-    AuthFormType.MagicLink,
-  );
+    AuthFormType.MagicLink
+  )
 
-  const isMagicLinkForm = currentForm === AuthFormType.MagicLink;
+  const isMagicLinkForm = currentForm === AuthFormType.MagicLink
 
   return (
-    <div className='flex flex-col gap-6'>
+    <div className="flex flex-col gap-6">
       <Suspense fallback={<LoginAuthFormLoading />}>
         {authFormMapper[currentForm]}
       </Suspense>
 
-      <div className='flex flex-col gap-6'>
-        <div className='relative'>
-          <div className='absolute inset-0 flex items-center'>
-            <span className='w-full border-t' />
+      <div className="flex flex-col gap-6">
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
           </div>
-          <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background px-2 text-muted-foreground'>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
               Or continue with
             </span>
           </div>
         </div>
-        <div className='flex flex-col gap-1'>
+        <div className="flex flex-col gap-1">
           <button
             className={cn(buttonVariants({ variant: 'outline' }))}
             onClick={() => {
               setCurrentForm(
                 isMagicLinkForm
                   ? AuthFormType.EmailAndPassword
-                  : AuthFormType.MagicLink,
-              );
+                  : AuthFormType.MagicLink
+              )
             }}
-            type='button'
+            type="button"
           >
             {isMagicLinkForm ? 'Email / Password' : 'Magic Link'}
           </button>
-          <button
-            className={cn(buttonVariants({ variant: 'outline' }))}
-            disabled
-            type='button'
-          >
-            
-            Github
-          </button>
+          <LoginButton />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

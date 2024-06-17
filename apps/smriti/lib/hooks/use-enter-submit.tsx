@@ -9,7 +9,6 @@ export function useEnterSubmit(): {
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLTextAreaElement>
   ): void => {
-    console.log("I am a hook")
     if (
       event.key === 'Enter' &&
       !event.shiftKey &&

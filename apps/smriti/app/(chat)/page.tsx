@@ -1,30 +1,21 @@
-import { nanoid } from '@/lib/utils'
-import { Chat } from '@/components/chat'
+import { UserBoard } from '@/components/user-board'
 import { AI } from '@/lib/chat/actions'
-import { auth } from '@/auth'
-import { Session } from '@/lib/types'
 import { getContents } from '@/app/actions'
+import { getCurrentUser } from '../auth/actions'
+import { redirect } from 'next/navigation'
 
 export const metadata = {
   title: 'Smriti - AI Memory Organizer'
 }
 
 export default async function IndexPage() {
-  const session = (await auth()) as Session
+  const user = await getCurrentUser()
 
-  if (!session) {
-    return (
-      <AI initialAIState={null} initialUIState={[]}>
-        <Chat session={session} initialMessages={[]} />
-      </AI>
-    )
-  }
-
-  const contents = await getContents(session.user.id)
+  const contents = user ? await getContents(user.id) : []
 
   return (
     <AI initialAIState={null} initialUIState={[]}>
-      <Chat session={session} initialMessages={contents} />
+      <UserBoard initialMessages={contents} />
     </AI>
   )
 }

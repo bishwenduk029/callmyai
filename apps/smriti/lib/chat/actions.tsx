@@ -10,11 +10,9 @@ import { CoreMessage, DeepPartial, streamObject } from 'ai'
 import { Task } from '@/components/task'
 import { nanoid } from 'nanoid'
 import { openai } from '@ai-sdk/openai'
-import { Ollama, ollama } from 'ollama-ai-provider'
-import { auth } from '@/auth'
-import { db } from '../db'
-import { contents } from '../db/schema'
-import { InferModelFromColumns } from 'drizzle-orm'
+// import { Ollama, ollama } from 'ollama-ai-provider'
+import { getCurrentUser } from '@/app/auth/actions'
+import { createSupabaseServerClient } from '../supabase/server'
 
 const systemPrompt = `You are a personal and organizational assistant.
 
@@ -98,16 +96,24 @@ export const taskSchema = z.object({
   category: z.string()
 })
 
+export const displayTaskSchema = z.object({
+  content: z.string(),
+  tags: z.array(z.string().nullable()).nullable(),
+  category: z.string()
+})
+
+export type PartialDisplayTaskSchema = DeepPartial<typeof displayTaskSchema>
 export type PartialTaskSchema = DeepPartial<typeof taskSchema>
 export type TaskSchema = z.infer<typeof taskSchema>
 
 async function submitUserMessage(userContent: string) {
   'use server'
   const id = nanoid()
+  const supabase = createSupabaseServerClient()
 
   const uiStream = createStreamableUI()
 
-  const objectStream = createStreamableValue<PartialTaskSchema>()
+  const objectStream = createStreamableValue<PartialDisplayTaskSchema>()
 
   uiStream.append(<Task task={objectStream.value} />)
   const messages: CoreMessage[] = [
@@ -120,7 +126,7 @@ async function submitUserMessage(userContent: string) {
   let finalContent: any = null
 
   await streamObject({
-    model: ollama('llama3:latest'),
+    model: openai("gpt-4o"),
     system: systemPrompt,
     messages,
     maxRetries: 0,
@@ -134,7 +140,11 @@ async function submitUserMessage(userContent: string) {
     .then(async result => {
       for await (const obj of result.partialObjectStream) {
         if (Object.keys(obj).length !== 0) {
-          objectStream.update(obj)
+          objectStream.update({
+            ...obj,
+            tags: obj?.tags?.split(',') || []
+          })
+
           finalContent = obj
         }
       }
@@ -143,13 +153,24 @@ async function submitUserMessage(userContent: string) {
       objectStream.done()
       uiStream.done()
 
-      const session = await auth()
-      const content = {
-        id,
-        userId: session?.user?.id,
-        ...finalContent
+      const user = await getCurrentUser()
+      console.log('I am the user', user)
+      if (user) {
+        const content = {
+          id,
+          userId: user?.id,
+          ...finalContent
+        }
+
+        const { error } = await supabase.from('content').insert({
+          ...content,
+          tags: content.tags.split(',')
+        })
+
+        if (error) {
+          console.error(error)
+        }
       }
-      await db.insert(contents).values(content)
     })
 
   return {

@@ -1,18 +1,17 @@
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '../ui/use-toast';
 import { useRouter } from 'next/navigation';
-import { updatePassword } from '@/app/(auth)/actions';
+import { updatePassword } from '@/app/auth/actions';
 import { AppForm } from '../form/AppForm';
 import type { ResetPasswordFormValues } from '@/components/auth/validations/ResetPasswordSchema';
 import { resetPasswordSchema } from '@/components/auth/validations/ResetPasswordSchema';
 import { FormInputField } from '@/components/form/FormInputField';
+import { toast } from 'sonner';
 
 export const ResetPasswordForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { push } = useRouter();
-  const { toast } = useToast();
 
   const onSubmit = async ({ password }: ResetPasswordFormValues) => {
     setIsLoading(true);
@@ -20,24 +19,14 @@ export const ResetPasswordForm: FC = () => {
 
     try {
       if (error) {
-        toast({
-          title: error.message,
-          variant: 'destructive',
-        });
+        toast(error.message);
         return;
       }
 
-      toast({
-        title: 'Password updated!',
-        description: 'Your password has been successfully updated.',
-      });
+      toast('Password updated!');
       push('/');
     } catch (err) {
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred. Please try again.',
-        variant: 'destructive',
-      });
+      toast('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }

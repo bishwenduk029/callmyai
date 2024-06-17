@@ -25,7 +25,7 @@ import { SimpleTask, Task } from './task'
 import IntroText from './intro-text'
 import Info from './info'
 import { PartialTaskSchema } from '@/lib/chat/actions'
-import { contents } from '@/lib/db/schema'
+import { useMediaQuery } from '@/lib/hooks/use-media-query'
 
 const simpleMessages = [
   {
@@ -120,39 +120,39 @@ const simpleMessages = [
   }
 ]
 
+export type InitialMessage = {
+  title: string | null;
+  id: string;
+  content: string;
+  userId: string;
+  category: string;
+  tags: (string | null | undefined)[];
+};
+
+export type InitialMessages = InitialMessage[];
+
 export interface ChatProps extends React.ComponentProps<'div'> {
-  initialMessages: {
-    title: string | null
-    id: string
-    content: string
-    userId: string
-    category: string
-    tags: string | null
-  }[]
-  session?: Session
+  initialMessages: InitialMessages | never[]
 }
 
-export function Chat({ className, session, initialMessages }: ChatProps) {
+export function UserBoard({ className, initialMessages }: ChatProps) {
   const router = useRouter()
   const [input, setInput] = useState('')
   const [messages] = useUIState()
+  const isDesktop = useMediaQuery('(min-width: 768px)')
 
   useEffect(() => {
     router.refresh()
   }, [router])
 
-  const { messagesRef, scrollRef, visibilityRef, isAtBottom, scrollToBottom } =
-    useScrollAnchor()
-
   return (
     <div
       className="group z-0 w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
-      ref={scrollRef}
     >
       {messages.length + initialMessages.length == 0 && (
         <div className='flex flex-col justify-center align-middle'>
           <IntroText />
-          <Info />
+          {!isDesktop && <Info />}
         </div>
       )}
       <div
@@ -160,7 +160,6 @@ export function Chat({ className, session, initialMessages }: ChatProps) {
           'pb-[200px] pt-4 md:pt-10 px-4 sm:px-1 flex flex-col space-y-3 w-full md:w-2/5 mx-auto',
           className
         )}
-        ref={messagesRef}
       >
         <AnimatePresence>
           {messages.map((message: any) => (
@@ -175,13 +174,11 @@ export function Chat({ className, session, initialMessages }: ChatProps) {
             />
           ))}
         </AnimatePresence>
-        <div className="w-full h-px" ref={visibilityRef} />
+        <div className="w-full h-px" />
       </div>
       <ChatPanel
         input={input}
         setInput={setInput}
-        isAtBottom={isAtBottom}
-        scrollToBottom={scrollToBottom}
       />
     </div>
   )

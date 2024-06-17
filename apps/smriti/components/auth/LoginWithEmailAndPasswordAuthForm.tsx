@@ -3,19 +3,18 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { signInWithEmailAndPassword } from '@/app/(auth)/actions';
+import { signInWithEmailAndPassword } from '@/app/auth/actions';
 import { FormInputField } from '../form/FormInputField';
 import { AppForm } from '../form/AppForm';
 import type { LoginEmailAndPasswordFormValues } from './validations';
 import { loginWithEmailAndPasswordSchema } from './validations';
+import { toast } from 'sonner';
 
 const LoginWithEmailAndPasswordAuthForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { push } = useRouter();
-  const { toast } = useToast();
 
   const onSubmit = async (formValues: LoginEmailAndPasswordFormValues) => {
     setIsLoading(true);
@@ -24,18 +23,14 @@ const LoginWithEmailAndPasswordAuthForm: FC = () => {
 
     try {
       if (error) {
-        toast({ title: error.message, variant: 'destructive' });
+        toast(error.message);
         return;
       }
 
-      toast({ title: 'Login successful!' });
-      push('/app');
+      toast('Login successful!');
+      push('/');
     } catch (err) {
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred. Please try again.',
-        variant: 'destructive',
-      });
+      toast('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }

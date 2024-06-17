@@ -4,18 +4,18 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useToast } from '../ui/use-toast';
 import { useRouter } from 'next/navigation';
-import { signUpWithEmailAndPassword } from '@/app/(auth)/actions';
+import { signUpWithEmailAndPassword } from '@/app/auth/actions';
 import { AppForm } from '@/components/form/AppForm';
 import { FormInputField } from '@/components/form/FormInputField';
 import type { RegisterEmailAndPasswordFormValues } from '@/components/auth/validations';
 import { registerWithEmailAndPasswordSchema } from '@/components/auth/validations';
+import { toast } from 'sonner';
+import { LoginButton } from '../login-button';
 
 export const RegisterWithEmailAndPasswordAuthForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { push } = useRouter();
-  const { toast } = useToast();
 
   const onSubmit = async ({
     email,
@@ -27,18 +27,14 @@ export const RegisterWithEmailAndPasswordAuthForm: FC = () => {
 
     try {
       if (error) {
-        toast({ title: error.message, variant: 'destructive' });
+        toast(error.message);
         return;
       }
 
-      toast({ title: 'User created!' });
+      toast('User created!');
       push('/auth/login');
     } catch (err) {
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred. Please try again.',
-        variant: 'destructive',
-      });
+      toast('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -80,14 +76,7 @@ export const RegisterWithEmailAndPasswordAuthForm: FC = () => {
           </span>
         </div>
       </div>
-      <button
-        className={cn(buttonVariants({ variant: 'outline' }))}
-        disabled
-        type='button'
-      >
-        {/* <Icons.Github className='mr-2 h-4 w-4' /> */}
-        Github
-      </button>
+      <LoginButton />
     </div>
   );
 };
