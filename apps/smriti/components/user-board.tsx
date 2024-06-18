@@ -6,7 +6,6 @@ import { EmptyScreen } from '@/components/empty-screen'
 import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import {
   JSXElementConstructor,
-  PromiseLikeOfReactNode,
   ReactElement,
   ReactNode,
   ReactPortal,
@@ -196,7 +195,6 @@ const UserTask = ({
       | ReactElement<any, string | JSXElementConstructor<any>>
       | Iterable<ReactNode>
       | ReactPortal
-      | PromiseLikeOfReactNode
       | ReactNode
       | null
       | undefined

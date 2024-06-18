@@ -1,6 +1,6 @@
 'use client'
 import { PartialDisplayTaskSchema, PartialTaskSchema, TaskSchema, taskSchema } from '../lib/chat/actions'
-import { useStreamableValue } from 'ai/rsc'
+import { useStreamableValue, StreamableValue } from 'ai/rsc';
 import { Badge } from './ui/badge'
 import { Skeleton } from './ui/skeleton'
 import { motion } from 'framer-motion'
@@ -13,10 +13,9 @@ import {
   CardTitle
 } from './ui/card'
 import { Button } from './ui/button'
-import { Key } from 'react'
 
 export interface TaskProps {
-  task: PartialTaskSchema
+  task: StreamableValue<PartialDisplayTaskSchema>
 }
 
 const SkeletonCard = () => {
