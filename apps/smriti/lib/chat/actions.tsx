@@ -154,7 +154,6 @@ async function submitUserMessage(userContent: string) {
       uiStream.done()
 
       const user = await getCurrentUser()
-      console.log('I am the user', user)
       if (user) {
         const content = {
           id,

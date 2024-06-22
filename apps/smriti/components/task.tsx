@@ -59,7 +59,7 @@ export const SimpleTask: React.FC<PartialDisplayTaskSchema> = ({
         scale: 1.02
       }}
     >
-      <Card className="mb-4 w-full last:mb-0 last:pb-0 border-mute-foreground rounded-lg bg-white">
+      <Card className="mb-4 w-full last:mb-0 last:pb-0 border-mute-foreground bg-white">
         <CardHeader className="w-full  -mb-5">
           <CardTitle className="w-full font-extrabold italic">{category}</CardTitle>
           <CardDescription className="w-full font-medium text-lg">{content}</CardDescription>

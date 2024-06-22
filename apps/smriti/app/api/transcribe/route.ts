@@ -2,6 +2,7 @@ import OpenAI from 'openai'
 
 const speechBackend = new OpenAI({
   baseURL: process.env.OPENAI_SPEECH_TO_TEXT_URL,
+  apiKey: process.env.GROQ_WHISPER_KEY
 });
 
 export async function POST(req: Request) {

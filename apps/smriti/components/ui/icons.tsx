@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { Loader2 } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
 
 export function IconNextChat({
   className,
@@ -89,7 +89,10 @@ export function IconNextChat({
   )
 }
 
-export function IconOpenAI({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconOpenAI({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       fill="currentColor"
@@ -105,7 +108,10 @@ export function IconOpenAI({ className, ...props }: React.ComponentProps<'svg'>)
   )
 }
 
-export function IconVercel({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconVercel({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       aria-label="Vercel logomark"
@@ -122,7 +128,10 @@ export function IconVercel({ className, ...props }: React.ComponentProps<'svg'>)
   )
 }
 
-export function IconGoogle({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconGoogle({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       role="img"
@@ -159,7 +168,10 @@ export function IconGoogle({ className, ...props }: React.ComponentProps<'svg'>)
   )
 }
 
-export function IconSeparator({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconSeparator({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       fill="none"
@@ -178,7 +190,10 @@ export function IconSeparator({ className, ...props }: React.ComponentProps<'svg
   )
 }
 
-export function IconArrowDown({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconArrowDown({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +207,10 @@ export function IconArrowDown({ className, ...props }: React.ComponentProps<'svg
   )
 }
 
-export function IconArrowRight({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconArrowRight({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +252,10 @@ export function IconPlus({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
-export function IconArrowElbow({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconArrowElbow({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +291,10 @@ export function IconMic({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
-export function IconSpinner({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconSpinner({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -284,7 +308,10 @@ export function IconSpinner({ className, ...props }: React.ComponentProps<'svg'>
   )
 }
 
-export function IconMessage({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconMessage({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -298,7 +325,10 @@ export function IconMessage({ className, ...props }: React.ComponentProps<'svg'>
   )
 }
 
-export function IconTrash({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconTrash({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -312,7 +342,10 @@ export function IconTrash({ className, ...props }: React.ComponentProps<'svg'>) 
   )
 }
 
-export function IconRefresh({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconRefresh({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -340,7 +373,10 @@ export function IconStop({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
-export function IconSidebar({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconSidebar({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -396,7 +432,10 @@ export function IconCopy({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
-export function IconCheck({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconCheck({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -410,7 +449,10 @@ export function IconCheck({ className, ...props }: React.ComponentProps<'svg'>) 
   )
 }
 
-export function IconDownload({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconDownload({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -424,7 +466,10 @@ export function IconDownload({ className, ...props }: React.ComponentProps<'svg'
   )
 }
 
-export function IconClose({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconClose({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -458,7 +503,10 @@ export function IconEdit({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
-export function IconShare({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconShare({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -472,7 +520,10 @@ export function IconShare({ className, ...props }: React.ComponentProps<'svg'>) 
   )
 }
 
-export function IconUsers({ className, ...props }: React.ComponentProps<'svg'>) {
+export function IconUsers({
+  className,
+  ...props
+}: React.ComponentProps<'svg'>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -549,7 +600,9 @@ const Icons = {
   IconExternalLink,
   IconChevronUpDown,
   IconMic,
-  Spinner: Loader2
+  Spinner: LucideIcons.Loader2,
+  IconFeather: LucideIcons.FeatherIcon,
+  IconLink: LucideIcons.Link2Icon
 }
 
-export default Icons;
+export default Icons

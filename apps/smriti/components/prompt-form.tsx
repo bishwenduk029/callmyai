@@ -10,13 +10,10 @@ import { ChatForm } from './chat-form'
 import { VoiceForm } from './voice-form'
 import { AI } from '../lib/chat/actions'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { Button } from './ui/button'
+import { Button, buttonVariants } from './ui/button'
 import Icons, { IconClose } from './ui/icons'
-import { Label } from '@radix-ui/react-dropdown-menu'
-import { Input } from './ui/input'
-import { FeatherIcon } from 'lucide-react'
 import { PopoverAnchor, PopoverArrow } from '@radix-ui/react-popover'
-import { motion } from 'framer-motion'
+import { Dock, DockIcon } from '@/components/magicui/dock'
 import {
   Drawer,
   DrawerTrigger,
@@ -27,6 +24,15 @@ import {
   DrawerDescription,
   DrawerClose
 } from './ui/drawer'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
+import Link from 'next/link'
+import { HomeIcon, NotebookIcon } from 'lucide-react'
+import { cn } from '../lib/utils'
+import { Separator } from './ui/separator'
 
 export function PromptForm({
   input,
@@ -63,180 +69,254 @@ export function PromptForm({
 
   if (!isDesktop) {
     return (
-      <div className="">
-        <Drawer
-          open={open}
-          onOpenChange={open => {
-            setOpen(open)
-            if (!open) {
-              setRecorderOpen(false)
-              setWriterOpen(false)
-            }
-          }}
-        >
-          <div className="flex flex-row justify-between bg-black border-t max-w-96 mx-auto px-4 py-2 shadow-2xl shadow-purple-200 sm:rounded-2xl sm:border md:py-4">
-            <DrawerTrigger asChild>
-              <Button
-                size="lg"
-                className="p-5 flex flex-row space-x-2"
-                onClick={() => {
-                  setRecorderOpen(!recorderOpen)
-                  setOpen(!open)
-                  setVoiceMode(true)
-                }}
-              >
-                {recorderOpen ? <Icons.IconClose /> : <Icons.IconMic className="" />}
-                <span className="hidden text-lg sm:inline">
-                  {recorderOpen ? 'Close' : 'Record'}
-                </span>
-              </Button>
-            </DrawerTrigger>
-            <DrawerTrigger asChild>
-              <Button
-                size="lg"
-                className="p-5 flex flex-row space-x-2"
-                onClick={() => {
-                  setWriterOpen(!writerOpen)
-                  setOpen(!open)
-                  setVoiceMode(false)
-                }}
-              >
-                {writerOpen ? <Icons.IconClose /> : <FeatherIcon className="" />}
-                <span className="hidden text-lg sm:inline">
-                  {writerOpen ? 'Close' : 'Write'}
-                </span>
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerHeader className="text-left">
-                <DrawerTitle>Edit profile</DrawerTitle>
-                <DrawerDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
-                </DrawerDescription>
-              </DrawerHeader>
-              {voiceMode ? (
-                <VoiceForm
-                  vad={vad}
-                  text={text}
-                  setMessages={setMessages}
-                  submitUserMessage={submitUserMessage}
-                  onCancel={() => {
-                    setOpen(false)
-                    setRecorderOpen(false)
-                  }}
-                  isTranscribing={isTranscribing}
-                />
-              ) : (
-                <ChatForm
-                  vad={vad}
-                  setInput={setInput}
-                  input={input}
-                  setMessages={setMessages}
-                />
-              )}
-              <DrawerFooter className="pt-2">
-                <DrawerClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </div>
-        </Drawer>
-      </div>
+      <Drawer
+        open={open}
+        onOpenChange={open => {
+          setOpen(open)
+          if (!open) {
+            setRecorderOpen(false)
+            setWriterOpen(false)
+          }
+        }}
+      >
+        <DrawerTrigger asChild className="flex flex-row justify-center">
+          <Dock className="z-50 bottom-5 pointer-events-auto border-6 fixed rounded-full flex items-center px-1 bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu">
+            <DockIcon>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/"
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'icon' }),
+                      'size-12'
+                    )}
+                  >
+                    <HomeIcon className="size-6" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Home</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+
+            <Separator orientation="vertical" className="h-full py-4" />
+            <DockIcon key={'record'}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={'ghost'}
+                    size={'lg'}
+                    onClick={() => {
+                      setRecorderOpen(!recorderOpen)
+                      setOpen(!open)
+                      setVoiceMode(true)
+                    }}
+                  >
+                    <Icons.IconMic className="size-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Record</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+            <DockIcon key={'write'}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={'ghost'}
+                    size={'lg'}
+                    onClick={() => {
+                      setWriterOpen(!writerOpen)
+                      setOpen(!open)
+                      setVoiceMode(false)
+                    }}
+                  >
+                    <Icons.IconFeather className="size-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Record</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+            <Separator orientation="vertical" className="h-full py-4" />
+            <DockIcon>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/blog"
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'icon' }),
+                      'size-12'
+                    )}
+                  >
+                    <NotebookIcon className="size-6" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Blog</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+          </Dock>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader className="text-left">
+            <DrawerTitle>Edit profile</DrawerTitle>
+            <DrawerDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DrawerDescription>
+          </DrawerHeader>
+          {voiceMode ? (
+            <VoiceForm
+              vad={vad}
+              text={text}
+              setMessages={setMessages}
+              submitUserMessage={submitUserMessage}
+              onCancel={() => {
+                setOpen(false)
+                setRecorderOpen(false)
+              }}
+              isTranscribing={isTranscribing}
+            />
+          ) : (
+            <ChatForm
+              vad={vad}
+              setInput={setInput}
+              input={input}
+              setMessages={setMessages}
+            />
+          )}
+          <DrawerFooter className="pt-2">
+            <DrawerClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     )
   }
 
   return (
-    <div className="shadow-2xl shadow-orange-300 w-full mx-auto sm:rounded-2xl sm:border ">
-      <Popover
-        open={open}
-        onOpenChange={open => {
-          if (!open) {
-            vad.pause()
-          }
-        }}
-      >
+    <Popover
+      open={open}
+      onOpenChange={open => {
+        if (!open) {
+          vad.pause()
+        }
+      }}
+    >
+      <div className="fixed bottom-0 inset-x-0 h-16 w-full bg-background to-transparent backdrop-blur-lg [-webkit-mask-image:linear-gradient(to_top,black,transparent)]"></div>
+      <PopoverTrigger className="flex flex-row justify-center">
         <PopoverAnchor asChild>
-          <div className="flex flex-row justify-between w-full sm:mx-auto px-4 py-2 md:py-4">
-            <PopoverTrigger>
-              <Button
-                size="lg"
-                className="p-5 flex flex-row space-x-2"
-                onClick={() => {
-                  setRecorderOpen(!recorderOpen)
-                  setOpen(!open)
-                  setVoiceMode(true)
-                }}
-              >
-                {recorderOpen ? <Icons.IconClose /> : <Icons.IconMic className="" />}
-                <span className="hidden text-lg sm:inline">
-                  {recorderOpen ? 'Close' : 'Record'}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <Icons.IconSeparator className="size-12 text-muted-foreground/50" />
-            <PopoverTrigger>
-              <Button
-                size="lg"
-                className="p-5 flex flex-row space-x-2"
-                onClick={() => {
-                  setWriterOpen(!writerOpen)
-                  setOpen(!open)
-                  setVoiceMode(false)
-                }}
-              >
-                {writerOpen ? <IconClose /> : <FeatherIcon className="" />}
-                <span className="hidden text-lg sm:inline">
-                  {writerOpen ? 'Close' : 'Write'}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="sm:w-[800px] bg-white">
-              {voiceMode ? (
-                <VoiceForm
-                  vad={vad}
-                  text={text}
-                  setMessages={setMessages}
-                  submitUserMessage={submitUserMessage}
-                  onCancel={() => {
-                    setOpen(false)
-                    setRecorderOpen(false)
-                  }}
-                  isTranscribing={isTranscribing}
-                />
-              ) : (
-                <ChatForm
-                  vad={vad}
-                  setInput={setInput}
-                  input={input}
-                  setMessages={setMessages}
-                />
-              )}
-            </PopoverContent>
-          </div>
+          <Dock className="z-50 bottom-20 sm:bottom-8 pointer-events-auto border-6 fixed rounded-full flex items-center px-1 bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu">
+            <DockIcon>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/"
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'icon' }),
+                      'size-12'
+                    )}
+                  >
+                    <HomeIcon className="size-6" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Home</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+
+            <Separator orientation="vertical" className="h-full py-4" />
+            <DockIcon key={'record'}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={'ghost'}
+                    size={'lg'}
+                    onClick={() => {
+                      setRecorderOpen(!recorderOpen)
+                      setOpen(!open)
+                      setVoiceMode(true)
+                    }}
+                  >
+                    <Icons.IconMic className="size-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Record</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+            <DockIcon key={'write'}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={'ghost'}
+                    size={'lg'}
+                    onClick={() => {
+                      setWriterOpen(!writerOpen)
+                      setOpen(!open)
+                      setVoiceMode(false)
+                    }}
+                  >
+                    <Icons.IconFeather className="size-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Record</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+            <Separator orientation="vertical" className="h-full py-4" />
+            <DockIcon>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/blog"
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'icon' }),
+                      'size-12'
+                    )}
+                  >
+                    <NotebookIcon className="size-6" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Blog</p>
+                </TooltipContent>
+              </Tooltip>
+            </DockIcon>
+          </Dock>
         </PopoverAnchor>
-      </Popover>
-    </div>
+      </PopoverTrigger>
+
+      <PopoverContent className="sm:w-[800px] bg-white">
+        {voiceMode ? (
+          <VoiceForm
+            vad={vad}
+            text={text}
+            setMessages={setMessages}
+            submitUserMessage={submitUserMessage}
+            onCancel={() => {
+              setOpen(false)
+              setRecorderOpen(false)
+            }}
+            isTranscribing={isTranscribing}
+          />
+        ) : (
+          <ChatForm
+            vad={vad}
+            setInput={setInput}
+            input={input}
+            setMessages={setMessages}
+          />
+        )}
+      </PopoverContent>
+    </Popover>
   )
 }
-
-// {voiceMode ? (
-//   <VoiceForm
-//     vad={vad}
-//     text={text}
-//     setMessages={setMessages}
-//     submitUserMessage={submitUserMessage}
-//     setVoiceMode={setVoiceMode}
-//     isTranscribing={isTranscribing}
-//   />
-// ) : (
-//   <ChatForm
-//     vad={vad}
-//     setInput={setInput}
-//     input={input}
-//     setMessages={setMessages}
-//     placeholders={placeholders}
-//     setVoiceMode={setVoiceMode}
-//   />
-// )}

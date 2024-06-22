@@ -120,15 +120,15 @@ const simpleMessages = [
 ]
 
 export type InitialMessage = {
-  title: string | null;
-  id: string;
-  content: string;
-  userId: string;
-  category: string;
-  tags: (string | null | undefined)[];
-};
+  title: string | null
+  id: string
+  content: string
+  userId: string
+  category: string
+  tags: (string | null | undefined)[]
+}
 
-export type InitialMessages = InitialMessage[];
+export type InitialMessages = InitialMessage[]
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages: InitialMessages | never[]
@@ -145,40 +145,37 @@ export function UserBoard({ className, initialMessages }: ChatProps) {
   }, [router])
 
   return (
-    <div
-      className="group z-0 w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
-    >
+    <div className="group z-0 w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]">
       {messages.length + initialMessages.length == 0 && (
-        <div className='flex flex-col justify-center align-middle'>
+        <div className="flex flex-col justify-center align-middle">
           <IntroText />
-          {!isDesktop && <Info />}
+          <Info />
         </div>
       )}
       <div
         className={cn(
-          'pb-[200px] pt-4 md:pt-10 px-4 sm:px-1 flex flex-col space-y-3 w-full md:w-2/5 mx-auto',
+          'pb-[200px] pt-4 md:pt-10 px-4 sm:px-1 flex flex-col items-center space-y-3 w-full md:w-2/5 mx-auto',
           className
         )}
       >
-        <AnimatePresence>
-          {messages.map((message: any) => (
-            <UserTask key={message.id} message={message} />
-          ))}
-          {initialMessages.map((simpleMessage, index) => (
-            <SimpleTask
-              key={index}
-              category={simpleMessage.category}
-              content={simpleMessage?.content}
-              tags={simpleMessage.tags}
-            />
-          ))}
-        </AnimatePresence>
+        <div className='flex flex-col justify-center'>
+          <AnimatePresence>
+            {messages.map((message: any) => (
+              <UserTask key={message.id} message={message} />
+            ))}
+            {initialMessages.map((simpleMessage, index) => (
+              <SimpleTask
+                key={index}
+                category={simpleMessage.category}
+                content={simpleMessage?.content}
+                tags={simpleMessage.tags}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
         <div className="w-full h-px" />
+        <ChatPanel input={input} setInput={setInput} />
       </div>
-      <ChatPanel
-        input={input}
-        setInput={setInput}
-      />
     </div>
   )
 }
@@ -207,7 +204,7 @@ const UserTask = ({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0 }}
       key={`${message.id}`}
-      className="mb-4 grid grid-cols-[25px_1fr] items-start p-4 last:mb-0 last:pb-0 border-black border-2 rounded-lg bg-background"
+      className=""
     >
       {message.display}
     </motion.div>
