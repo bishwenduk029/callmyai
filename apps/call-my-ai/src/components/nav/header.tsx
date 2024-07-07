@@ -21,6 +21,7 @@ import { Icons } from "@/components/icons"
 import { Navigation } from "@/components/nav/navigation"
 import { NavigationMobile } from "@/components/nav/navigation-mobile"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "./logo"
 
 export async function Header(): Promise<JSX.Element> {
   const session = await auth()
@@ -28,13 +29,7 @@ export async function Header(): Promise<JSX.Element> {
   return (
     <header className="sticky top-0 z-40 flex h-20 w-full bg-transparent">
       <div className="container flex items-center justify-between p-4">
-        <Link
-          href="/"
-          className="flex items-center justify-center gap-2 text-lg font-bold tracking-wide transition-all duration-300 ease-in-out"
-        >
-          <Icons.rocket className="size-6 md:hidden lg:flex" />
-          <span className="hidden md:flex">{siteConfig.name}</span>
-        </Link>
+        <Logo />
         <Navigation navItems={siteConfig.navItems} />
         <div className="flex items-center justify-center">
           <ThemeToggle />
@@ -105,7 +100,7 @@ export async function Header(): Promise<JSX.Element> {
             ) : (
               <Link
                 aria-label="Get started"
-                href="/signup"
+                href="/dashboard/settings"
                 className={cn(buttonVariants({ size: "sm" }), "ml-2")}
               >
                 Get Started

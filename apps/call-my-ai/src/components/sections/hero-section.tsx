@@ -1,23 +1,34 @@
+"use client"
+
+import { useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { motion, useInView } from "framer-motion"
 import Balancer from "react-wrap-balancer"
 
 import { siteConfig } from "@/config/site"
 
-import { cn, getGitHubStars } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 
 import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 
-export async function HeroSection() {
-  const gitHubStars = await getGitHubStars()
+const FADE_DOWN_ANIMATION_VARIANTS = {
+  hidden: { opacity: 0, y: -10 },
+  show: { opacity: 1, y: 0, transition: { type: "spring" } },
+}
+
+export function HeroSection() {
+  const gitHubStars = 0
+  const ref = useRef(null)
+  const isInView = useInView(ref)
 
   return (
-    <section
+    <motion.div
       id="hero-section"
       aria-label="hero section"
-      className="mt-16 w-full md:mt-48"
+      className="md:mt-38 mx-auto mt-16 w-full sm:w-1/2"
     >
       <Image
         fill
@@ -26,7 +37,21 @@ export async function HeroSection() {
         className="absolute right-0 top-0 opacity-5 lg:opacity-10"
       />
 
-      <div className="container flex flex-col items-center gap-6 text-center">
+      <motion.div
+        initial="hidden"
+        ref={ref}
+        animate={isInView ? "show" : "hidden"}
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          show: {
+            transition: {
+              staggerChildren: 0.15,
+            },
+          },
+        }}
+        className="container mx-auto flex flex-col items-center gap-6 text-center"
+      >
         {gitHubStars ? (
           <Link
             href={siteConfig.links.github}
@@ -45,44 +70,42 @@ export async function HeroSection() {
             <span className="sr-only">GitHub</span>
           </Link>
         ) : null}
-        <h1 className="animate-fade-up font-urbanist text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+        <motion.h1
+          variants={FADE_DOWN_ANIMATION_VARIANTS}
+          className="font-urbanist text-5xl font-extrabold tracking-tight sm:text-6xl"
+        >
           <Balancer>
-            Fast-Track Your Business Launch with{" "}
-            <span className="bg-gradient-to-r from-pink-600 to-purple-400 bg-clip-text font-extrabold text-transparent">
-              SaaSy Land
-            </span>
+            AI powered answering machine{" "}
+            <motion.span
+              variants={FADE_DOWN_ANIMATION_VARIANTS}
+              className="bg-clip-text underline "
+            >
+              on web
+            </motion.span>
           </Balancer>
-        </h1>
+        </motion.h1>
 
-        <h3 className="max-w-2xl animate-fade-up text-muted-foreground sm:text-xl sm:leading-8">
+        <motion.h3
+          variants={FADE_DOWN_ANIMATION_VARIANTS}
+          className="max-w-2xl font-urbanist text-muted-foreground sm:text-xl sm:leading-8"
+        >
           <Balancer>
-            Your shortcut to startup success. The ultimate, modern, open-source
-            Next.js template, with everything you need set up and ready to use.
+            Your own call assistant. Ready to take calls on your behalf and filter out spams, unwanted calls and more.
           </Balancer>
-        </h3>
+        </motion.h3>
 
-        <div className="z-10 flex animate-fade-up flex-col justify-center gap-4 sm:flex-row">
+        <motion.div
+          variants={FADE_DOWN_ANIMATION_VARIANTS}
+          className="z-10 flex flex-col justify-center gap-4 sm:flex-row"
+        >
           <Link
-            href="/signup"
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "transition-all duration-1000 ease-out md:hover:-translate-y-2"
-            )}
+            href="/dashboard/settings"
+            className={cn(buttonVariants({ size: "lg" }))}
           >
-            Get Started
+            Get Your Handle
           </Link>
-
-          <Link
-            href={siteConfig.links.github}
-            className={cn(
-              buttonVariants({ variant: "outline", size: "lg" }),
-              "transition-all duration-1000 ease-out md:hover:-translate-y-2"
-            )}
-          >
-            See on GitHub
-          </Link>
-        </div>
-      </div>
-    </section>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   )
 }

@@ -4,14 +4,9 @@ import type { NextAuthConfig } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GitHubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
-import ResendProvider from "next-auth/providers/resend"
 
 import { env } from "@/env.mjs"
-import { resend } from "@/config/email"
-import { siteConfig } from "@/config/site"
 import { signInWithPasswordSchema } from "@/validations/auth"
-
-import { MagicLinkEmail } from "@/components/emails/magic-link-email"
 
 export default {
   providers: [
@@ -44,36 +39,6 @@ export default {
           if (passwordIsValid) return user
         }
         return null
-      },
-    }),
-    ResendProvider({
-      server: {
-        host: env.RESEND_HOST,
-        port: Number(env.RESEND_PORT),
-        auth: {
-          user: env.RESEND_USERNAME,
-          pass: env.RESEND_API_KEY,
-        },
-      },
-      async sendVerificationRequest({
-        identifier,
-        url,
-      }: {
-        identifier: string
-        url: string
-      }) {
-        try {
-          await resend.emails.send({
-            from: env.RESEND_EMAIL_FROM,
-            to: [identifier],
-            subject: `${siteConfig.name} magic link sign in`,
-            react: MagicLinkEmail({ identifier, url }),
-          })
-
-          console.log("Verification email sent")
-        } catch (error) {
-          throw new Error("Failed to send verification email")
-        }
       },
     }),
   ],

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Link from "next/link"
 import Balancer from "react-wrap-balancer"
 
@@ -46,7 +47,7 @@ export function Footer(): JSX.Element {
           ))}
         </div>
 
-        <div className="hidden flex-col gap-4 sm:flex sm:w-1/3 xl:pl-24">
+        {/* <div className="hidden flex-col gap-4 sm:flex sm:w-1/3 xl:pl-24">
           <p className="text-sm font-medium leading-5 tracking-wide lg:text-base 2xl:text-lg">
             <Balancer>
               Join our newsletter today to stay up to date on features and
@@ -55,24 +56,21 @@ export function Footer(): JSX.Element {
           </p>
 
           <NewsletterSignUpForm />
-        </div>
-      </div>
+        </div> */}
+      </div> 
 
       <div className="container flex items-center justify-between">
         <p className="text-sm text-muted-foreground xl:text-base">
           <Balancer>
-            Built in public by{" "}
+            Built with ❤️ by{" "}
             <Link
               href={siteConfig.links.authorsGitHub}
               target="_blank"
               rel="noreferrer"
               className="font-semibold underline-offset-8 transition-all hover:underline hover:opacity-70"
             >
-              Piotr Borowiecki.
+              Bishwendu Kundu.
             </Link>{" "}
-            <span className="hidden md:inline-flex">
-              Freely available under the MIT license. Enjoy :)
-            </span>
           </Balancer>
         </p>
         <div className="flex items-center justify-center">

@@ -1,35 +1,30 @@
+"use client"
 import Link from "next/link"
 
 import { techStack } from "@/data/tech-stack"
 
 import { Icons } from "@/components/icons"
+import { useEffect, useState } from "react"
 
 export function TechSection(): JSX.Element {
   return (
     <section
       id="tech-section"
       aria-label="tech section"
-      className="hidden w-full bg-background py-8 sm:grid"
+      className="w-full bg-background py-8 grid"
     >
       <div
         className="container flex w-full max-w-4xl animate-fade-up flex-wrap place-items-center items-center justify-center gap-6 opacity-0 sm:gap-[38px] md:gap-[36px] lg:gap-x-12"
-        style={{ animationDelay: "0.55s", animationFillMode: "forwards" }}
+        style={{ animationDelay: "1s", animationFillMode: "forwards" }}
       >
-        {techStack.map((tech) => {
-          const Icon = Icons[tech.icon as keyof typeof Icons]
-
-          return (
-            <Link
-              key={tech.title}
-              href={tech.href}
-              target="_blank"
-              rel="noreferer"
-              className="transition-all duration-200 ease-out hover:opacity-70"
-            >
-              <Icon />
-            </Link>
-          )
-        })}
+        <div
+          className="absolute bottom-0 left-1/2 aspect-[1/2] w-[150%] -translate-x-1/2 rounded-r-full opacity-20 blur-xl transition-colors duration-300 ease-in"
+          style={{
+            background: `radial-gradient(ellipse at bottom, #fb2ef1, transparent 70%)`,
+          }}
+        />
+        <div className="relative z-10 flex h-full items-center justify-center text-white">
+        </div>
       </div>
     </section>
   )

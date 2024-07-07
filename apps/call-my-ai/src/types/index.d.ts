@@ -37,14 +37,14 @@ export interface BlogPostParamsProps {
 }
 
 export interface PricingPlan {
-  id: "basic" | "standard" | "premium"
+  id: "basic" | "standard" | "premium" | "enterprises"
   name: string
   description: string
   features: string[]
   limitations: string[]
   stripePriceId: string
   prices: {
-    monthly: number
+    monthly: number | string
     yearly: number
   }
   stripeIds: {

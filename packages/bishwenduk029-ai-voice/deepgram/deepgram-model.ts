@@ -79,7 +79,6 @@ export class DeepgramSpeechModel implements SpeechModelV1 {
   }
 
   async generateAudioStream(value: string) {
-    console.log(this.config.headers())
     const { responseHeaders, value: response } = await postJsonToApi({
       url: `${this.config.baseURL}/v1/speak?model=${this.modelId}`,
       headers: this.config.headers(),

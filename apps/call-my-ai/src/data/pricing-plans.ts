@@ -5,12 +5,8 @@ export const pricingPlans: PricingPlan[] = [
     id: "basic",
     name: "Basic",
     description: "Perfect for when you are just getting started",
-    features: ["Up to 5 projects", "Basic analytics and reporting"],
+    features: ["100 calls per month", "Call History reporting", "Each call of duration 100 seconds"],
     limitations: [
-      "No custom branding",
-      "No commercial license",
-      "Limited customer support",
-      "No access to new features",
     ],
     stripePriceId: "",
     prices: {
@@ -23,21 +19,17 @@ export const pricingPlans: PricingPlan[] = [
     },
   },
   {
-    id: "standard",
-    name: "Standard",
-    description: "Perfect for when you are starting to grow",
+    id: "premium",
+    name: "Premium",
+    description: "Perfect for seriously scaling your business",
     features: [
-      "Up to 10 projects",
-      "Commercial license",
-      "Advanced analytics and reporting",
-      "Priority customer support",
-      "Exclusive training materials",
+      "Unlimited calls per month", "Call History reporting", "Each call of duration 100 seconds"
     ],
-    limitations: ["No custom branding", "Limited customer support"],
+    limitations: [],
     stripePriceId: "",
     prices: {
-      monthly: 19,
-      yearly: 180,
+      monthly: 15,
+      yearly: 240,
     },
     stripeIds: {
       monthly: undefined,
@@ -45,21 +37,16 @@ export const pricingPlans: PricingPlan[] = [
     },
   },
   {
-    id: "premium",
-    name: "Premium",
-    description: "Perfect for seriously scaling your business",
+    id: "enterprises",
+    name: "Enterprise",
+    description: "Perfect for advertizing agencies, call centers and call agencies",
     features: [
-      "Unlimited projects",
-      "Commercial licence",
-      "Real-time analytics and reporting",
-      "Exclusive training materials",
-      "24/7 custommer support",
-      "Personal branding",
+      "Unlimited calls per month", "Call History reporting", "Each call of duration 3 mins or more"
     ],
     limitations: [],
     stripePriceId: "",
     prices: {
-      monthly: 29,
+      monthly: "",
       yearly: 240,
     },
     stripeIds: {

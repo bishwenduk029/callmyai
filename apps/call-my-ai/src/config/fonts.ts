@@ -1,17 +1,16 @@
-import { Inter, Urbanist } from "next/font/google"
-import localFont from "next/font/local"
+import { Inter, Urbanist, Alegreya, Nunito_Sans, Nunito } from "next/font/google"
 
-export const fontInter = Inter({
+export const fontInter = Nunito({
   subsets: ["latin"],
   variable: "--font-inter",
 })
 
-export const fontUrbanist = Urbanist({
+export const fontUrbanist = Nunito({
   subsets: ["latin"],
   variable: "--font-urbanist",
 })
 
-export const fontHeading = localFont({
-  src: "../../public/fonts/cal-sans-semi-bold.woff2",
+export const fontHeading = Nunito({
+  subsets: ["latin"],
   variable: "--font-heading",
 })

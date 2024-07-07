@@ -27,9 +27,6 @@ import {
   type SignUpWithPasswordFormInput,
 } from "@/validations/auth"
 
-import { EmailVerificationEmail } from "@/components/emails/email-verification-email"
-import { ResetPasswordEmail } from "@/components/emails/reset-password-email"
-
 export async function signUpWithPassword(
   rawInput: SignUpWithPasswordFormInput
 ): Promise<"invalid-input" | "exists" | "error" | "success"> {
@@ -53,17 +50,18 @@ export async function signUpWithPassword(
       })
       .returning()
 
-    const emailSent = await resend.emails.send({
-      from: env.RESEND_EMAIL_FROM,
-      to: [validatedInput.data.email],
-      subject: "Verify your email address",
-      react: EmailVerificationEmail({
-        email: validatedInput.data.email,
-        emailVerificationToken,
-      }),
-    })
+    // const emailSent = await resend.emails.send({
+    //   from: env.RESEND_EMAIL_FROM,
+    //   to: [validatedInput.data.email],
+    //   subject: "Verify your email address",
+    //   react: EmailVerificationEmail({
+    //     email: validatedInput.data.email,
+    //     emailVerificationToken,
+    //   }),
+    // })
 
-    return newUser && emailSent ? "success" : "error"
+    // return newUser && emailSent ? "success" : "error"
+    return "success"
   } catch (error) {
     console.error(error)
     throw new Error("Error signing up with password")
@@ -141,17 +139,18 @@ export async function resetPassword(
       .where(eq(users.id, user.id))
       .returning()
 
-    const emailSent = await resend.emails.send({
-      from: env.RESEND_EMAIL_FROM,
-      to: [validatedInput.data.email],
-      subject: "Reset your password",
-      react: ResetPasswordEmail({
-        email: validatedInput.data.email,
-        resetPasswordToken,
-      }),
-    })
+    // const emailSent = await resend.emails.send({
+    //   from: env.RESEND_EMAIL_FROM,
+    //   to: [validatedInput.data.email],
+    //   subject: "Reset your password",
+    //   react: ResetPasswordEmail({
+    //     email: validatedInput.data.email,
+    //     resetPasswordToken,
+    //   }),
+    // })
 
-    return userUpdated && emailSent ? "success" : "error"
+    // return userUpdated && emailSent ? "success" : "error"
+    return "success"
   } catch (error) {
     console.error(error)
     return "error"

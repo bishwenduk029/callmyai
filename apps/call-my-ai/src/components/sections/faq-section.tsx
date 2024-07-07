@@ -15,10 +15,10 @@ export function FAQSection() {
     <section id="faq-section" aria-label="faq section" className="w-full">
       <div className="container grid max-w-6xl gap-8 md:gap-16">
         <div className="flex w-full flex-col items-center gap-6 text-center">
-          <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+          <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
               Frequently Asked{" "}
-              <span className="bg-gradient-to-r from-pink-600 to-purple-400 bg-clip-text text-transparent">
+              <span className=" bg-clip-text">
                 Questions
               </span>
             </Balancer>
@@ -28,7 +28,7 @@ export function FAQSection() {
               Find the answers to the most common questions about our product.
               Feel free to{" "}
               <Link
-                href="#contact-section"
+                href="mailto:bishwenduk029@gmail.com"
                 className="font-semibold text-foreground underline-offset-4 transition-all hover:underline"
               >
                 email us

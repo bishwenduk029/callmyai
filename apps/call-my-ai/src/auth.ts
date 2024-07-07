@@ -48,6 +48,7 @@ export const {
       return !existingUser?.emailVerified ? false : true
     },
   },
+  // @ts-ignore
   adapter: DrizzleAdapter(db),
   ...authConfig,
 })

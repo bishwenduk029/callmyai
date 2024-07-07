@@ -15,6 +15,27 @@
       "when": 1715282629065,
       "tag": "0001_slow_hellion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1720892563444,
+      "tag": "0002_ordinary_spacker_dave",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1720893829717,
+      "tag": "0003_woozy_pride",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1720961086220,
+      "tag": "0004_odd_magik",
+      "breakpoints": true
     }
   ]
 }

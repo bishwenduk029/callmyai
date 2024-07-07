@@ -29,25 +29,21 @@ export function PricingSection(): JSX.Element {
     >
       <div className="container grid max-w-6xl gap-4 md:gap-8">
         <div className="flex flex-col items-center gap-6 text-center">
-          <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+          <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
-              It&apos;s{" "}
-              <span className="bg-gradient-to-r from-pink-600 to-purple-400 bg-clip-text text-transparent">
-                Free Forever!
+              <span className="text-primary bg-clip-text">
+                Pricing!
               </span>
             </Balancer>
           </h2>
           <h3 className="max-w-2xl text-muted-foreground sm:text-xl sm:leading-8">
             <Balancer>
-              {siteConfig.name} is completely free and open source. The pricing
-              section is there to serve as an example of how you could set it up
-              for your own SaaS product. We have no plans and no intentions to
-              make this a paid product.
+              {siteConfig.name} is open source. Simple pricing for everyone.
             </Balancer>
           </h3>
         </div>
 
-        <div className="my-4 flex items-center justify-center gap-4 text-lg">
+        {/* <div className="my-4 flex items-center justify-center gap-4 text-lg">
           <span>Monthly</span>
           <Switch
             checked={yearlyBilling}
@@ -56,19 +52,17 @@ export function PricingSection(): JSX.Element {
             aria-label="switch-year"
           />
           <span>Annual</span>
-        </div>
+        </div> */}
 
         <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
           {pricingPlans.map((plan) => (
             <Card
               key={plan.name}
               className={cn(
-                "flex flex-col transition-all duration-1000 ease-out hover:opacity-80 md:hover:-translate-y-3",
-                plan.name === "Standard" &&
-                  "border-pink-600/60 bg-gradient-to-r from-pink-600/10 to-purple-400/10"
+                "flex flex-col transition-all duration-1000 ease-out hover:opacity-80 md:hover:-translate-y-3"
               )}
             >
-              <CardHeader className="overflow-hidden rounded-t-lg bg-gradient-to-r from-pink-600/10 to-purple-400/10">
+              <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-secondary">
                 <CardTitle className="font-urbanist text-2xl tracking-wide">
                   <Balancer>{plan.name}</Balancer>
                 </CardTitle>
@@ -84,7 +78,7 @@ export function PricingSection(): JSX.Element {
                     </span>
                     <span
                       className={cn(
-                        yearlyBilling && "text-muted-foreground/60 line-through"
+                        yearlyBilling && "line-through"
                       )}
                     >
                       {plan.prices.monthly}
@@ -97,7 +91,7 @@ export function PricingSection(): JSX.Element {
                     </span>
                   </div>
 
-                  {yearlyBilling && plan.prices.monthly > 0 && (
+                  {/* {(
                     <p className="text-xs font-bold text-muted-foreground">
                       <Balancer>
                         You will be charged{" "}
@@ -107,7 +101,7 @@ export function PricingSection(): JSX.Element {
                         once a year, starting today
                       </Balancer>
                     </p>
-                  )}
+                  )} */}
                 </div>
               </CardHeader>
 
@@ -135,8 +129,8 @@ export function PricingSection(): JSX.Element {
                   </ul>
                 </div>
                 <Button
-                  variant="outline"
-                  className="h-10 w-full border bg-gradient-to-br from-pink-600/20 to-purple-400/20 font-bold tracking-wide"
+                  variant="default"
+                  className="h-10 w-full border font-bold tracking-wide"
                 >
                   Purchase
                 </Button>

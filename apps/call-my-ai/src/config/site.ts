@@ -1,129 +1,138 @@
 import { type NavItem, type NavItemFooter } from "@/types"
 
+import { env } from "@/env.mjs"
+
 const links = {
   github:
-    "https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented",
-  twitter: "https://twitter.com/pjborowiecki",
-  linkedin: "https://www.linkedin.com/in/pjborowiecki",
+    "https://github.com/bishwenduk029/ai-voice",
+  twitter: "https://twitter.com/bishwenduk029",
+  linkedin: "https://www.linkedin.com/in/bishwendu.kundu",
   discord: "",
-  authorsWebsite: "https://pjborowiecki.com",
-  authorsGitHub: "https://github.com/pjborowiecki",
-  openGraphImage: "https://saasyland.com/images/opengraph-image.png",
-  manifestFile: "https://saasyland.com/site.webmanifest",
+  authorsWebsite: "",
+  authorsGitHub: "https://github.com/bishwenduk029",
+  openGraphImage: `${env.NEXT_PUBLIC_APP_URL}/images/opengraph-image.png`,
+  manifestFile: "",
 }
 
 export const siteConfig = {
-  name: "SaaSy Land",
-  description:
-    "An open-source starter for Next.js 14 full-stack projects with advanced authentication and several database configurations. The aim of this project is to provide a solid foundation for faster building and launching SaaS products, marketing sites, blogs, and more.",
+  name: "callmyai",
+  description: "Open Call Assistant Infrasrtucture",
   links,
-  url: "https://saasyland.com",
+  url: "https://callmyai.app",
   ogImage: links.openGraphImage,
-  author: "pjborowiecki",
-  hostingRegion: "fra1",
-  keywords: ["SaaS", "Next.js", "Template"],
+  author: "bishwenduk029",
+  hostingRegion: "us-east-1",
+  keywords: [
+    "voice",
+    "assistant",
+    "OpenAI",
+    "Anthropic",
+    "ai",
+    "chatbot",
+    "call-assistant",
+  ],
   navItems: [
-    {
-      title: "About",
-      href: "/about",
-    },
-    {
-      title: "Features",
-      href: "/features",
-    },
+    // {
+    //   title: "About",
+    //   href: "/about",
+    // },
+    // {
+    //   title: "Features",
+    //   href: "/#features",
+    // },
     {
       title: "Pricing",
-      href: "/pricing",
+      href: "/#pricing-section",
     },
     {
       title: "FAQ",
-      href: "/faq",
+      href: "/#faq-section",
     },
-    {
-      title: "Docs",
-      href: "/docs",
-    },
-    {
-      title: "Blog",
-      href: "/blog",
-    },
+    // {
+    //   title: "Docs",
+    //   href: "/docs",
+    // },
+    // {
+    //   title: "Blog",
+    //   href: "/blog",
+    // },
   ] satisfies NavItem[],
   navItemsMobile: [],
   navItemsFooter: [
-    {
-      title: "Company",
-      items: [
-        {
-          title: "About",
-          href: "/about",
-          external: false,
-        },
-        {
-          title: "Privacy",
-          href: "/privacy",
-          external: false,
-        },
-        {
-          title: "Terms",
-          href: "/tos",
-          external: false,
-        },
-        {
-          title: "Careers",
-          href: "/careers",
-          external: false,
-        },
-      ],
-    },
-    {
-      title: "Support",
-      items: [
-        {
-          title: "Docs",
-          href: "/docs",
-          external: false,
-        },
-        {
-          title: "FAQ",
-          href: "/faq",
-          external: false,
-        },
-        {
-          title: "Blog",
-          href: "/blog",
-          external: false,
-        },
-        {
-          title: "Contact",
-          href: "/contact",
-          external: false,
-        },
-      ],
-    },
-    {
-      title: "Inspiration",
-      items: [
-        {
-          title: "Shadcn",
-          href: "https://ui.shadcn.com/",
-          external: true,
-        },
-        {
-          title: "Taxonomy",
-          href: "https://tx.shadcn.com/",
-          external: true,
-        },
-        {
-          title: "Skateshop",
-          href: "https://skateshop.sadmn.com/",
-          external: true,
-        },
-        {
-          title: "Acme Corp",
-          href: "https://acme-corp.jumr.dev/",
-          external: true,
-        },
-      ],
-    },
+    // {
+    //   title: "Company",
+    //   items: [
+    //     {
+    //       title: "About",
+    //       href: "/about",
+    //       external: false,
+    //     },
+    //     {
+    //       title: "Privacy",
+    //       href: "/privacy",
+    //       external: false,
+    //     },
+    //     {
+    //       title: "Terms",
+    //       href: "/tos",
+    //       external: false,
+    //     },
+    //     {
+    //       title: "Careers",
+    //       href: "/careers",
+    //       external: false,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Support",
+    //   items: [
+    //     {
+    //       title: "Docs",
+    //       href: "/docs",
+    //       external: false,
+    //     },
+    //     {
+    //       title: "FAQ",
+    //       href: "/faq",
+    //       external: false,
+    //     },
+    //     {
+    //       title: "Blog",
+    //       href: "/blog",
+    //       external: false,
+    //     },
+    //     {
+    //       title: "Contact",
+    //       href: "/contact",
+    //       external: false,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Inspiration",
+    //   items: [
+    //     {
+    //       title: "Shadcn",
+    //       href: "https://ui.shadcn.com/",
+    //       external: true,
+    //     },
+    //     {
+    //       title: "Taxonomy",
+    //       href: "https://tx.shadcn.com/",
+    //       external: true,
+    //     },
+    //     {
+    //       title: "Skateshop",
+    //       href: "https://skateshop.sadmn.com/",
+    //       external: true,
+    //     },
+    //     {
+    //       title: "Acme Corp",
+    //       href: "https://acme-corp.jumr.dev/",
+    //       external: true,
+    //     },
+    //   ],
+    // },
   ] satisfies NavItemFooter[],
 }

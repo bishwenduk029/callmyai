@@ -46,7 +46,7 @@ export default async function SignInPage(): Promise<JSX.Element> {
         </CardHeader>
         <CardContent className="max-sm:w-full max-sm:max-w-[340px] max-sm:px-10">
           <OAuthButtons />
-          <div className="relative">
+          {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
@@ -67,10 +67,10 @@ export default async function SignInPage(): Promise<JSX.Element> {
               </span>
             </div>
           </div>
-          <SignInWithPasswordForm />
+          <SignInWithPasswordForm /> */}
         </CardContent>
 
-        <CardFooter className="grid w-full text-sm text-muted-foreground max-sm:max-w-[340px] max-sm:px-10">
+        {/* <CardFooter className="grid w-full text-sm text-muted-foreground max-sm:max-w-[340px] max-sm:px-10">
           <div>
             <span>Don&apos;t have an account? </span>
             <Link
@@ -95,7 +95,7 @@ export default async function SignInPage(): Promise<JSX.Element> {
             </Link>
             .
           </div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </div>
   )

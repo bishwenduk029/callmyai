@@ -2,9 +2,7 @@
 
 import { unstable_noStore as noStore } from "next/cache"
 
-import { env } from "@/env.mjs"
 import { db } from "@/config/db"
-import { resend } from "@/config/email"
 import { psGetNewsletterSubscriberByEmail } from "@/db/prepared/statements"
 import { newsletterSubscribers } from "@/db/schema"
 import {
@@ -13,8 +11,6 @@ import {
   type CheckIfSubscribedToNewsletterInput,
   type NewsletterSignUpFormInput,
 } from "@/validations/newsletter"
-
-import { NewsletterWelcomeEmail } from "@/components/emails/newsletter-welcome-email"
 
 export async function checkIfSubscribedToNewsletter(
   rawInput: CheckIfSubscribedToNewsletterInput
@@ -53,14 +49,15 @@ export async function subscribeToNewsletter(
       .insert(newsletterSubscribers)
       .values({ email: validatedInput.data.email })
 
-    const emailSent = await resend.emails.send({
-      from: env.RESEND_EMAIL_FROM,
-      to: validatedInput.data.email,
-      subject: "Welcome to our newsletter!",
-      react: NewsletterWelcomeEmail(),
-    })
+    // const emailSent = await resend.emails.send({
+    //   from: env.RESEND_EMAIL_FROM,
+    //   to: validatedInput.data.email,
+    //   subject: "Welcome to our newsletter!",
+    //   react: NewsletterWelcomeEmail(),
+    // })
 
-    return newSubscriber && emailSent ? "success" : "error"
+    // return newSubscriber && emailSent ? "success" : "error"
+    return "success"
   } catch (error) {
     console.error(error)
     throw new Error("Error subscribing to the newsletter")

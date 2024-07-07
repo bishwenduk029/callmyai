@@ -80,7 +80,6 @@ export class OpenAISpeechModel implements SpeechModelV1 {
   }
 
   async generateAudioStream(value: string) {
-    console.log(this.config.headers())
     const { responseHeaders, value: response } = await postJsonToApi({
       url: `${this.config.baseURL}/v1/audio/speech`,
       headers: this.config.headers(),

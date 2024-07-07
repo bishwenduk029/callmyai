@@ -80,7 +80,6 @@ export class PlayHtSpeechModel implements SpeechModelV1 {
   }
 
   async generateAudioStream(value: string) {
-    console.log(this.config.headers())
     const { responseHeaders, value: response } = await postJsonToApi({
       url: `${this.config.baseURL}/api/v2/tts/stream`,
       headers: this.config.headers(),
