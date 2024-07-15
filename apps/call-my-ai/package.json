@@ -17,10 +17,9 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "contentlayer build && next dev",
-    "build": "contentlayer build && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
-    "postinstall": "drizzle-kit generate --config=drizzle.config.ts",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
     "db:pull": "drizzle-kit introspect --config=drizzle.config.ts",
