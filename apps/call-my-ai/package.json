@@ -3,22 +3,22 @@
   "name": "callmyai",
   "description": "",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "GNU AFFERO GENERAL PUBLIC LICENSE",
   "author": {
-    "name": "Piotr Borowiecki",
-    "url": "https://pjborowiecki.com"
+    "name": "Bishwendu Kundu",
+    "url": "https://www.callmyai.app"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-drizzle-neon-postgres"
+    "url": "https://github.com/bishwenduk029/callmyai"
   },
   "bugs": {
-    "url": "https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/issues"
+    "url": "https://github.com/bishwenduk029/callmyai/issues"
   },
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build -- --output public",
+    "build": "next build",
     "start": "next start",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
