@@ -2,6 +2,7 @@ import { defineConfig } from "drizzle-kit"
 
 import { env } from "@/env.mjs"
 
+// @ts-ignore
 export default defineConfig({
   dialect: "postgresql",
   schema: "./src/db/schema/index.ts",
