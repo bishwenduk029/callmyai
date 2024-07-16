@@ -14,7 +14,6 @@ import { ThemeProvider } from "@/providers/theme-provider"
 import { cn } from "@/lib/utils"
 
 import { Toaster } from "@/components/ui/toaster"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -93,7 +92,6 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
             {children}
             <Toaster />
             <Analytics />
-            <TailwindIndicator />
           </ThemeProvider>
         </SmoothScrollProvider>
       </body>
