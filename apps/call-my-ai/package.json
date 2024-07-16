@@ -18,7 +18,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --output public",
+    "build": "next build -- --output public",
     "start": "next start",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
