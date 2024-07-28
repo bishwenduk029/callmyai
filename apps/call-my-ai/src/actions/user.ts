@@ -1,11 +1,13 @@
 "use server"
 
-import { unstable_noStore as noStore } from "next/cache"
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
-import { generateObject, streamObject } from "ai"
+import { generateObject } from "ai"
 import { z } from "zod"
 
+import { env } from "@/env.mjs"
 import {
+  psCheckExistingUsername,
   psCreateChat,
   psGetChatsByUserId,
   psGetMessagesByChatId,
@@ -66,6 +68,35 @@ Remember, your goal is to create a summary that allows the user to quickly grasp
 
 Based on the conversation transcript provided, generate a title and summary following these guidelines.
   `
+
+export async function updateUserHandle(userId: string, formData: FormData) {
+  const username = formData.get("username")?.toString()
+
+  if (!username) {
+    return { error: "Username is required" }
+  }
+
+  try {
+    // Check if username already exists
+    const existingUser = await psCheckExistingUsername.execute({
+      username,
+      id: userId,
+    })
+
+    if (existingUser.length > 0) {
+      return { error: "Username already taken" }
+    }
+
+    // Update username
+    await psUpdateUserUsername.execute({ id: userId, username })
+
+    revalidatePath("/settings")
+    return { success: "Username updated successfully" }
+  } catch (error) {
+    console.error("Error updating username:", error)
+    return { error: "An error occurred while updating username" }
+  }
+}
 
 export async function getUserById(
   rawInput: GetUserByIdInput
@@ -151,10 +182,16 @@ export async function updateUsername(
   }
 }
 
-export async function createChat(hostUsername: string, visitorId: string) {
-  const hostResult = await psGetUserByUsername.execute({
-    username: hostUsername,
-  })
+export async function createChat(
+  hostUsername: string,
+  visitor: any
+): Promise<{ id: string; userId: string }> {
+  const hostResult =
+    visitor.username === hostUsername
+      ? [visitor]
+      : await psGetUserByUsername.execute({
+          username: hostUsername,
+        })
 
   if (hostResult.length === 0) {
     throw new Error("Host user not found")
@@ -162,23 +199,43 @@ export async function createChat(hostUsername: string, visitorId: string) {
 
   const host = hostResult[0]
   if (!host) {
-    throw new Error("invalid request from host")
+    throw new Error("Invalid request from host")
   }
-  const newChat = await psCreateChat.execute({
+
+  const [newChat] = await psCreateChat.execute({
     userId: host.id,
-    visitorId: visitorId,
+    visitorId: visitor.id,
   })
 
-  return newChat[0]
+  if (!newChat) {
+    throw new Error("Failed to create chat")
+  }
+
+  return newChat
 }
 
-export async function getChatsForUser(userId: string) {
-  // Fetch chat messages
-  const chatMessages = await psGetChatsByUserId.execute({
-    userId,
-  })
+export async function getCallSummariesForUser(
+  userId: string,
+  page: number,
+  pageSize: number
+) {
+  try {
+    const offset = (page - 1) * pageSize
+    // Fetch chat messages with pagination and order by most recent
+    const chatMessages = await psGetChatsByUserId.execute({
+      userId,
+      limit: pageSize,
+      offset: offset,
+    })
 
-  return chatMessages
+    return {
+      summaries: chatMessages,
+      hasMore: chatMessages.length === pageSize,
+    }
+  } catch (error) {
+    console.error("Error fetching chats for user:", error)
+    throw new Error("Failed to fetch chats")
+  }
 }
 
 export async function summarizeCall(chatId: string) {
@@ -199,7 +256,7 @@ export async function summarizeCall(chatId: string) {
 
   // Generate summary and title
   const { object } = await generateObject({
-    model: openai("gpt-4"), // Make sure this matches your OpenAI model name
+    model: openai(env.OPENAI_MODEL), // Make sure this matches your OpenAI model name
     schema: z.object({
       title: z.string(),
       summary: z.string(),

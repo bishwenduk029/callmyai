@@ -1,14 +1,16 @@
-"use client"
+"use server"
 
 import * as React from "react"
+import Link from "next/link"
+import { getCheckoutURL } from "@/actions/payments"
 import Balancer from "react-wrap-balancer"
 
+import { env } from "@/env.mjs"
 import { siteConfig } from "@/config/site"
 import { pricingPlans } from "@/data/pricing-plans"
 
 import { cn } from "@/lib/utils"
 
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -16,11 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
 import { Icons } from "@/components/icons"
 
-export function PricingSection(): JSX.Element {
-  const [yearlyBilling, setYearlyBilling] = React.useState<boolean>(false)
+import { buttonVariants } from "../ui/button"
+
+export async function PricingSection(): Promise<JSX.Element> {
+  const checkoutLink = await getCheckoutURL(
+    parseInt(env.LEMONSQUEEZY_VARIANT_ID)
+  )
   return (
     <section
       id="pricing-section"
@@ -31,9 +36,7 @@ export function PricingSection(): JSX.Element {
         <div className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
-              <span className="text-primary bg-clip-text">
-                Pricing!
-              </span>
+              <span className="bg-clip-text text-primary">Pricing!</span>
             </Balancer>
           </h2>
           <h3 className="max-w-2xl text-muted-foreground sm:text-xl sm:leading-8">
@@ -54,89 +57,76 @@ export function PricingSection(): JSX.Element {
           <span>Annual</span>
         </div> */}
 
-        <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
-          {pricingPlans.map((plan) => (
-            <Card
-              key={plan.name}
-              className={cn(
-                "flex flex-col transition-all duration-1000 ease-out hover:opacity-80 md:hover:-translate-y-3"
-              )}
-            >
-              <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-secondary">
-                <CardTitle className="font-urbanist text-2xl tracking-wide">
-                  <Balancer>{plan.name}</Balancer>
-                </CardTitle>
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            {pricingPlans.map((plan) => (
+              <Card
+                key={plan.name}
+                className={cn(
+                  "flex flex-col transition-all duration-1000 ease-out hover:-translate-y-3 hover:opacity-80"
+                )}
+              >
+                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-secondary">
+                  <CardTitle className="font-urbanist text-2xl tracking-wide">
+                    <Balancer>{plan.name}</Balancer>
+                  </CardTitle>
 
-                <CardDescription className="text-sm">
-                  <Balancer>{plan.description}</Balancer>
-                </CardDescription>
+                  <CardDescription className="text-sm">
+                    <Balancer>{plan.description}</Balancer>
+                  </CardDescription>
 
-                <div className="flex flex-col gap-4 py-2">
-                  <div className="flex gap-2 text-4xl font-semibold md:gap-1 md:text-2xl lg:gap-2 lg:text-4xl">
-                    <span className="flex items-center justify-center text-3xl font-normal md:text-2xl lg:text-3xl">
-                      $
-                    </span>
-                    <span
-                      className={cn(
-                        yearlyBilling && "line-through"
-                      )}
-                    >
-                      {plan.prices.monthly}
-                    </span>
+                  <div className="flex flex-col gap-4 py-2">
+                    <div className="flex gap-2 text-4xl font-semibold">
+                      <span className="flex items-center justify-center text-3xl font-normal">
+                        $
+                      </span>
+                      <span>{plan.prices.monthly}</span>
 
-                    {yearlyBilling && <span>{plan.prices.yearly / 12}</span>}
-
-                    <span className="flex items-end text-lg font-semibold md:items-center md:text-base lg:items-end lg:text-lg">
-                      / month
-                    </span>
+                      <span className="flex items-end text-lg font-semibold">
+                        / month
+                      </span>
+                    </div>
                   </div>
+                </CardHeader>
 
-                  {/* {(
-                    <p className="text-xs font-bold text-muted-foreground">
-                      <Balancer>
-                        You will be charged{" "}
-                        <span className="text-foreground">
-                          ${plan.prices.yearly}
-                        </span>{" "}
-                        once a year, starting today
-                      </Balancer>
-                    </p>
-                  )} */}
-                </div>
-              </CardHeader>
+                <CardContent className="flex flex-1 flex-col justify-between text-sm lg:text-base">
+                  <div className="grid gap-3 py-8">
+                    <ul className="flex flex-col gap-3">
+                      {plan.features.map((item) => (
+                        <li className="flex items-center gap-2" key={item}>
+                          <Icons.check className="size-4" />
+                          <Balancer>{item}</Balancer>
+                        </li>
+                      ))}
+                    </ul>
 
-              <CardContent className="flex flex-1 flex-col justify-between text-sm lg:text-base">
-                <div className="grid gap-3 py-8">
-                  <ul className="flex flex-col gap-3">
-                    {plan.features.map((item) => (
-                      <li className="flex items-center gap-2" key={item}>
-                        <Icons.check className="size-4" />
-                        <Balancer>{item}</Balancer>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <ul className="flex flex-col gap-2">
-                    {plan.limitations.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-center gap-3 text-muted-foreground"
-                      >
-                        <Icons.close className="size-4" />
-                        <Balancer>{item}</Balancer>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Button
-                  variant="default"
-                  className="h-10 w-full border font-bold tracking-wide"
-                >
-                  Purchase
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                    <ul className="flex flex-col gap-2">
+                      {plan.limitations.map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-center gap-3 text-muted-foreground"
+                        >
+                          <Icons.close className="size-4" />
+                          <Balancer>{item}</Balancer>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Link
+                    href={checkoutLink || ""}
+                    className={cn(
+                      buttonVariants({
+                        variant: "default",
+                        className: "mt-4 w-full",
+                      })
+                    )}
+                  >
+                    Purchase
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </section>

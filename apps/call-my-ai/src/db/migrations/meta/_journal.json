@@ -36,6 +36,20 @@
       "when": 1720961086220,
       "tag": "0004_odd_magik",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1721590857118,
+      "tag": "0005_overrated_captain_cross",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1722189005317,
+      "tag": "0006_nice_meteorite",
+      "breakpoints": true
     }
   ]
 }

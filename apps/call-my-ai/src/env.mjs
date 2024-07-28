@@ -19,6 +19,13 @@ export const env = createEnv({
     RESEND_HOST: z.string().optional(),
     RESEND_USERNAME: z.string().optional(),
     RESEND_PORT: z.string().optional(),
+    OPENAI_MODEL: z.string(),
+    DEEPGRAM_API_KEY: z.string().optional(),
+    SYSTEM_PROMPT: z.string(),
+    LEMONSQUEEZY_WEBHOOK_SECRET: z.string(),
+    LEMONSQUEEZY_API_KEY: z.string(),
+    LEMONSQUEEZY_STORE_ID: z.string(),
+    LEMONSQUEEZY_VARIANT_ID: z.string(),
   },
 
   /**
@@ -48,5 +55,12 @@ export const env = createEnv({
     RESEND_HOST: process.env.RESEND_HOST,
     RESEND_USERNAME: process.env.RESEND_USERNAME,
     RESEND_PORT: process.env.RESEND_PORT,
+    OPENAI_MODEL: process.env.OPENAI_MODEL,
+    DEEPGRAM_API_KEY: process.env.DEEPGRAM_API_KEY,
+    SYSTEM_PROMPT: process.env.SYSTEM_PROMPT,
+    LEMONSQUEEZY_WEBHOOK_SECRET: process.env.LEMONSQUEEZY_WEBHOOK_SECRET,
+    LEMONSQUEEZY_API_KEY: process.env.LEMONSQUEEZY_API_KEY,
+    LEMONSQUEEZY_STORE_ID: process.env.LEMONSQUEEZY_STORE_ID,
+    LEMONSQUEEZY_VARIANT_ID: process.env.LEMONSQUEEZY_VARIANT_ID,
   },
 })

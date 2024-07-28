@@ -9,9 +9,7 @@ import bcryptjs from "bcryptjs"
 import { eq } from "drizzle-orm"
 import { AuthError } from "next-auth"
 
-import { env } from "@/env.mjs"
 import { db } from "@/config/db"
-import { resend } from "@/config/email"
 import { psLinkOAuthAccount } from "@/db/prepared/statements"
 import { users } from "@/db/schema"
 import {

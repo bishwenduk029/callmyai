@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm"
+import { and, desc, eq, ne, sql } from "drizzle-orm"
 
 import { db } from "@/config/db"
 import { chats, messages, newsletterSubscribers, users } from "@/db/schema"
@@ -61,7 +61,7 @@ export const psCreateChat = db
     userId: sql.placeholder("userId"),
     visitorId: sql.placeholder("visitorId"),
   })
-  .returning({ id: chats.id })
+  .returning({ id: chats.id, userId: chats.userId })
   .prepare("psCreateChat")
 
 export const psGetUserByUsername = db
@@ -100,5 +100,13 @@ export const psUpdateChatSummary = db
 export const psGetChatsByUserId = db
   .select()
   .from(chats)
-  .where(eq(chats.userId, sql.placeholder("userId")))
+  .where(
+    and(
+      eq(chats.userId, sql.placeholder("userId")),
+      ne(chats.userId, chats.visitorId)
+    )
+  )
+  .orderBy(desc(chats.createdAt))
+  .limit(sql.placeholder("limit"))
+  .offset(sql.placeholder("offset"))
   .prepare("psGetChatsByUserId")

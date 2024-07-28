@@ -12,10 +12,12 @@ import { summarizeCall } from "@/actions/user"
 
 interface AudioReactiveInterfaceProps {
   chatId: string
+  personalMode: boolean
 }
 
 export const AudioReactiveInterface = ({
   chatId,
+  personalMode
 }: AudioReactiveInterfaceProps) => {
   const [primaryColor, setPrimaryColor] = useState("black")
   const [secondaryColor, setSecondaryColor] = useState("#fdfdfd")
@@ -125,17 +127,22 @@ export const AudioReactiveInterface = ({
   }
 
   const toggleListening = async () => {
-    if (isListening) {
-      stop()
-      stopAudioVisualization()
-      stopTimer()
-      await summarizeCall(chatId)
-    } else {
-      start()
-      startTimer()
-      startAudioVisualization()
-    }
-    setIsListening(!isListening)
+    const actions = isListening
+      ? {
+          audio: stop,
+          visualization: stopAudioVisualization,
+          timer: personalMode ? null : stopTimer,
+          summarize: personalMode ? null : () => summarizeCall(chatId),
+        }
+      : {
+          audio: start,
+          visualization: startAudioVisualization,
+          timer: personalMode ? null : startTimer,
+        };
+
+    Object.values(actions).forEach(action => action && action());
+
+    setIsListening(!isListening);
   }
 
   useEffect(() => {
@@ -170,7 +177,7 @@ export const AudioReactiveInterface = ({
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
             )}
-            <span>{elapsedTime}s of 100s</span>
+            {!personalMode && <span>{elapsedTime}s of 100s</span>}
           </div>
           <motion.button
             className="rounded px-5 py-2.5 text-white transition-colors"
@@ -180,9 +187,9 @@ export const AudioReactiveInterface = ({
             onClick={toggleListening}
           >
             {isListening ? (
-              <PhonePause size={75} className="rounded-full bg-red-400 p-2" />
+              <PhonePause size={75} className="rounded-full bg-primary p-2" />
             ) : (
-              <PhoneCall size={75} className="rounded-full bg-green-500 p-2" />
+              <PhoneCall size={75} className="rounded-full bg-primary text-primary-foreground p-2" />
             )}
           </motion.button>
         </div>

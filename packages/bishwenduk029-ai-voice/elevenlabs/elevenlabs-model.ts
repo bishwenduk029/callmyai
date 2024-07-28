@@ -15,6 +15,10 @@ type ElevenLabsSpeechConfig = {
   generateId: () => string;
 };
 
+/**
+ * This class represents the Elevenlabs Speech Model and implements the SpeechModelV1 interface.
+ * It provides methods to handle text streams, generate audio streams, and get the provider.
+ */
 export class ElevenlabsSpeechModel implements SpeechModelV1 {
   readonly specificationVersion = "v1";
 

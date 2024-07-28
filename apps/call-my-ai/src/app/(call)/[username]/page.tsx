@@ -16,28 +16,21 @@ export default async function CallPage({
   const session = await auth()
   if (!session) redirect(DEFAULT_UNAUTHENTICATED_REDIRECT)
 
-  let chatId: string | null = null
-  try {
-    const visitor = await getUserByEmail({ email: session.user.email || "" })
-    const newChat = await createChat(params.username, visitor?.id || "")
+  const visitor = await getUserByEmail({ email: session.user.email || "" })
+  const newChat = await createChat(params.username, visitor)
 
-    if (!newChat) {
-      throw new Error("Currently Experiencing internal server issues")
-    }
-    chatId = newChat.id
-  } catch (error) {
-    console.error("Failed to create chat:", error)
-    console.log(error)
+  if (!newChat) {
+    throw new Error("Currently Experiencing internal server issues")
   }
 
-  if (!chatId) {
+  if (!newChat.id) {
     // Handle the case where chat creation failed
     return <div>Failed to initialize chat. Please try again.</div>
   }
 
   return (
     <div className="container">
-      <AudioReactiveInterface chatId={chatId} />
+      <AudioReactiveInterface chatId={newChat.id} personalMode={visitor?.username === params.username} />
     </div>
   )
 }

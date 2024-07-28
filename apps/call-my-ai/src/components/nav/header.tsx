@@ -10,10 +10,8 @@ import { buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SignOutButton } from "@/components/auth/signout-button"
@@ -27,7 +25,7 @@ export async function Header(): Promise<JSX.Element> {
   const session = await auth()
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 w-full bg-transparent">
+    <header className="sticky flex h-20 w-full bg-background bg-opacity-80 backdrop-blur-sm z-50">
       <div className="container flex items-center justify-between p-4">
         <Logo />
         <Navigation navItems={siteConfig.navItems} />
@@ -70,28 +68,6 @@ export async function Header(): Promise<JSX.Element> {
                       </p>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem asChild disabled>
-                      <Link href="/dashboard/account">
-                        <Icons.avatar
-                          className="mr-2 size-4"
-                          aria-hidden="true"
-                        />
-                        Account
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild disabled>
-                      <Link href="/dashboard/settings">
-                        <Icons.settings
-                          className="mr-2 size-4"
-                          aria-hidden="true"
-                        />
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <SignOutButton />
                   </DropdownMenuItem>
@@ -101,7 +77,7 @@ export async function Header(): Promise<JSX.Element> {
               <Link
                 aria-label="Get started"
                 href="/dashboard/settings"
-                className={cn(buttonVariants({ size: "sm" }), "ml-2")}
+                className={`${cn(buttonVariants({ size: "sm" }), "ml-2")} cursor-pointer`}
               >
                 Get Started
                 <span className="sr-only">Get Started</span>

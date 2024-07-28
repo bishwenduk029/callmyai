@@ -32,11 +32,12 @@ export const {
   },
   callbacks: {
     jwt({ token, user }) {
-      if (user) token.role = user.role
+      if (user) {token.role = user.role; token.id = user.id}
       return token
     },
     session({ session, token }) {
       session.user.role = token.role as "USER" | "ADMIN"
+      session.user.id = token.id as string
       return session
     },
     async signIn({ user, account }) {

@@ -9,6 +9,10 @@ import {
   text,
   timestamp,
   uuid,
+  index,
+  serial,
+  jsonb,
+  boolean,
 } from "drizzle-orm/pg-core"
 
 export const userRoleEnum = pgEnum("user_role", ["USER", "ADMIN"])
@@ -35,6 +39,7 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
+    userIdIdx: index("account_userId_idx").on(account.userId),
   })
 )
 
@@ -51,7 +56,9 @@ export const sessions = pgTable("session", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
-})
+}, (session) => ({
+  userIdIdx: index("session_userId_idx").on(session.userId),
+}))
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, {
@@ -73,7 +80,11 @@ export const chats = pgTable("chat", {
   title: text("title"),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
-})
+  systemPromptOverride: text("systemPromptOverride"),
+}, (chat) => ({
+  userIdIdx: index("chat_userId_idx").on(chat.userId),
+  visitorIdIdx: index("chat_visitorId_idx").on(chat.visitorId),
+}))
 
 // Modified chatsRelations
 export const chatsRelations = relations(chats, ({ one, many }) => ({
@@ -98,7 +109,9 @@ export const messages = pgTable("message", {
     .references(() => chats.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-})
+}, (message) => ({
+  chatIdIdx: index("message_chatId_idx").on(message.chatId),
+}))
 
 // New messagesRelations
 export const messagesRelations = relations(messages, ({ one }) => ({
@@ -124,7 +137,11 @@ export const users = pgTable("user", {
   }),
   image: text("image"),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-})
+  systemPrompt: text("systemPrompt"),
+}, (user) => ({
+  emailIdx: index("user_email_idx").on(user.email),
+  usernameIdx: index("user_username_idx").on(user.username),
+}))
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   account: one(accounts, {
@@ -149,6 +166,8 @@ export const verificationTokens = pgTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
+    identifierIdx: index("verificationToken_identifier_idx").on(vt.identifier),
+    tokenIdx: index("verificationToken_token_idx").on(vt.token),
   })
 )
 
@@ -156,6 +175,54 @@ export const newsletterSubscribers = pgTable("newsletterSubscriber", {
   email: text("email").notNull().primaryKey(),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
 })
+
+export const webhookEvents = pgTable("webhookEvent", {
+  id: integer("id").primaryKey(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  eventName: text("eventName").notNull(),
+  processed: boolean("processed").default(false),
+  body: jsonb("body").notNull(),
+  processingError: text("processingError"),
+});
+
+export const plans = pgTable("plan", {
+  id: serial("id").primaryKey(),
+  productId: integer("productId").notNull(),
+  productName: text("productName"),
+  variantId: integer("variantId").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description"),
+  price: text("price").notNull(),
+  isUsageBased: boolean("isUsageBased").default(false),
+  interval: text("interval"),
+  intervalCount: integer("intervalCount"),
+  trialInterval: text("trialInterval"),
+  trialIntervalCount: integer("trialIntervalCount"),
+  sort: integer("sort"),
+});
+
+export const subscriptions = pgTable("subscription", {
+  id: serial("id").primaryKey(),
+  lemonSqueezyId: text("lemonSqueezyId").unique().notNull(),
+  orderId: integer("orderId").notNull(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  status: text("status").notNull(),
+  statusFormatted: text("statusFormatted").notNull(),
+  renewsAt: text("renewsAt"),
+  endsAt: text("endsAt"),
+  trialEndsAt: text("trialEndsAt"),
+  price: text("price").notNull(),
+  isUsageBased: boolean("isUsageBased").default(false),
+  isPaused: boolean("isPaused").default(false),
+  subscriptionItemId: serial("subscriptionItemId"),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id),
+  planId: integer("planId")
+    .notNull()
+    .references(() => plans.id),
+});
 
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
@@ -171,3 +238,13 @@ export type NewVerificationToken = typeof verificationTokens.$inferInsert
 
 export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect
 export type NewNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert
+
+export type Chat = typeof chats.$inferSelect
+export type NewChat = typeof chats.$inferInsert
+
+export type Message = typeof messages.$inferSelect
+export type NewMessage = typeof messages.$inferInsert
+
+export type NewPlan = typeof plans.$inferInsert;
+export type NewWebhookEvent = typeof webhookEvents.$inferInsert;
+export type NewSubscription = typeof subscriptions.$inferInsert;

@@ -1,9 +1,4 @@
 import * as React from "react"
-import { redirect } from "next/navigation"
-
-import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
-
-import auth from "@/lib/auth"
 import { Header } from "@/components/nav/header"
 
 interface DashboardLayoutProps {
