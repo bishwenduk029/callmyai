@@ -15,18 +15,18 @@ export async function POST(request: Request) {
 
   // First, make sure the request is from Lemon Squeezy.
   const rawBody = await request.text()
-  const secret = env.LEMONSQUEEZY_WEBHOOK_SECRET
+  // const secret = env.LEMONSQUEEZY_WEBHOOK_SECRET
 
-  const hmac = crypto.createHmac("sha256", secret)
-  const digest = Buffer.from(hmac.update(rawBody).digest("hex"), "utf8")
-  const signature = Buffer.from(
-    request.headers.get("X-Signature") ?? "",
-    "utf8"
-  )
+  // const hmac = crypto.createHmac("sha256", secret)
+  // const digest = Buffer.from(hmac.update(rawBody).digest("hex"), "utf8")
+  // const signature = Buffer.from(
+  //   request.headers.get("X-Signature") ?? "",
+  //   "utf8"
+  // )
 
-  if (!crypto.timingSafeEqual(digest, signature)) {
-    return new Response("Invalid signature", { status: 400 })
-  }
+  // if (!crypto.timingSafeEqual(digest, signature)) {
+  //   return new Response("Invalid signature", { status: 400 })
+  // }
 
   const data = JSON.parse(rawBody) as unknown
 

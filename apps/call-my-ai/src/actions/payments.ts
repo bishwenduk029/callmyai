@@ -19,7 +19,6 @@ import {
 } from "@lemonsqueezy/lemonsqueezy.js"
 import { eq } from "drizzle-orm"
 
-import { env } from "@/env.mjs"
 import { db } from "@/config/db"
 import { configureLemonSqueezy } from "@/config/lemonsqueezy"
 import {
@@ -68,7 +67,7 @@ export async function getCheckoutURL(variantId: number, embed = false) {
     {
       checkoutOptions: {
         embed,
-        media: false,
+        media: !embed,
         logo: !embed,
       },
       checkoutData: {
@@ -87,84 +86,6 @@ export async function getCheckoutURL(variantId: number, embed = false) {
   )
 
   return checkout.data?.data.attributes.url
-}
-
-/**
- * This action will check if a webhook exists on Lemon Squeezy. It will return
- * the webhook if it exists, otherwise it will return undefined.
- */
-export async function hasWebhook() {
-  configureLemonSqueezy()
-
-  if (!process.env.WEBHOOK_URL) {
-    throw new Error(
-      "Missing required WEBHOOK_URL env variable. Please, set it in your .env file."
-    )
-  }
-
-  // Check if a webhook exists on Lemon Squeezy.
-  const allWebhooks = await listWebhooks({
-    filter: { storeId: process.env.LEMONSQUEEZY_STORE_ID },
-  })
-
-  // Check if WEBHOOK_URL ends with a slash. If not, add it.
-  let webhookUrl = process.env.WEBHOOK_URL
-  if (!webhookUrl.endsWith("/")) {
-    webhookUrl += "/"
-  }
-  webhookUrl += "api/webhook"
-
-  const webhook = allWebhooks.data?.data.find(
-    (wh) => wh.attributes.url === webhookUrl && wh.attributes.test_mode
-  )
-
-  return webhook
-}
-
-/**
- * This action will set up a webhook on Lemon Squeezy to listen to
- * Subscription events. It will only set up the webhook if it does not exist.
- */
-export async function setupWebhook() {
-  configureLemonSqueezy()
-
-  if (!process.env.WEBHOOK_URL) {
-    throw new Error(
-      "Missing required WEBHOOK_URL env variable. Please, set it in your .env file."
-    )
-  }
-
-  // Check if WEBHOOK_URL ends with a slash. If not, add it.
-  let webhookUrl = process.env.WEBHOOK_URL
-  if (!webhookUrl.endsWith("/")) {
-    webhookUrl += "/"
-  }
-  webhookUrl += "api/webhook"
-
-  // eslint-disable-next-line no-console -- allow
-  console.log("Setting up a webhook on Lemon Squeezy (Test Mode)...")
-
-  // Do not set a webhook on Lemon Squeezy if it already exists.
-  let webhook = await hasWebhook()
-
-  // If the webhook does not exist, create it.
-  if (!webhook) {
-    const newWebhook = await createWebhook(process.env.LEMONSQUEEZY_STORE_ID!, {
-      secret: env.LEMONSQUEEZY_WEBHOOK_SECRET!,
-      url: webhookUrl,
-      testMode: true, // will create a webhook in Test mode only!
-      events: [
-        "subscription_created",
-        "subscription_expired",
-        "subscription_updated",
-      ],
-    })
-
-    webhook = newWebhook.data?.data
-  }
-
-  // eslint-disable-next-line no-console -- allow
-  console.log(`Webhook ${webhook?.id} created on Lemon Squeezy.`)
 }
 
 /**
@@ -305,20 +226,17 @@ export async function storeWebhookEvent(
 export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
   configureLemonSqueezy()
 
+  console.log("Processing webhook event:", webhookEvent.id)
+
   const dbwebhookEvent = await db
     .select()
     .from(webhookEvents)
     .where(eq(webhookEvents.id, webhookEvent.id))
 
   if (dbwebhookEvent.length < 1) {
+    console.log("Webhook event not found in database:", webhookEvent.id)
     throw new Error(
       `Webhook event #${webhookEvent.id} not found in the database.`
-    )
-  }
-
-  if (!process.env.WEBHOOK_URL) {
-    throw new Error(
-      "Missing required WEBHOOK_URL env variable. Please, set it in your .env file."
     )
   }
 
@@ -326,12 +244,16 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
   const eventBody = webhookEvent.body
 
   if (!webhookHasMeta(eventBody)) {
+    console.log("Event body is missing 'meta' property:", webhookEvent.id)
     processingError = "Event body is missing the 'meta' property."
   } else if (webhookHasData(eventBody)) {
+    console.log("Event has data, processing:", webhookEvent.eventName)
     if (webhookEvent.eventName.startsWith("subscription_payment_")) {
+      console.log("Subscription payment event:", webhookEvent.id)
       // Save subscription invoices; eventBody is a SubscriptionInvoice
       // Not implemented.
     } else if (webhookEvent.eventName.startsWith("subscription_")) {
+      console.log("Subscription event:", webhookEvent.id)
       // Save subscription events; obj is a Subscription
       const attributes = eventBody.data.attributes
       const variantId = attributes.variant_id as string
@@ -343,8 +265,10 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
         .where(eq(plans.variantId, parseInt(variantId, 10)))
 
       if (plan.length < 1) {
+        console.log("Plan not found for variantId:", variantId)
         processingError = `Plan with variantId ${variantId} not found.`
       } else {
+        console.log("Updating subscription in database:", eventBody.data.id)
         // Update the subscription in the database.
 
         const priceId = attributes.first_subscription_item.price_id
@@ -352,6 +276,7 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
         // Get the price data from Lemon Squeezy.
         const priceData = await getPrice(priceId)
         if (priceData.error) {
+          console.log("Failed to get price data:", priceId)
           processingError = `Failed to get the price data for the subscription ${eventBody.data.id}.`
         }
 
@@ -384,15 +309,18 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
             target: subscriptions.lemonSqueezyId,
             set: updateData,
           })
+          console.log("Successfully upserted subscription:", updateData.lemonSqueezyId)
         } catch (error) {
+          console.error("Failed to upsert subscription:", error)
           processingError = `Failed to upsert Subscription #${updateData.lemonSqueezyId} to the database.`
-          console.error(error)
         }
       }
     } else if (webhookEvent.eventName.startsWith("order_")) {
+      console.log("Order event:", webhookEvent.id)
       // Save orders; eventBody is a "Order"
       /* Not implemented */
     } else if (webhookEvent.eventName.startsWith("license_")) {
+      console.log("License event:", webhookEvent.id)
       // Save license keys; eventBody is a "License key"
       /* Not implemented */
     }
@@ -405,6 +333,9 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
         processingError,
       })
       .where(eq(webhookEvents.id, webhookEvent.id))
+    console.log("Updated webhook event status:", webhookEvent.id, "Error:", processingError || "None")
+  } else {
+    console.log("Event does not have data:", webhookEvent.id)
   }
 }
 

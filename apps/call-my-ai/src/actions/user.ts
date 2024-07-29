@@ -17,6 +17,7 @@ import {
   psGetUserByResetPasswordToken,
   psGetUserByUsername,
   psUpdateChatSummary,
+  psUpdateUserCalls,
   psUpdateUserUsername,
 } from "@/db/prepared/statements"
 import { type User } from "@/db/schema"
@@ -182,10 +183,23 @@ export async function updateUsername(
   }
 }
 
+export async function updateUserCalls(
+  userId: string | undefined,
+  newCalls: number
+) {
+  try {
+    await psUpdateUserCalls.execute({ id: userId, calls: newCalls })
+    console.log(`Calls updated successfully for user ${userId}`)
+  } catch (error) {
+    console.error("Error updating username:", error)
+    throw error
+  }
+}
+
 export async function createChat(
   hostUsername: string,
   visitor: any
-): Promise<{ id: string; userId: string }> {
+): Promise<{ id: string; userId: string; exhausted: boolean }> {
   const hostResult =
     visitor.username === hostUsername
       ? [visitor]
@@ -202,16 +216,27 @@ export async function createChat(
     throw new Error("Invalid request from host")
   }
 
+  if (visitor.id != host.id) {
+    if (host.calls === 0) {
+      return { id: "", userId: "", exhausted: true }
+    }
+  }
+
   const [newChat] = await psCreateChat.execute({
     userId: host.id,
     visitorId: visitor.id,
   })
 
+  if (visitor.id != host.id) {
+    const visitorCalls = host.calls - 1
+    await updateUserCalls(host.id, visitorCalls)
+  }
+
   if (!newChat) {
     throw new Error("Failed to create chat")
   }
 
-  return newChat
+  return { ...newChat, exhausted: false }
 }
 
 export async function getCallSummariesForUser(

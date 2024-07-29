@@ -15,6 +15,7 @@ export function webhookHasMeta(obj: unknown): obj is {
     custom_data: {
       user_id: string
     }
+    [key: string]: unknown
   }
 } {
   if (

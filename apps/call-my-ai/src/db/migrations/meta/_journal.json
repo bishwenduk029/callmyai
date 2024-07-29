@@ -50,6 +50,13 @@
       "when": 1722189005317,
       "tag": "0006_nice_meteorite",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1722261401785,
+      "tag": "0007_wise_lily_hollister",
+      "breakpoints": true
     }
   ]
 }

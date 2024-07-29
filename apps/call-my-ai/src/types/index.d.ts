@@ -37,10 +37,11 @@ export interface BlogPostParamsProps {
 }
 
 export interface PricingPlan {
-  id: "basic" | "standard" | "premium" | "enterprises"
+  id: "basic" | "standard" | "premium" | "enterprises" | "free"
   name: string
   description: string
   features: string[]
+  lemonSqueezyVariantId: string
   limitations: string[]
   stripePriceId: string
   prices: {
@@ -50,7 +51,8 @@ export interface PricingPlan {
   stripeIds: {
     monthly?: string
     yearly?: string
-  }
+  },
+  buttonText: string
 }
 
 export interface UserSubscriptionPlan extends SubscriptionPlan {

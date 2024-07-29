@@ -46,6 +46,13 @@ export const psUpdateUserUsername = db
   .where(eq(users.id, sql.placeholder("id")))
   .prepare("psUpdateUserUsername")
 
+  export const psUpdateUserCalls = db
+  .update(users)
+  // @ts-ignore
+  .set({ calls: sql.placeholder("calls") })
+  .where(eq(users.id, sql.placeholder("id")))
+  .prepare("psUpdateUserCalls")
+
 export const psCheckExistingUsername = db
   .select({ id: users.id })
   .from(users)
