@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "web",
+  "description": "",
+  "version": "0.1.0",
+  "license": "GNU AFFERO GENERAL PUBLIC LICENSE",
+  "author": {
+    "name": "Bishwendu Kundu",
+    "url": "https://www.callmyai.app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bishwenduk029/callmyai"
+  },
+  "bugs": {
+    "url": "https://github.com/bishwenduk029/callmyai/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "install": "source venv/bin/activate && pip install -r requirements.txt",
+    "dev": "source venv/bin/activate && python bot_runner.py",
+    "build": "next build",
+    "start": "source venv/bin/activate && python bot_runner.py"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engine": {
+    "node": ">=20.10.0"
+  }
+}

@@ -225,6 +225,14 @@ export const subscriptions = pgTable("subscription", {
     .references(() => plans.id),
 });
 
+export const promptTemplates = pgTable("promptTemplate", {
+  id: uuid("id").defaultRandom().notNull().primaryKey(),
+  name: text("name").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+})
+
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 
@@ -245,6 +253,9 @@ export type NewChat = typeof chats.$inferInsert
 
 export type Message = typeof messages.$inferSelect
 export type NewMessage = typeof messages.$inferInsert
+
+export type PromptTemplate = typeof promptTemplates.$inferSelect
+export type NewPromptTemplate = typeof promptTemplates.$inferInsert
 
 export type NewPlan = typeof plans.$inferInsert;
 export type NewWebhookEvent = typeof webhookEvents.$inferInsert;

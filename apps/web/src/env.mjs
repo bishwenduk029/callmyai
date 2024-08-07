@@ -35,6 +35,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_VOICE_BACKEND_URL: z.string().url().optional(),
   },
 
   /**
@@ -43,6 +44,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_VOICE_BACKEND_URL: process.env.NEXT_PUBLIC_VOICE_BACKEND_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     GOOGLE_ID: process.env.GOOGLE_ID,

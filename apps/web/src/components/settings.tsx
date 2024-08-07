@@ -1,16 +1,25 @@
 "use client"
 
-import { useCallback, useState, ChangeEvent } from "react"
+import { useCallback, useState, ChangeEvent, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { CheckCircle, Copy, XCircle } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { updateUserHandle } from "@/app/(dashboard)/actions"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { getPromptTemplates } from "@/actions/templates"
+import { updateUserHandle } from "@/actions/user"
 
 interface SettingsProps {
-  user: { id: string; username: string | null }
+  user: { id: string; username: string | null; systemPrompt: string | null }
+}
+
+interface PromptTemplate {
+  id: string;
+  name: string;
+  content: string;
 }
 
 export default function Settings({ user }: SettingsProps) {
@@ -19,7 +28,17 @@ export default function Settings({ user }: SettingsProps) {
   const [copied, setCopied] = useState(false)
   const [isInputChanged, setIsInputChanged] = useState(false)
   const [username, setUsername] = useState(user?.username || "")
+  const [systemPrompt, setSystemPrompt] = useState(user?.systemPrompt || "")
   const router = useRouter()
+  const [promptTemplates, setPromptTemplates] = useState<PromptTemplate[]>([])
+
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      const templates = await getPromptTemplates()
+      setPromptTemplates(templates)
+    }
+    fetchTemplates()
+  }, [])
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,8 +60,12 @@ export default function Settings({ user }: SettingsProps) {
     [user.id, router]
   )
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value)
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (event.target.name === "username") {
+      setUsername(event.target.value)
+    } else if (event.target.name === "systemPrompt") {
+      setSystemPrompt(event.target.value)
+    }
     setIsInputChanged(true)
   }
 
@@ -121,6 +144,17 @@ export default function Settings({ user }: SettingsProps) {
             </Button>
           </motion.div>
         </div>
+
+        <h2 className="font-inter text-3xl font-extrabold tracking-tight sm:text-3xl mt-8">System Prompt Template</h2>
+        <Textarea
+          id="systemPrompt"
+          name="systemPrompt"
+          placeholder="Enter your system prompt template here"
+          value={systemPrompt}
+          onChange={handleInputChange}
+          className="w-full px-2 py-3 text-lg h-200"
+          rows={4}
+        />
 
         {error && <p className=" text-destructive">{error}</p>}
         <Button type="submit" disabled={!isInputChanged}>

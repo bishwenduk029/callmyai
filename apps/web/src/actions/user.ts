@@ -2,7 +2,7 @@
 
 import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
-import { generateObject } from "ai"
+import { CoreMessage, generateObject } from "ai"
 import { z } from "zod"
 
 import { env } from "@/env.mjs"
@@ -21,6 +21,7 @@ import {
   psUpdateUserUsername,
 } from "@/db/prepared/statements"
 import { type User } from "@/db/schema"
+import { messages, User } from '../db/schema/index';
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -118,17 +119,20 @@ export async function getUserById(
 export async function getUserByEmail(
   rawInput: GetUserByEmailInput
 ): Promise<User | null> {
+  console.log("getUserByEmail")
   try {
     const validatedInput = getUserByEmailSchema.safeParse(rawInput)
+    console.log(validatedInput)
     if (!validatedInput.success) return null
 
-    noStore()
     const [user] = await psGetUserByEmail.execute({
       email: validatedInput.data.email,
     })
+    console.log(user)
     return user || null
   } catch (error) {
-    console.error(error)
+    console.log("did something go wrong")
+    console.log(error)
     throw new Error("Error getting user by email")
   }
 }
@@ -198,8 +202,9 @@ export async function updateUserCalls(
 
 export async function createChat(
   hostUsername: string,
-  visitor: any
-): Promise<{ id: string; userId: string; exhausted: boolean }> {
+  visitor: User
+): Promise<{ id: string; userId: string; exhausted: boolean, prompt: string | null }> {
+  console.log("wha is hap")
   const hostResult =
     visitor.username === hostUsername
       ? [visitor]
@@ -218,7 +223,7 @@ export async function createChat(
 
   if (visitor.id != host.id) {
     if (host.calls === 0) {
-      return { id: "", userId: "", exhausted: true }
+      return { id: "", userId: "", exhausted: true, prompt: null }
     }
   }
 
@@ -228,7 +233,7 @@ export async function createChat(
   })
 
   if (visitor.id != host.id) {
-    const visitorCalls = host.calls - 1
+    const visitorCalls = host?.calls || 0 - 1
     await updateUserCalls(host.id, visitorCalls)
   }
 
@@ -236,7 +241,7 @@ export async function createChat(
     throw new Error("Failed to create chat")
   }
 
-  return { ...newChat, exhausted: false }
+  return { ...newChat, exhausted: false, prompt: host.systemPrompt }
 }
 
 export async function getCallSummariesForUser(
@@ -263,23 +268,10 @@ export async function getCallSummariesForUser(
   }
 }
 
-export async function summarizeCall(chatId: string) {
-  // Fetch chat messages
-  const chatMessages = await psGetMessagesByChatId.execute({
-    chatId,
-  })
-
-  // Parse messages
-  const parsedMessages = chatMessages.map((msg) => {
-    try {
-      return JSON.parse(msg.content)
-    } catch (error) {
-      console.error(`Failed to parse message content: ${msg.content}`)
-      return { role: "system", content: "Error: Could not parse message" }
-    }
-  })
+export async function summarizeCall(chatId: string, chatTranscripts: CoreMessage[]) {
 
   // Generate summary and title
+  console.log(chatTranscripts)
   const { object } = await generateObject({
     model: openai(env.OPENAI_MODEL), // Make sure this matches your OpenAI model name
     schema: z.object({
@@ -291,7 +283,7 @@ export async function summarizeCall(chatId: string) {
         role: "system",
         content: systemPrompt,
       },
-      ...parsedMessages,
+      ...chatTranscripts,
     ],
   })
 

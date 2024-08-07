@@ -1,4 +1,6 @@
 import * as React from "react"
+import { SessionProvider } from "next-auth/react"
+
 import { Header } from "@/components/nav/header"
 
 interface DashboardLayoutProps {
@@ -8,6 +10,12 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps): Promise<JSX.Element> {
-
-  return <div><Header />{children}</div>
+  return (
+    <SessionProvider>
+      <div>
+        <Header />
+        {children}
+      </div>
+    </SessionProvider>
+  )
 }
