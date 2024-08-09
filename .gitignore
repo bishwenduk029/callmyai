@@ -60,3 +60,4 @@ yarn-error.log*
 **/**/gen-ai-local
 
 **/**/venv
+.env*.local
