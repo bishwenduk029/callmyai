@@ -31,6 +31,7 @@ import {
   type GetUserByIdInput,
   type GetUserByResetPasswordTokenInput,
 } from "@/validations/user"
+import { getUserSubscriptions } from "./payments"
 
 const systemPrompt = `
   You are an expert conversation analyst and summarizer. Your task is to create a brief, engaging summary of a conversation between an AI assistant and a caller. This summary should be easily digestible and help the user quickly determine the call's relevance and importance.
@@ -72,7 +73,7 @@ Based on the conversation transcript provided, generate a title and summary foll
 
 export async function updateUserHandle(userId: string, formData: FormData) {
   const username = formData.get("username")?.toString()
-  const userPrompt = formData.get("userPrompt")?.toString()
+  const userPrompt = formData.get("systemPrompt")?.toString()
 
   if (!username) {
     return { error: "Username is required" }
@@ -93,13 +94,13 @@ export async function updateUserHandle(userId: string, formData: FormData) {
     await psUpdateUserUsernameAndSystemPrompt.execute({
       id: userId,
       username,
-      prompt: userPrompt,
+      systemPrompt: userPrompt,
     })
 
     revalidatePath("/settings")
     return { success: "Username updated successfully" }
   } catch (error) {
-    console.error("Error updating username:", error)
+    console.log("Error updating username:", error)
     return { error: "An error occurred while updating username" }
   }
 }
@@ -191,7 +192,12 @@ export async function updateUserCalls(
 export async function createChat(
   hostUsername: string,
   visitor: any
-): Promise<{ id: string; userId: string; exhausted: boolean }> {
+): Promise<{
+  id: string
+  userId: string
+  exhausted: boolean
+  duration: number
+}> {
   const hostResult =
     visitor.username === hostUsername
       ? [visitor]
@@ -209,8 +215,8 @@ export async function createChat(
   }
 
   if (visitor.id != host.id) {
-    if (host.calls === 0) {
-      return { id: "", userId: "", exhausted: true }
+    if (host.calls <= 0) {
+      return { id: "", userId: "", exhausted: true, duration: 0 }
     }
   }
 
@@ -228,7 +234,25 @@ export async function createChat(
     throw new Error("Failed to create chat")
   }
 
-  return { ...newChat, exhausted: false }
+  // Fetch user subscriptions
+  const userSubscriptions = await getUserSubscriptions(newChat.userId)
+
+  // Define a mapping of variantIds to durations
+  const variantDurations: { [key: string]: number } = {
+    "450525": 100,
+    // Add more variants here in the future
+  }
+
+  // Determine the duration based on the subscription
+  let duration = 100 // Default duration
+  if (userSubscriptions.length > 0) {
+    const variantId = userSubscriptions[0]?.variantId
+    if (variantId && variantDurations[variantId]) {
+      duration = variantDurations[variantId] || 100
+    }
+  }
+
+  return { ...newChat, exhausted: false, duration }
 }
 
 export async function getCallSummariesForUser(

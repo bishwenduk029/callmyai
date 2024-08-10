@@ -13,12 +13,14 @@ import { summarizeCall } from "@/actions/user"
 interface AudioReactiveInterfaceProps {
   chatId: string
   personalMode: boolean
+  allowedCallDuration: number
 }
 
 export const AudioReactiveInterface = ({
   chatId,
-  personalMode
-}: AudioReactiveInterfaceProps) => {
+  personalMode,
+  allowedCallDuration
+}: AudioReactiveInterfaceProps & { allowedCallDuration: number }) => {
   const [primaryColor, setPrimaryColor] = useState("black")
   const [secondaryColor, setSecondaryColor] = useState("#fdfdfd")
   const [audioData, setAudioData] = useState<number[]>(new Array(6).fill(1))
@@ -61,9 +63,9 @@ export const AudioReactiveInterface = ({
     setElapsedTime(0)
     timerIntervalRef.current = setInterval(() => {
       setElapsedTime((prevTime) => {
-        if (prevTime >= 100) {
+        if (prevTime >= allowedCallDuration) {
           clearInterval(timerIntervalRef.current!)
-          return 100
+          return allowedCallDuration
         }
         return prevTime + 1
       })
@@ -131,13 +133,13 @@ export const AudioReactiveInterface = ({
       ? {
           audio: stop,
           visualization: stopAudioVisualization,
-          timer: personalMode ? null : stopTimer,
+          timer: stopTimer,
           summarize: personalMode ? null : () => summarizeCall(chatId),
         }
       : {
           audio: start,
           visualization: startAudioVisualization,
-          timer: personalMode ? null : startTimer,
+          timer: startTimer,
         };
 
     Object.values(actions).forEach(action => action && action());
@@ -146,10 +148,10 @@ export const AudioReactiveInterface = ({
   }
 
   useEffect(() => {
-    if (elapsedTime >= 100) {
+    if (elapsedTime >= allowedCallDuration) {
       toggleListening()
     }
-  }, [elapsedTime])
+  }, [elapsedTime, allowedCallDuration])
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center">
@@ -177,7 +179,7 @@ export const AudioReactiveInterface = ({
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
             )}
-            {!personalMode && <span>{elapsedTime}s of 100s</span>}
+            {!personalMode && <span>{elapsedTime}s of {allowedCallDuration}s</span>}
           </div>
           <motion.button
             className="rounded px-5 py-2.5 text-white transition-colors"

@@ -29,33 +29,33 @@ export default function Settings({ user }: SettingsProps) {
   const [systemPrompt, setSystemPrompt] = useState(user?.systemPrompt || "")
   const router = useRouter()
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
-      setError(null)
-      setSuccess(null)
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setError(null)
+    setSuccess(null)
 
-      const formData = new FormData(event.currentTarget)
-      const result = await updateUserHandle(user.id, formData)
+    const formData = new FormData(event.currentTarget)
+    formData.set("username", username)
+    formData.set("systemPrompt", systemPrompt)
+    const result = await updateUserHandle(user.id, formData)
 
-      if (result.error) {
-        setError(result.error)
-      } else if (result.success) {
-        setSuccess(result.success)
-        router.refresh()
-      }
-      setIsInputChanged(false)
-    },
-    [user.id, router]
-  )
+    if (result.error) {
+      setError(result.error)
+    } else if (result.success) {
+      setSuccess(result.success)
+      router.refresh()
+    }
+    setIsInputChanged(false)
+  }
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    if (event.target.name === "username") {
-      setUsername(event.target.value)
-    } else if (event.target.name === "systemPrompt") {
-      setSystemPrompt(event.target.value)
+    const { name, value } = event.target
+    if (name === "username") {
+      setUsername(value)
+    } else if (name === "systemPrompt") {
+      setSystemPrompt(value)
     }
     setIsInputChanged(true)
   }
@@ -150,7 +150,7 @@ export default function Settings({ user }: SettingsProps) {
             placeholder="Enter your system prompt template here"
             value={systemPrompt}
             onChange={handleInputChange}
-            className="w-full px-2 py-3 text-lg h-[50vh] min-h-[200px] resize-y"
+            className="w-full px-2 py-3 text-lg h-[50vh] min-h-[200px] resize-none border-primary border-2 overflow-y-auto"
             rows={4}
           />
 

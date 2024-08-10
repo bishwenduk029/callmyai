@@ -46,7 +46,7 @@ export default async function CallPage({
 
   return (
     <div className="container">
-      <AudioReactiveInterface chatId={newChat.id} personalMode={visitor?.username === params.username} />
+      <AudioReactiveInterface chatId={newChat.id} personalMode={visitor?.username === newChat.userId} allowedCallDuration={newChat.duration} />
     </div>
   )
 }

@@ -26,16 +26,16 @@ import { redirect } from "next/navigation"
 
 export async function PricingSection(): Promise<JSX.Element> {
   const session = await auth()
-  console.log(session)
 
   if (!session || !session.user) {
     // User is not logged in, we'll show a simplified version of the pricing
     return <NonLoggedInPricingSection />
   }
-  const userSubscriptions = await getUserSubscriptions()
-  const hasActiveSubscription = userSubscriptions.some(
-    (sub) => sub.status === "active"
-  )
+  const hasActiveSubscription = true
+  // const userSubscriptions = await getUserSubscriptions()
+  // const hasActiveSubscription = userSubscriptions.some(
+  //   (sub) => sub.status === "active"
+  // )
 
   return (
     <section
@@ -58,7 +58,7 @@ export async function PricingSection(): Promise<JSX.Element> {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
@@ -195,7 +195,7 @@ function NonLoggedInPricingSection(): JSX.Element {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
