@@ -39,14 +39,16 @@ export const psLinkOAuthAccount = db
   .where(eq(users.id, sql.placeholder("userId")))
   .prepare("psLinkOAuthAccount")
 
-export const psUpdateUserUsername = db
+export const psUpdateUserUsernameAndSystemPrompt = db
   .update(users)
-  // @ts-ignore
-  .set({ username: sql.placeholder("username") })
+  .set({
+    username: sql`${sql.placeholder("username")}`,
+    systemPrompt: sql`${sql.placeholder("systemPrompt")}`,
+  })
   .where(eq(users.id, sql.placeholder("id")))
-  .prepare("psUpdateUserUsername")
+  .prepare("psUpdateUserUsernameAndSystemPrompt")
 
-  export const psUpdateUserCalls = db
+export const psUpdateUserCalls = db
   .update(users)
   // @ts-ignore
   .set({ calls: sql.placeholder("calls") })

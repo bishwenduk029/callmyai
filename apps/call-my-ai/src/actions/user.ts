@@ -1,11 +1,10 @@
 "use server"
 
-import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
 import { generateObject } from "ai"
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { z } from "zod"
 
-import { env } from "@/env.mjs"
 import {
   psCheckExistingUsername,
   psCreateChat,
@@ -18,9 +17,10 @@ import {
   psGetUserByUsername,
   psUpdateChatSummary,
   psUpdateUserCalls,
-  psUpdateUserUsername,
+  psUpdateUserUsernameAndSystemPrompt,
 } from "@/db/prepared/statements"
 import { type User } from "@/db/schema"
+import { env } from "@/env.mjs"
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -72,6 +72,7 @@ Based on the conversation transcript provided, generate a title and summary foll
 
 export async function updateUserHandle(userId: string, formData: FormData) {
   const username = formData.get("username")?.toString()
+  const userPrompt = formData.get("userPrompt")?.toString()
 
   if (!username) {
     return { error: "Username is required" }
@@ -89,7 +90,11 @@ export async function updateUserHandle(userId: string, formData: FormData) {
     }
 
     // Update username
-    await psUpdateUserUsername.execute({ id: userId, username })
+    await psUpdateUserUsernameAndSystemPrompt.execute({
+      id: userId,
+      username,
+      prompt: userPrompt,
+    })
 
     revalidatePath("/settings")
     return { success: "Username updated successfully" }
@@ -167,19 +172,6 @@ export async function getUserByEmailVerificationToken(
   } catch (error) {
     console.error(error)
     throw new Error("Error getting user by email verification token")
-  }
-}
-
-export async function updateUsername(
-  userId: string | undefined,
-  newUsername: string
-) {
-  try {
-    await psUpdateUserUsername.execute({ id: userId, username: newUsername })
-    console.log(`Username updated successfully for user ${userId}`)
-  } catch (error) {
-    console.error("Error updating username:", error)
-    throw error
   }
 }
 

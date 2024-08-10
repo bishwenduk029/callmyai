@@ -58,7 +58,7 @@ export async function PricingSection(): Promise<JSX.Element> {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-2 gap-4 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
@@ -160,7 +160,7 @@ export async function PricingSection(): Promise<JSX.Element> {
               className={cn(
                 buttonVariants({
                   variant: "default",
-                  className: "w-1/2 items-center self-center",
+                  className: "w-full md:w-1/2 items-center self-center",
                 })
               )}
             >
@@ -195,7 +195,7 @@ function NonLoggedInPricingSection(): JSX.Element {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-2 gap-4 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
