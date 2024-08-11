@@ -45,7 +45,7 @@ export const pricingPlans: PricingPlan[] = [
       monthly: undefined,
       yearly: undefined,
     },
-    buttonText: "Purchase",
+    buttonText: "Coming Soon",
   },
   {
     id: "premium",
@@ -67,6 +67,6 @@ export const pricingPlans: PricingPlan[] = [
       monthly: undefined,
       yearly: undefined,
     },
-    buttonText: "Purchase",
+    buttonText: "Coming Soon",
   },
 ]

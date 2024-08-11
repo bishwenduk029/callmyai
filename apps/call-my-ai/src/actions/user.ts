@@ -1,10 +1,11 @@
 "use server"
 
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
 import { generateObject } from "ai"
-import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { z } from "zod"
 
+import { env } from "@/env.mjs"
 import {
   psCheckExistingUsername,
   psCreateChat,
@@ -20,7 +21,6 @@ import {
   psUpdateUserUsernameAndSystemPrompt,
 } from "@/db/prepared/statements"
 import { type User } from "@/db/schema"
-import { env } from "@/env.mjs"
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -31,6 +31,7 @@ import {
   type GetUserByIdInput,
   type GetUserByResetPasswordTokenInput,
 } from "@/validations/user"
+
 import { getUserSubscriptions } from "./payments"
 
 const systemPrompt = `
@@ -73,7 +74,7 @@ Based on the conversation transcript provided, generate a title and summary foll
 
 export async function updateUserHandle(userId: string, formData: FormData) {
   const username = formData.get("username")?.toString()
-  const userPrompt = formData.get("systemPrompt")?.toString()
+  const systemPrompt = formData.get("systemPrompt")?.toString()
 
   if (!username) {
     return { error: "Username is required" }
@@ -90,18 +91,18 @@ export async function updateUserHandle(userId: string, formData: FormData) {
       return { error: "Username already taken" }
     }
 
-    // Update username
+    // Update username and systemPrompt
     await psUpdateUserUsernameAndSystemPrompt.execute({
       id: userId,
       username,
-      systemPrompt: userPrompt,
+      systemPrompt,
     })
 
     revalidatePath("/settings")
-    return { success: "Username updated successfully" }
+    return { success: "Username and system prompt updated successfully" }
   } catch (error) {
-    console.log("Error updating username:", error)
-    return { error: "An error occurred while updating username" }
+    console.error("Error updating user:", error)
+    return { error: "An error occurred while updating user information" }
   }
 }
 
@@ -217,6 +218,15 @@ export async function createChat(
   if (visitor.id != host.id) {
     if (host.calls <= 0) {
       return { id: "", userId: "", exhausted: true, duration: 0 }
+    }
+  }
+
+  if (visitor.id == host.id) {
+    return {
+      exhausted: false,
+      id: "dummy",
+      userId: host.id,
+      duration: 50,
     }
   }
 

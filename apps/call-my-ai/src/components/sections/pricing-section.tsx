@@ -31,7 +31,7 @@ export async function PricingSection(): Promise<JSX.Element> {
     // User is not logged in, we'll show a simplified version of the pricing
     return <NonLoggedInPricingSection />
   }
-  const hasActiveSubscription = true
+  const hasActiveSubscription = false
   // const userSubscriptions = await getUserSubscriptions()
   // const hasActiveSubscription = userSubscriptions.some(
   //   (sub) => sub.status === "active"
@@ -137,6 +137,7 @@ export async function PricingSection(): Promise<JSX.Element> {
                     >
                       <button
                         type="submit"
+                        disabled={plan.id !== "free"}
                         className={cn(
                           buttonVariants({
                             variant: "default",

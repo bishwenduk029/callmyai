@@ -44,7 +44,7 @@ export const AudioReactiveInterface = ({
     body: {
       chatId,
     },
-    speakerPause: 500,
+    speakerPause: 250,
     onSpeechCompletion: async () => {},
   })
 

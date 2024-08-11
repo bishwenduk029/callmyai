@@ -46,6 +46,7 @@ export default async function CallPage({
 
   return (
     <div className="container">
+      {(visitor?.id === newChat.userId) && <div className="text-center mb-2 my-6 text-xl font-semibold">In Preview/Test Mode</div>}
       <AudioReactiveInterface chatId={newChat.id} personalMode={visitor?.username === newChat.userId} allowedCallDuration={newChat.duration} />
     </div>
   )
