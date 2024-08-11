@@ -208,7 +208,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
 
-                  <CardDescription className="text-sm">
+                  <CardDescription className="text-sm text-neutral-3000 dark:text-muted-foreground">
                     <Balancer>{plan.description}</Balancer>
                   </CardDescription>
 

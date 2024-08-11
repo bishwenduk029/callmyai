@@ -1,4 +1,4 @@
-import { Inter, Urbanist, Alegreya, Nunito_Sans, Nunito } from "next/font/google"
+import { Nunito } from "next/font/google"
 
 export const fontInter = Nunito({
   subsets: ["latin"],
