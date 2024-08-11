@@ -16,6 +16,8 @@ import { cn } from "@/lib/utils"
 
 import { Toaster } from "@/components/ui/toaster"
 
+export const runtime = "edge"
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
