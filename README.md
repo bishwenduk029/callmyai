@@ -1,7 +1,7 @@
 <p align="center">
 	<h1 align="center"><b>CallMyAI</b></h1>
 <p align="center">
-    AI powered call assistant
+    AI Powered Call Assistant
     <br />
     <a href="https://www.callmyai.app">Website</a>
     ·
@@ -9,9 +9,27 @@
   </p>
 </p>
 
-## About CallMyAI
+## Why CallMyAI
 
-CallMyAI is an open-source, AI-powered answering machine designed to revolutionize how individuals and businesses handle incoming calls. It's an all-in-one solution that combines traditional answering machine functionality with advanced AI capabilities, catering to professionals, small businesses, and anyone seeking to streamline their communication management.
+Ever feel overwhelmed by calls, but worried about missing the good ones?
+👉 Constant ringing from unknown numbers
+👉 Important calls buried in the noise
+👉 Missed opportunities you didn't know about
+👉 Work interruptions killing your focus
+👉 Forced to share wrong numbers to avoid getting some calls
+
+Meet CallMyAI: Your personalized, AI-powered answering machine.
+
+It's not just about blocking - it's about smart filtering. Tell CallMyAI what matters to you:
+🏠 Looking for real estate deals?
+🚗 Interested in that new car model?
+💼 Open to exciting job opportunities?
+
+CallMyAI learns your interests and:
+✅ Gathers info on topics you care about in calls
+✅ Ensures you never miss the important stuff, by summarizing and ranking the call summaries
+
+Take control of your calls and opportunities with CallMyAI.
 
 ## Features
 
