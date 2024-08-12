@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { getUserSubscriptions } from "@/actions/payments"
 import { getUserByEmail, updateUserCalls } from "@/actions/user"
 import Balancer from "react-wrap-balancer"
 
