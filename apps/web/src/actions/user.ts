@@ -31,7 +31,7 @@ import {
   type GetUserByResetPasswordTokenInput,
 } from "@/validations/user"
 
-import { messages, User } from "../db/schema/index"
+import { messages, User, promptTemplates } from '../db/schema/index';
 import { getUserSubscriptions } from "./payments"
 
 const systemPrompt = `
@@ -125,7 +125,6 @@ export async function getUserById(
 export async function getUserByEmail(
   rawInput: GetUserByEmailInput
 ): Promise<User | null> {
-  console.log("getUserByEmail")
   try {
     const validatedInput = getUserByEmailSchema.safeParse(rawInput)
     console.log(validatedInput)
@@ -134,7 +133,6 @@ export async function getUserByEmail(
     const [user] = await psGetUserByEmail.execute({
       email: validatedInput.data.email,
     })
-    console.log(user)
     return user || null
   } catch (error) {
     console.log("did something go wrong")
@@ -218,11 +216,6 @@ export async function createChat(
   if (!host) {
     throw new Error("Invalid request from host")
   }
-  if (visitor.id !== host.id) {
-    if (host.calls !== null && host.calls <= 0) {
-      return { id: "", userId: "", exhausted: true, duration: 0, prompt: "" }
-    }
-  }
 
   if (visitor.id == host.id) {
     return {
@@ -231,6 +224,12 @@ export async function createChat(
       userId: host.id,
       duration: 50,
       prompt: "",
+    }
+  }
+
+  if (visitor.id !== host.id) {
+    if (host.calls !== null && host.calls <= 0) {
+      return { id: "", userId: "", exhausted: true, duration: 0, prompt: "" }
     }
   }
 
@@ -266,7 +265,9 @@ export async function createChat(
     }
   }
 
-  return { ...newChat, exhausted: false, duration, prompt: "" }
+  const systemPrompt = JSON.parse(host.systemPrompt || "")
+
+  return { ...newChat, exhausted: false, duration, prompt: systemPrompt.promptTemplate }
 }
 
 export async function getCallSummariesForUser(
