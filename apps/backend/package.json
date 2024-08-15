@@ -17,7 +17,7 @@
   },
   "type": "module",
   "scripts": {
-    "install": "source venv/bin/activate",
+    "install": "",
     "dev": "source venv/bin/activate && python bot_runner.py",
     "build": "",
     "start": "source venv/bin/activate && python bot_runner.py"
