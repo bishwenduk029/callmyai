@@ -2,10 +2,15 @@
 "use client"
 
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useDailyVoiceClient, useDailyVoiceClientEvent } from "@bishwenduk029/ai-voice/ui"
+import {
+  DailyVoiceClient,
+  useDailyVoiceClient,
+  useDailyVoiceClientEvent,
+} from "@bishwenduk029/ai-voice/ui"
 import { Spinner } from "@phosphor-icons/react"
 import { PhoneCall, PhonePause } from "@phosphor-icons/react/dist/ssr"
 import { motion } from "framer-motion"
+import { VoiceEvent } from "realtime-ai"
 
 import { GooeyDiv } from "./gooey-div"
 import { InnerOrb } from "./inner-orb"
@@ -34,6 +39,13 @@ export const AudioReactiveInterface = ({
   const animationFrameRef = useRef<number | null>(null)
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const voiceClient = useDailyVoiceClient()
+
+  // Wait for the bot to enter a ready state and trigger it to say hello
+  useDailyVoiceClientEvent(VoiceEvent.BotConnected, async () => {
+    await startAudioVisualization()
+    startTimer()
+    setIsLoadingBot(false)
+  })
 
   useEffect(() => {
     return () => {
@@ -72,7 +84,6 @@ export const AudioReactiveInterface = ({
         (window as any).webkitAudioContext)()
       analyserRef.current = audioContextRef.current.createAnalyser()
       analyserRef.current.fftSize = 256
-      voiceClient?.start()
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -131,8 +142,8 @@ export const AudioReactiveInterface = ({
           timer: stopTimer,
         }
       : {
-          visualization: startAudioVisualization,
-          timer: startTimer,
+          visualization: () => {},
+          timer: () => {},
         }
 
     await Promise.all(

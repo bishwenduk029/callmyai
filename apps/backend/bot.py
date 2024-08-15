@@ -11,6 +11,7 @@ from pipecat.pipeline.task import PipelineParams, PipelineTask
 from pipecat.processors.aggregators.llm_response import LLMAssistantResponseAggregator, LLMUserResponseAggregator
 from pipecat.frames.frames import LLMMessagesFrame, EndFrame
 from pipecat.services.openai import OpenAILLMService, OpenAITTSService
+from pipecat.services.cartesia import CartesiaTTSService
 from pipecat.transports.services.daily import DailyParams, DailyTransport
 from pipecat.processors.frameworks.rtvi import RTVIProcessor, RTVIConfig
 from pipecat.vad.silero import SileroVADAnalyzer
@@ -55,9 +56,10 @@ async def main(room_url: str, token: str, client_config: dict):
             )
         )
 
-        tts = OpenAITTSService(
-            voice="nova",
-            api_key=os.getenv("OPENAI_API_KEY", ""),
+        tts = CartesiaTTSService(
+            api_key=os.getenv("CARTESIA_API_KEY"),
+            voice_id="248be419-c632-4f23-adf1-5324ed7dbf1d",
+            sample_rate=24000,
         )
 
         llm = OpenAILLMService(

@@ -249,7 +249,7 @@ export async function createChat(
 
   // Define a mapping of variantIds to durations
   const variantDurations: { [key: string]: number } = {
-    "450525": 100,
+    "450525": 75,
     // Add more variants here in the future
   }
 
