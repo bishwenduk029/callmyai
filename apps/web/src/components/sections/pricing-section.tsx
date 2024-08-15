@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { getUserSubscriptions } from "@/actions/payments"
 import { getUserByEmail, updateUserCalls } from "@/actions/user"
 import Balancer from "react-wrap-balancer"
 
@@ -26,16 +25,16 @@ import { redirect } from "next/navigation"
 
 export async function PricingSection(): Promise<JSX.Element> {
   const session = await auth()
-  console.log(session)
 
   if (!session || !session.user) {
     // User is not logged in, we'll show a simplified version of the pricing
     return <NonLoggedInPricingSection />
   }
-  const userSubscriptions = await getUserSubscriptions()
-  const hasActiveSubscription = userSubscriptions.some(
-    (sub) => sub.status === "active"
-  )
+  const hasActiveSubscription = false
+  // const userSubscriptions = await getUserSubscriptions()
+  // const hasActiveSubscription = userSubscriptions.some(
+  //   (sub) => sub.status === "active"
+  // )
 
   return (
     <section
@@ -58,7 +57,7 @@ export async function PricingSection(): Promise<JSX.Element> {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-2 gap-4 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
@@ -137,6 +136,7 @@ export async function PricingSection(): Promise<JSX.Element> {
                     >
                       <button
                         type="submit"
+                        disabled={plan.id !== "free"}
                         className={cn(
                           buttonVariants({
                             variant: "default",
@@ -160,7 +160,7 @@ export async function PricingSection(): Promise<JSX.Element> {
               className={cn(
                 buttonVariants({
                   variant: "default",
-                  className: "w-1/2 items-center self-center",
+                  className: "w-full md:w-1/2 items-center self-center",
                 })
               )}
             >
@@ -195,7 +195,7 @@ function NonLoggedInPricingSection(): JSX.Element {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-2 gap-4 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
@@ -208,7 +208,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
 
-                  <CardDescription className="text-sm">
+                  <CardDescription className="text-sm text-neutral-3000 dark:text-muted-foreground">
                     <Balancer>{plan.description}</Balancer>
                   </CardDescription>
 

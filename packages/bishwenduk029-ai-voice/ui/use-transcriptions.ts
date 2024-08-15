@@ -56,7 +56,6 @@ function useTranscription({
     modelURL: "/silero_vad.onnx",
     workletURL: "/vad.worklet.bundle.min.js",
     onSpeechStart: () => {
-      console.log("Yes I deteted speech start and I am processing the speech")
       setListening(true);
 
       if (speechEndTimeout) {
@@ -66,7 +65,6 @@ function useTranscription({
     },
     // Inside the `onSpeechEnd` callback
     onSpeechEnd: async (audio: Float32Array) => {
-      console.log("Yes I deteted speech end and I am processing the speech")
       let updatedAccumulatedText = accumulatedText;
       const wavBuffer = utils.encodeWAV(audio);
       const blob = new Blob([wavBuffer], { type: "audio/mpeg" });

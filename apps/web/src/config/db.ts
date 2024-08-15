@@ -1,17 +1,14 @@
-import "dotenv/config";
-import { PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import * as schema from "@/db/schema";
+import postgres from 'postgres';
+import { PostgresJsDatabase, drizzle } from 'drizzle-orm/postgres-js';
 
-import { env } from "@/env.mjs";
-
-const connectionString = env.DATABASE_URL;
+import { env } from "@/env.mjs"
+import * as schema from "@/db/schema"
 
 const drizzleClient = drizzle(
-  postgres(connectionString, {
+  postgres(env.DATABASE_URL, {
     prepare: false,
   }),
-  { schema },
+  { schema }
 );
 
 declare global {

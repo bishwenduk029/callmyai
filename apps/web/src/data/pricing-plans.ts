@@ -6,9 +6,9 @@ export const pricingPlans: PricingPlan[] = [
   {
     id: "free",
     name: "Free Forever",
-    description: "Perfect for when you are just getting started",
+    description: "Perfect for individuals expecting lower call volumes",
     features: [
-      "20 calls per month",
+      "50 calls per month",
       "Filtered Call Summaries",
       "Each call of duration 100 seconds",
     ],
@@ -26,9 +26,31 @@ export const pricingPlans: PricingPlan[] = [
     buttonText: "Get Started",
   },
   {
+    id: "standard",
+    name: "Standard",
+    description: "Perfect for individuals expecting higher call volumes",
+    features: [
+      "Handle 200 calls per month",
+      "Filtered Call Summaries",
+      "Each call of duration 100 seconds",
+    ],
+    lemonSqueezyVariantId: env.LEMONSQUEEZY_VARIANT_ID,
+    limitations: [],
+    stripePriceId: "",
+    prices: {
+      monthly: 9.99,
+      yearly: 240,
+    },
+    stripeIds: {
+      monthly: undefined,
+      yearly: undefined,
+    },
+    buttonText: "Coming Soon",
+  },
+  {
     id: "premium",
-    name: "Premium",
-    description: "Perfect for everyday use",
+    name: "Business Lite",
+    description: "Perfect for businesses looking for AI receptionist",
     features: [
       "Handle Unlimited calls per month",
       "Filtered Call Summaries",
@@ -38,13 +60,13 @@ export const pricingPlans: PricingPlan[] = [
     limitations: [],
     stripePriceId: "",
     prices: {
-      monthly: 6.99,
+      monthly: 39.99,
       yearly: 240,
     },
     stripeIds: {
       monthly: undefined,
       yearly: undefined,
     },
-    buttonText: "Purchase",
+    buttonText: "Coming Soon",
   },
 ]

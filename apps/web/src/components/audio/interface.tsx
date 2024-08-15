@@ -2,13 +2,10 @@
 "use client"
 
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { summarizeCall } from "@/actions/user"
+import { useDailyVoiceClient, useDailyVoiceClientEvent } from "@bishwenduk029/ai-voice/ui"
 import { Spinner } from "@phosphor-icons/react"
 import { PhoneCall, PhonePause } from "@phosphor-icons/react/dist/ssr"
-import { CoreAssistantMessage, CoreMessage, CoreUserMessage } from "ai"
 import { motion } from "framer-motion"
-import { Transcript, VoiceEvent } from "realtime-ai"
-import { useVoiceClient, useVoiceClientEvent } from "realtime-ai-react"
 
 import { GooeyDiv } from "./gooey-div"
 import { InnerOrb } from "./inner-orb"
@@ -16,12 +13,14 @@ import { InnerOrb } from "./inner-orb"
 interface AudioReactiveInterfaceProps {
   chatId: string
   personalMode: boolean
+  allowedCallDuration: number
 }
 
 export const AudioReactiveInterface = ({
   chatId,
   personalMode,
-}: AudioReactiveInterfaceProps) => {
+  allowedCallDuration,
+}: AudioReactiveInterfaceProps & { allowedCallDuration: number }) => {
   const [primaryColor, setPrimaryColor] = useState("black")
   const [secondaryColor, setSecondaryColor] = useState("#fdfdfd")
   const [audioData, setAudioData] = useState<number[]>(new Array(6).fill(1))
@@ -34,8 +33,7 @@ export const AudioReactiveInterface = ({
   const analyserRef = useRef<AnalyserNode | null>(null)
   const animationFrameRef = useRef<number | null>(null)
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null)
-  const [messages, setMessages] = useState<CoreMessage[]>([])
-  const voiceClient = useVoiceClient()
+  const voiceClient = useDailyVoiceClient()
 
   useEffect(() => {
     return () => {
@@ -48,42 +46,13 @@ export const AudioReactiveInterface = ({
     }
   }, [])
 
-  useVoiceClientEvent(
-    VoiceEvent.BotConnected,
-    useCallback(() => {
-      startTimer()
-      setIsListening(true)
-      setIsLoadingBot(false)
-    }, [])
-  )
-
-  useVoiceClientEvent(
-    VoiceEvent.BotTranscript,
-    useCallback((transcript: string) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { role: "assistant", content: transcript } as CoreAssistantMessage,
-      ])
-    }, [])
-  )
-
-  useVoiceClientEvent(
-    VoiceEvent.UserTranscript,
-    useCallback((transcript: Transcript) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { role: "user", content: transcript.text } as CoreUserMessage,
-      ])
-    }, [])
-  )
-
   const startTimer = () => {
     setElapsedTime(0)
     timerIntervalRef.current = setInterval(() => {
       setElapsedTime((prevTime) => {
-        if (prevTime >= 100) {
+        if (prevTime >= allowedCallDuration) {
           clearInterval(timerIntervalRef.current!)
-          return 100
+          return allowedCallDuration
         }
         return prevTime + 1
       })
@@ -160,30 +129,32 @@ export const AudioReactiveInterface = ({
       ? {
           visualization: stopAudioVisualization,
           timer: stopTimer,
-          summarize: personalMode ? null : async () => await summarizeCall(chatId, messages),
         }
       : {
           visualization: startAudioVisualization,
+          timer: startTimer,
         }
 
-    await Promise.all(Object.values(actions).map(async (action) => {
-      if (action) {
-        if (typeof action === 'function') {
-          await action()
-        } else {
-          action
+    await Promise.all(
+      Object.values(actions).map(async (action) => {
+        if (action) {
+          if (typeof action === "function") {
+            await action()
+          } else {
+            action
+          }
         }
-      }
-    }))
+      })
+    )
 
     setIsListening(!isListening)
   }
 
   useEffect(() => {
-    if (elapsedTime >= 100) {
+    if (elapsedTime >= allowedCallDuration) {
       toggleListening()
     }
-  }, [elapsedTime])
+  }, [elapsedTime, allowedCallDuration])
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center">
@@ -211,7 +182,11 @@ export const AudioReactiveInterface = ({
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
             )}
-            {!personalMode && <span>{elapsedTime}s of 100s</span>}
+            {!personalMode && (
+              <span>
+                {elapsedTime}s of {allowedCallDuration}s
+              </span>
+            )}
           </div>
           <motion.button
             className="rounded px-5 py-2.5 text-white transition-colors"

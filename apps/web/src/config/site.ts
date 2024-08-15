@@ -15,7 +15,7 @@ const links = {
 }
 
 export const siteConfig = {
-  name: "callmyai.app",
+  name: "callmyai.app (beta)",
   description: "Open Call Assistant Infrasrtucture",
   links,
   url: "https://callmyai.app",

@@ -12,7 +12,7 @@ import {
 
 export function FAQSection() {
   return (
-    <section id="faq-section" aria-label="faq section" className="w-full">
+    <section id="faq-section" aria-label="faq section" className="w-full mt-8">
       <div className="container grid max-w-6xl gap-8 md:gap-16">
         <div className="flex w-full flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">

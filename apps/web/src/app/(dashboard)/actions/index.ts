@@ -1,13 +1,15 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+
 import {
   psCheckExistingUsername,
-  psUpdateUserUsername,
+  psUpdateUserUsernameAndSystemPrompt,
 } from "@/db/prepared/statements"
 
 export async function updateUserHandle(userId: string, formData: FormData) {
   const username = formData.get("username")?.toString()
+  const systemPrompt = formData.get("systemPrompt")?.toString()
 
   if (!username) {
     return { error: "Username is required" }
@@ -24,13 +26,17 @@ export async function updateUserHandle(userId: string, formData: FormData) {
       return { error: "Username already taken" }
     }
 
-    // Update username
-    await psUpdateUserUsername.execute({ id: userId, username })
+    // Update username and systemPrompt
+    await psUpdateUserUsernameAndSystemPrompt.execute({
+      id: userId,
+      username,
+      systemPrompt,
+    })
 
     revalidatePath("/settings")
-    return { success: "Username updated successfully" }
+    return { success: "Username and system prompt updated successfully" }
   } catch (error) {
-    console.error("Error updating username:", error)
-    return { error: "An error occurred while updating username" }
+    console.error("Error updating user:", error)
+    return { error: "An error occurred while updating user information" }
   }
 }

@@ -11,22 +11,25 @@ import {
 } from "@bishwenduk029/ai-voice/ui"
 import { useSession } from "next-auth/react"
 
+import { env } from "@/env.mjs"
 import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
 
 import { AudioReactiveInterface } from "@/components/audio/interface"
 
+interface ChatData {
+  id: string
+  userId: string
+  prompt: string
+  exhausted: boolean
+  duration: number
+}
+
 export default function CallPage({ params }: { params: { username: string } }) {
   const [voiceClient, setVoiceClient] = useState<DailyVoiceClient | null>(null)
-  const [chatData, setChatData] = useState<{
-    id: string
-    userId: string
-    exhausted: boolean
-    prompt: string | null
-  } | null>(null)
+  const [chatData, setChatData] = useState<ChatData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const { data: session, status } = useSession()
   const router = useRouter()
-  console.log(chatData)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -48,7 +51,7 @@ export default function CallPage({ params }: { params: { username: string } }) {
         setChatData(newChat)
         if (typeof window !== "undefined" && !voiceClient) {
           const client = new DailyVoiceClient({
-            baseUrl: "https://callmyai-pipecat.fly.dev/start_bot",
+            baseUrl: env.NEXT_PUBLIC_VOICE_BACKEND_URL || "",
             enableMic: true,
             config: {
               llm: {
@@ -115,7 +118,11 @@ export default function CallPage({ params }: { params: { username: string } }) {
   return (
     <DailyVoiceClientProvider voiceClient={voiceClient}>
       <div className="container">
-        <AudioReactiveInterface chatId={chatData.id} personalMode={false} />
+        <AudioReactiveInterface
+          chatId={chatData.id}
+          personalMode={false}
+          allowedCallDuration={chatData.duration}
+        />
       </div>
       <DailyVoiceClientAudio />
     </DailyVoiceClientProvider>

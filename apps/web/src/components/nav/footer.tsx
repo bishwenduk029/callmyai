@@ -61,7 +61,7 @@ export function Footer(): JSX.Element {
 
       <div className="container flex items-center justify-between">
         <p className="text-sm text-muted-foreground xl:text-base">
-          <Balancer>
+          {/* <Balancer>
             Built with ❤️ by{" "}
             <Link
               href={siteConfig.links.authorsGitHub}
@@ -71,7 +71,7 @@ export function Footer(): JSX.Element {
             >
               Bishwendu Kundu.
             </Link>{" "}
-          </Balancer>
+          </Balancer> */}
         </p>
         <div className="flex items-center justify-center">
           <Link

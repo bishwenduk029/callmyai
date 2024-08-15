@@ -18,9 +18,8 @@ import {
   psGetUserByUsername,
   psUpdateChatSummary,
   psUpdateUserCalls,
-  psUpdateUserUsername,
+  psUpdateUserUsernameAndSystemPrompt,
 } from "@/db/prepared/statements"
-import { messages, User } from '../db/schema/index';
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -31,6 +30,9 @@ import {
   type GetUserByIdInput,
   type GetUserByResetPasswordTokenInput,
 } from "@/validations/user"
+
+import { messages, User } from "../db/schema/index"
+import { getUserSubscriptions } from "./payments"
 
 const systemPrompt = `
   You are an expert conversation analyst and summarizer. Your task is to create a brief, engaging summary of a conversation between an AI assistant and a caller. This summary should be easily digestible and help the user quickly determine the call's relevance and importance.
@@ -72,6 +74,7 @@ Based on the conversation transcript provided, generate a title and summary foll
 
 export async function updateUserHandle(userId: string, formData: FormData) {
   const username = formData.get("username")?.toString()
+  const systemPrompt = formData.get("systemPrompt")?.toString()
 
   if (!username) {
     return { error: "Username is required" }
@@ -88,14 +91,18 @@ export async function updateUserHandle(userId: string, formData: FormData) {
       return { error: "Username already taken" }
     }
 
-    // Update username
-    await psUpdateUserUsername.execute({ id: userId, username })
+    // Update username and systemPrompt
+    await psUpdateUserUsernameAndSystemPrompt.execute({
+      id: userId,
+      username,
+      systemPrompt,
+    })
 
     revalidatePath("/settings")
-    return { success: "Username updated successfully" }
+    return { success: "Username and system prompt updated successfully" }
   } catch (error) {
-    console.error("Error updating username:", error)
-    return { error: "An error occurred while updating username" }
+    console.error("Error updating user:", error)
+    return { error: "An error occurred while updating user information" }
   }
 }
 
@@ -173,19 +180,6 @@ export async function getUserByEmailVerificationToken(
   }
 }
 
-export async function updateUsername(
-  userId: string | undefined,
-  newUsername: string
-) {
-  try {
-    await psUpdateUserUsername.execute({ id: userId, username: newUsername })
-    console.log(`Username updated successfully for user ${userId}`)
-  } catch (error) {
-    console.error("Error updating username:", error)
-    throw error
-  }
-}
-
 export async function updateUserCalls(
   userId: string | undefined,
   newCalls: number
@@ -202,8 +196,13 @@ export async function updateUserCalls(
 export async function createChat(
   hostUsername: string,
   visitor: User
-): Promise<{ id: string; userId: string; exhausted: boolean, prompt: string | null }> {
-  console.log("wha is hap")
+): Promise<{
+  id: string
+  userId: string
+  prompt: string
+  exhausted: boolean
+  duration: number
+}> {
   const hostResult =
     visitor.username === hostUsername
       ? [visitor]
@@ -219,10 +218,19 @@ export async function createChat(
   if (!host) {
     throw new Error("Invalid request from host")
   }
+  if (visitor.id !== host.id) {
+    if (host.calls !== null && host.calls <= 0) {
+      return { id: "", userId: "", exhausted: true, duration: 0, prompt: "" }
+    }
+  }
 
-  if (visitor.id != host.id) {
-    if (host.calls === 0) {
-      return { id: "", userId: "", exhausted: true, prompt: null }
+  if (visitor.id == host.id) {
+    return {
+      exhausted: false,
+      id: "dummy",
+      userId: host.id,
+      duration: 50,
+      prompt: "",
     }
   }
 
@@ -240,7 +248,25 @@ export async function createChat(
     throw new Error("Failed to create chat")
   }
 
-  return { ...newChat, exhausted: false, prompt: host.systemPrompt }
+  // Fetch user subscriptions
+  const userSubscriptions = await getUserSubscriptions(newChat.userId)
+
+  // Define a mapping of variantIds to durations
+  const variantDurations: { [key: string]: number } = {
+    "450525": 100,
+    // Add more variants here in the future
+  }
+
+  // Determine the duration based on the subscription
+  let duration = 100 // Default duration
+  if (userSubscriptions.length > 0) {
+    const variantId = userSubscriptions[0]?.variantId
+    if (variantId && variantDurations[variantId]) {
+      duration = variantDurations[variantId] || 100
+    }
+  }
+
+  return { ...newChat, exhausted: false, duration, prompt: "" }
 }
 
 export async function getCallSummariesForUser(
@@ -267,8 +293,10 @@ export async function getCallSummariesForUser(
   }
 }
 
-export async function summarizeCall(chatId: string, chatTranscripts: CoreMessage[]) {
-
+export async function summarizeCall(
+  chatId: string,
+  chatTranscripts: CoreMessage[]
+) {
   // Generate summary and title
   console.log(chatTranscripts)
   const { object } = await generateObject({
