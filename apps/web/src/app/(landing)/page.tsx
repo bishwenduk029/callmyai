@@ -5,7 +5,7 @@ import { PricingSection } from "@/components/sections/pricing-section"
 
 export default function LandingPage() {
   return (
-    <div className="grid w-full grid-cols-1 items-center justify-center gap-16">
+    <div className="font-urbanist grid w-full grid-cols-1 items-center justify-center gap-16">
       <HeroSection />
       <FeaturesSection />
       <PricingSection />

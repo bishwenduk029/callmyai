@@ -11,25 +11,25 @@
 
 ## Why CallMyAI
 
-Ever feel overwhelmed by calls, but worried about missing the good ones?
-👉 Constant ringing from unknown numbers
-👉 Important calls buried in the noise
-👉 Missed opportunities you didn't know about
-👉 Work interruptions killing your focus
-👉 Forced to share wrong numbers to avoid getting some calls
+Ever feel overwhelmed by calls, but worried about missing the good ones?<br />
+👉 Constant ringing from unknown numbers<br />
+👉 Important calls buried in the noise<br />
+👉 Missed opportunities you didn't know about<br />
+👉 Work interruptions killing your focus<br />
+👉 Forced to share wrong numbers to avoid getting some calls<br />
 
-Meet CallMyAI: Your personalized, AI-powered answering machine.
+Meet CallMyAI: Your personalized, AI-powered answering machine.<br />
 
-It's not just about blocking - it's about smart filtering. Tell CallMyAI what matters to you:
-🏠 Looking for real estate deals?
-🚗 Interested in that new car model?
-💼 Open to exciting job opportunities?
+It's not just about blocking - it's about smart filtering. Tell CallMyAI what matters to you:<br />
+🏠 Looking for real estate deals?<br />
+🚗 Interested in that new car model?<br />
+💼 Open to exciting job opportunities?<br />
 
-CallMyAI learns your interests and:
-✅ Gathers info on topics you care about in calls
-✅ Ensures you never miss the important stuff, by summarizing and ranking the call summaries
+CallMyAI learns your interests and:<br />
+✅ Gathers info on topics you care about in calls<br />
+✅ Ensures you never miss the important stuff, by summarizing and ranking the call summaries<br />
 
-Take control of your calls and opportunities with CallMyAI.
+Take control of your calls and opportunities with CallMyAI.<br />
 
 ## Features
 

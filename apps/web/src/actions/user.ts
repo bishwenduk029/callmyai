@@ -127,7 +127,6 @@ export async function getUserByEmail(
 ): Promise<User | null> {
   try {
     const validatedInput = getUserByEmailSchema.safeParse(rawInput)
-    console.log(validatedInput)
     if (!validatedInput.success) return null
 
     const [user] = await psGetUserByEmail.execute({
@@ -135,7 +134,6 @@ export async function getUserByEmail(
     })
     return user || null
   } catch (error) {
-    console.log("did something go wrong")
     console.log(error)
     throw new Error("Error getting user by email")
   }
@@ -184,7 +182,6 @@ export async function updateUserCalls(
 ) {
   try {
     await psUpdateUserCalls.execute({ id: userId, calls: newCalls })
-    console.log(`Calls updated successfully for user ${userId}`)
   } catch (error) {
     console.error("Error updating username:", error)
     throw error
@@ -222,7 +219,7 @@ export async function createChat(
       exhausted: false,
       id: "dummy",
       userId: host.id,
-      duration: 50,
+      duration: 25,
       prompt: "",
     }
   }
@@ -298,8 +295,6 @@ export async function summarizeCall(
   chatId: string,
   chatTranscripts: CoreMessage[]
 ) {
-  // Generate summary and title
-  console.log(chatTranscripts)
   const { object } = await generateObject({
     model: openai(env.OPENAI_MODEL), // Make sure this matches your OpenAI model name
     schema: z.object({
@@ -314,8 +309,6 @@ export async function summarizeCall(
       ...chatTranscripts,
     ],
   })
-
-  console.log(object)
 
   // Update the chat with the generated summary and title
   try {
