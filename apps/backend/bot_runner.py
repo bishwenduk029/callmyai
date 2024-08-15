@@ -25,7 +25,7 @@ load_dotenv(override=True)
 
 # ------------ Configuration ------------ #
 
-MAX_SESSION_TIME = 5 * 60  # 5 minutes
+MAX_SESSION_TIME = 1 * 60  # 1 minute
 REQUIRED_ENV_VARS = [
     'DAILY_API_KEY',
     'OPENAI_API_KEY',
@@ -100,7 +100,7 @@ async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
                 "guest": {
                     "cpu_kind": "shared",
                     "cpus": 1,
-                    "memory_mb": 1024
+                    "memory_mb": 2048
                 }
             },
         }
