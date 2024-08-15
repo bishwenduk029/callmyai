@@ -159,7 +159,7 @@ export const AudioReactiveInterface = ({
     const actions = isListening
       ? {
           visualization: stopAudioVisualization,
-          timer: personalMode ? null : stopTimer,
+          timer: stopTimer,
           summarize: personalMode ? null : async () => await summarizeCall(chatId, messages),
         }
       : {

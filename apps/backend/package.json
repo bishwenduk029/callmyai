@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "web",
-  "description": "",
+  "name": "daily-backend",
+  "description": "great",
   "version": "0.1.0",
   "license": "GNU AFFERO GENERAL PUBLIC LICENSE",
   "author": {
@@ -17,9 +17,9 @@
   },
   "type": "module",
   "scripts": {
-    "install": "source venv/bin/activate && pip install -r requirements.txt",
+    "install": "source venv/bin/activate",
     "dev": "source venv/bin/activate && python bot_runner.py",
-    "build": "next build",
+    "build": "",
     "start": "source venv/bin/activate && python bot_runner.py"
   },
   "dependencies": {},

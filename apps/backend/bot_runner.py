@@ -47,11 +47,14 @@ daily_helpers = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    aiohttp_session = aiohttp.ClientSession()
     daily_helpers["rest"] = DailyRESTHelper(
         daily_api_key=os.getenv("DAILY_API_KEY", ""),
         daily_api_url=os.getenv("DAILY_API_URL", 'https://api.daily.co/v1'),
+        aiohttp_session=aiohttp_session
     )
     yield
+    await aiohttp_session.close()
 
 app = FastAPI(lifespan=lifespan)
 

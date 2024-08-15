@@ -55,33 +55,32 @@ async def main(room_url: str, token: str, client_config: dict):
             )
         )
 
-        # tts = OpenAITTSService(
-        #     voice="nova",
-        #     api_key=os.getenv("OPENAI_API_KEY", ""),
-        # )
-
-        # llm = OpenAILLMService(
-        #     api_key=os.getenv("OPENAI_API_KEY"),
-        #     model="gpt-4o-mini")
-
-        # messages = [
-        #     {
-        #         "role": "system",
-        #         "content": client_config["config"]["llm"]["messages"][0]["content"],
-        #     },
-        # ]
-
-        # tma_in = LLMUserResponseAggregator(messages)
-        # tma_out = LLMAssistantResponseAggregator(messages)
-        
-        rtai = RTVIProcessor(
-            transport=transport,
-            setup=RTVISetup(config=RTVIConfig(**bot_config))
+        tts = OpenAITTSService(
+            voice="nova",
+            api_key=os.getenv("OPENAI_API_KEY", ""),
         )
+
+        llm = OpenAILLMService(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model="gpt-4o-mini")
+
+        messages = [
+            {
+                "role": "system",
+                "content": client_config["config"]["llm"]["messages"][0]["content"],
+            },
+        ]
+
+        tma_in = LLMUserResponseAggregator(messages)
+        tma_out = LLMAssistantResponseAggregator(messages)
 
         pipeline = Pipeline([
             transport.input(),
-            rtai
+            tma_in,
+            llm,
+            tts,
+            transport.output(),
+            tma_out
         ])
 
         task = PipelineTask(pipeline, PipelineParams(allow_interruptions=True))
@@ -92,6 +91,23 @@ async def main(room_url: str, token: str, client_config: dict):
 
         @transport.event_handler("on_participant_left")
         async def on_participant_left(transport, participant, reason):
+            
+            chat_id = client_config["config"]["chatId"]
+            summary_url = "https://www.callmyai.app/api/summary"
+            
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(summary_url, json={
+                        "chatId": chat_id,
+                        "chatTranscripts": messages
+                    }) as response:
+                        if response.status == 200:
+                            logger.info("Summary created successfully")
+                        else:
+                            logger.error(f"Failed to create summary. Status: {response.status}")
+            except Exception as e:
+                logger.error(f"Error creating summary: {str(e)}")
+            
             await task.queue_frame(EndFrame())
 
         @transport.event_handler("on_call_state_updated")

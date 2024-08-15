@@ -8,3 +8,4 @@ websockets
 torch
 torchaudio
 aiohttp
+silero-vad

@@ -20,7 +20,6 @@ import {
   psUpdateUserCalls,
   psUpdateUserUsername,
 } from "@/db/prepared/statements"
-import { type User } from "@/db/schema"
 import { messages, User } from '../db/schema/index';
 import {
   getUserByEmailSchema,
@@ -286,6 +285,8 @@ export async function summarizeCall(chatId: string, chatTranscripts: CoreMessage
       ...chatTranscripts,
     ],
   })
+
+  console.log(object)
 
   // Update the chat with the generated summary and title
   try {

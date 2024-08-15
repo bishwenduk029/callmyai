@@ -4,17 +4,19 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createChat, getUserByEmail } from "@/actions/user"
+import {
+  DailyVoiceClient,
+  DailyVoiceClientAudio,
+  DailyVoiceClientProvider,
+} from "@bishwenduk029/ai-voice/ui"
 import { useSession } from "next-auth/react"
-import { VoiceClient } from "realtime-ai"
-import { VoiceClientAudio, VoiceClientProvider } from "realtime-ai-react"
 
-import { env } from "@/env.mjs"
 import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
 
 import { AudioReactiveInterface } from "@/components/audio/interface"
 
 export default function CallPage({ params }: { params: { username: string } }) {
-  const [voiceClient, setVoiceClient] = useState<VoiceClient | null>(null)
+  const [voiceClient, setVoiceClient] = useState<DailyVoiceClient | null>(null)
   const [chatData, setChatData] = useState<{
     id: string
     userId: string
@@ -27,27 +29,26 @@ export default function CallPage({ params }: { params: { username: string } }) {
   console.log(chatData)
 
   useEffect(() => {
-    console.log(status, session)
     if (status === "unauthenticated") {
       router.push(DEFAULT_UNAUTHENTICATED_REDIRECT)
-    } else if (status === "authenticated" && session?.user?.email) {
+    } else if (
+      status === "authenticated" &&
+      session?.user?.email &&
+      !voiceClient
+    ) {
       initializeChat(session.user.email)
     }
   }, [params.username, status, session])
 
   async function initializeChat(email: string) {
-    console.log("initializing chat")
     try {
       const visitor = await getUserByEmail({ email })
-      console.log("visitor")
-      console.log(visitor)
       if (visitor) {
         const newChat = await createChat(params.username, visitor)
         setChatData(newChat)
-        console.log(voiceClient)
         if (typeof window !== "undefined" && !voiceClient) {
-          const client = new VoiceClient({
-            baseUrl: env.NEXT_PUBLIC_VOICE_BACKEND_URL || "",
+          const client = new DailyVoiceClient({
+            baseUrl: "https://callmyai-pipecat.fly.dev/start_bot",
             enableMic: true,
             config: {
               llm: {
@@ -62,13 +63,14 @@ export default function CallPage({ params }: { params: { username: string } }) {
               tts: {
                 voice: "b7d50908-b17c-442d-ad8d-810c63997ed9",
               },
+              // @ts-ignore
+              chatId: newChat.id,
             },
           })
           setVoiceClient(client)
         }
       }
     } catch (err) {
-      console.log(err)
       // setError("Failed to initialize chat. Please try again.")
       return
     }
@@ -111,11 +113,11 @@ export default function CallPage({ params }: { params: { username: string } }) {
   }
 
   return (
-    <VoiceClientProvider voiceClient={voiceClient}>
+    <DailyVoiceClientProvider voiceClient={voiceClient}>
       <div className="container">
         <AudioReactiveInterface chatId={chatData.id} personalMode={false} />
       </div>
-      <VoiceClientAudio />
-    </VoiceClientProvider>
+      <DailyVoiceClientAudio />
+    </DailyVoiceClientProvider>
   )
 }
