@@ -26,6 +26,8 @@ export const env = createEnv({
     LEMONSQUEEZY_API_KEY: z.string(),
     LEMONSQUEEZY_STORE_ID: z.string(),
     LEMONSQUEEZY_VARIANT_ID: z.string(),
+    API_SECRET_KEY: z.string(),
+    VOICE_BACKEND_URL: z.string(),
   },
 
   /**
@@ -64,5 +66,7 @@ export const env = createEnv({
     LEMONSQUEEZY_API_KEY: process.env.LEMONSQUEEZY_API_KEY,
     LEMONSQUEEZY_STORE_ID: process.env.LEMONSQUEEZY_STORE_ID,
     LEMONSQUEEZY_VARIANT_ID: process.env.LEMONSQUEEZY_VARIANT_ID,
+    API_SECRET_KEY: process.env.API_SECRET_KEY,
+    VOICE_BACKEND_URL: process.env.VOICE_BACKEND_URL,
   },
 })

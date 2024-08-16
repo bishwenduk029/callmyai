@@ -51,7 +51,7 @@ export default function CallPage({ params }: { params: { username: string } }) {
         setChatData(newChat)
         if (typeof window !== "undefined" && !voiceClient) {
           const client = new DailyVoiceClient({
-            baseUrl: env.NEXT_PUBLIC_VOICE_BACKEND_URL || "",
+            baseUrl: "/api/bots/start",
             enableMic: true,
             config: {
               llm: {

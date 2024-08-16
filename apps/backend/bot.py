@@ -4,6 +4,8 @@ import os
 import sys
 import argparse
 import json
+import hmac
+import hashlib
 
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
@@ -99,10 +101,26 @@ async def main(room_url: str, token: str, client_config: dict):
             
             try:
                 async with aiohttp.ClientSession() as session:
-                    async with session.post(summary_url, json={
+                    # Prepare the payload
+                    payload = {
                         "chatId": chat_id,
                         "chatTranscripts": messages
-                    }) as response:
+                    }
+                    raw_body = json.dumps(payload)
+                    
+                    # Compute HMAC signature
+                    api_secret_key = os.getenv("API_SECRET_KEY", "").encode()
+                    signature = hmac.new(api_secret_key, raw_body.encode(), hashlib.sha256).hexdigest()
+
+                    # Send the request with raw body and signature
+                    async with session.post(
+                        summary_url, 
+                        data=raw_body,
+                        headers={
+                            "Content-Type": "application/json",
+                            "X-Signature": signature
+                        }
+                    ) as response:
                         if response.status == 200:
                             logger.info("Summary created successfully")
                         else:
