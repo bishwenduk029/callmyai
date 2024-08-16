@@ -1,8 +1,6 @@
 // /[username]/page.tsx
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { createChat, getUserByEmail } from "@/actions/user"
 import {
   DailyVoiceClient,
@@ -10,8 +8,9 @@ import {
   DailyVoiceClientProvider,
 } from "@bishwenduk029/ai-voice/ui"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
-import { env } from "@/env.mjs"
 import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
 
 import { AudioReactiveInterface } from "@/components/audio/interface"

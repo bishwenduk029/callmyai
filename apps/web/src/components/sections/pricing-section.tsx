@@ -79,7 +79,7 @@ export async function PricingSection(): Promise<JSX.Element> {
                       <span className="flex items-center justify-center text-3xl font-normal">
                         $
                       </span>
-                      <span>{plan.prices.monthly}</span>
+                      <span>{plan.disable ? "--" : plan.prices.monthly}</span>
 
                       <span className="flex items-end text-lg font-semibold">
                         / month
@@ -217,7 +217,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                       <span className="flex items-center justify-center text-3xl font-normal">
                         $
                       </span>
-                      <span>{plan.prices.monthly}</span>
+                      <span>{plan.disable ? "--" : plan.prices.monthly}</span>
 
                       <span className="flex items-end text-lg font-semibold">
                         / month
@@ -250,11 +250,11 @@ function NonLoggedInPricingSection(): JSX.Element {
                     </ul>
                   </div>
                   <Link
-                    href="/signin"
+                    href={plan.disable ? "" : "/signin"}
                     type="submit"
                     className={cn(
                       buttonVariants({
-                        variant: "default",
+                        variant: plan.disable ? "disabledLink" : "default",
                         className: "mt-4 w-full",
                       })
                     )}

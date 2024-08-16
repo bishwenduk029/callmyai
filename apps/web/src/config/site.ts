@@ -59,31 +59,31 @@ export const siteConfig = {
   ] satisfies NavItem[],
   navItemsMobile: [],
   navItemsFooter: [
-    // {
-    //   title: "Company",
-    //   items: [
-    //     {
-    //       title: "About",
-    //       href: "/about",
-    //       external: false,
-    //     },
-    //     {
-    //       title: "Privacy",
-    //       href: "/privacy",
-    //       external: false,
-    //     },
-    //     {
-    //       title: "Terms",
-    //       href: "/tos",
-    //       external: false,
-    //     },
-    //     {
-    //       title: "Careers",
-    //       href: "/careers",
-    //       external: false,
-    //     },
-    //   ],
-    // },
+    {
+      title: "Company",
+      items: [
+        // {
+        //   title: "About",
+        //   href: "/about",
+        //   external: false,
+        // },
+        {
+          title: "Privacy",
+          href: "/privacy",
+          external: false,
+        },
+        {
+          title: "Terms",
+          href: "/tos",
+          external: false,
+        },
+        // {
+        //   title: "Careers",
+        //   href: "/careers",
+        //   external: false,
+        // },
+      ],
+    },
     // {
     //   title: "Support",
     //   items: [

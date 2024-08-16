@@ -53,6 +53,7 @@ export interface PricingPlan {
     yearly?: string
   },
   buttonText: string
+  disable: boolean
 }
 
 export interface UserSubscriptionPlan extends SubscriptionPlan {

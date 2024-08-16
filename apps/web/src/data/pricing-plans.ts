@@ -10,7 +10,7 @@ export const pricingPlans: PricingPlan[] = [
     features: [
       "50 calls per month",
       "Filtered Call Summaries",
-      "Each call of duration 100 seconds",
+      "Each call of duration 75 seconds",
     ],
     limitations: [],
     lemonSqueezyVariantId: "2",
@@ -24,6 +24,7 @@ export const pricingPlans: PricingPlan[] = [
       yearly: undefined,
     },
     buttonText: "Get Started",
+    disable: false
   },
   {
     id: "standard",
@@ -46,6 +47,7 @@ export const pricingPlans: PricingPlan[] = [
       yearly: undefined,
     },
     buttonText: "Coming Soon",
+    disable: true
   },
   {
     id: "premium",
@@ -68,5 +70,6 @@ export const pricingPlans: PricingPlan[] = [
       yearly: undefined,
     },
     buttonText: "Coming Soon",
+    disable: true
   },
 ]

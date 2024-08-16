@@ -22,6 +22,7 @@ const buttonVariants = cva(
         navbarIcon:
           "m-0 p-1 transition-all duration-300 ease-in-out hover:bg-accent hover:text-accent-foreground",
         user: "flex items-center justify-center",
+        disabledLink: "text-muted-foreground cursor-not-allowed pointer-events-none",
       },
       size: {
         default: "h-9 px-4 py-2",
