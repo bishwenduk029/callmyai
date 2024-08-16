@@ -53,7 +53,7 @@ Coming Soon
 - TypeScript
 - Nextjs
 - AuthJs
-- Vercel AI SDK (for leveraging openai)
+- pipecat-ai on Fly.io
 - @bishwenduk029/ai-voice (for streaming LLM response into streaming speech)
 - Drizzle (ORM)
 - Supabase
