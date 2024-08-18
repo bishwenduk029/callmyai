@@ -37,10 +37,10 @@ export const GooeyDiv: React.FC<GooeyDivProps> = ({
 
   return (
     <motion.div
-      className="absolute h-[200px] w-[200px]"
+      className="absolute h-[100px] w-[100px]"
       style={{
-        border: `2px solid ${isOdd ? primaryColor : secondaryColor}`,
-        boxShadow: `0 0 20px 10px ${isOdd ? primaryColor : secondaryColor}`,
+        border: `1px solid ${isOdd ? primaryColor : secondaryColor}`,
+        boxShadow: `0 0 10px 5px ${isOdd ? primaryColor : secondaryColor}`,
         filter: `blur(${index * 2 + 1}px)`,
       }}
       initial={{

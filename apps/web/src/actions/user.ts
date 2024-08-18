@@ -1,16 +1,15 @@
 "use server"
 
-import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
 import { CoreMessage, generateObject } from "ai"
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
+import { cache } from "react"
 import { z } from "zod"
 
-import { env } from "@/env.mjs"
 import {
   psCheckExistingUsername,
   psCreateChat,
   psGetChatsByUserId,
-  psGetMessagesByChatId,
   psGetUserByEmail,
   psGetUserByEmailVerificationToken,
   psGetUserById,
@@ -20,6 +19,7 @@ import {
   psUpdateUserCalls,
   psUpdateUserUsernameAndSystemPrompt,
 } from "@/db/prepared/statements"
+import { env } from "@/env.mjs"
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -31,7 +31,9 @@ import {
   type GetUserByResetPasswordTokenInput,
 } from "@/validations/user"
 
-import { messages, User, promptTemplates } from '../db/schema/index';
+import { ChatSession } from "@/components/audio/chat-room-provider"
+
+import { User } from "../db/schema/index"
 import { getUserSubscriptions } from "./payments"
 
 const systemPrompt = `
@@ -188,16 +190,13 @@ export async function updateUserCalls(
   }
 }
 
-export async function createChat(
+export async function createNewChatSession(
   hostUsername: string,
-  visitor: User
-): Promise<{
-  id: string
-  userId: string
-  prompt: string
-  exhausted: boolean
-  duration: number
-}> {
+  visitor: User | null | undefined
+): Promise<ChatSession> {
+  if (!visitor) {
+    throw new Error("Invalid visitor")
+  }
   const hostResult =
     visitor.username === hostUsername
       ? [visitor]
@@ -206,7 +205,7 @@ export async function createChat(
         })
 
   if (hostResult.length === 0) {
-    throw new Error("Host user not found")
+    throw new Error("callmyai user handle does not exist")
   }
 
   const host = hostResult[0]
@@ -214,19 +213,29 @@ export async function createChat(
     throw new Error("Invalid request from host")
   }
 
+  const systemPrompt = JSON.parse(host.systemPrompt || "")
+
   if (visitor.id == host.id) {
     return {
       exhausted: false,
       id: "dummy",
       userId: host.id,
       duration: 25,
-      prompt: "",
+      prompt: `Remember this is test simulation to understand if the system propmpt will work as per user's needs. Guide the user to act as a caller and simulate some scenario to verify if the prompt set by them is working as per expectation. Below is the prompt set by user\n${systemPrompt.promptTemplate}`,
+      private: true,
     }
   }
 
   if (visitor.id !== host.id) {
     if (host.calls !== null && host.calls <= 0) {
-      return { id: "", userId: "", exhausted: true, duration: 0, prompt: "" }
+      return {
+        id: "",
+        userId: "",
+        exhausted: true,
+        duration: 0,
+        prompt: "",
+        private: false,
+      }
     }
   }
 
@@ -262,9 +271,13 @@ export async function createChat(
     }
   }
 
-  const systemPrompt = JSON.parse(host.systemPrompt || "")
-
-  return { ...newChat, exhausted: false, duration, prompt: systemPrompt.promptTemplate }
+  return {
+    ...newChat,
+    exhausted: false,
+    duration,
+    prompt: systemPrompt.promptTemplate,
+    private: false,
+  }
 }
 
 export async function getCallSummariesForUser(

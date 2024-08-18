@@ -14,6 +14,7 @@ export const emailSchema = z
   .email({
     message: "Please enter a valid email address",
   })
+  .optional()
 
 export const contactFormSchema = z.object({
   email: emailSchema,

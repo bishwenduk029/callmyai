@@ -98,27 +98,6 @@ export const chatsRelations = relations(chats, ({ one, many }) => ({
     references: [users.id],
     relationName: "visitorChats",
   }),
-  messages: many(messages),
-}))
-
-// New messages table
-export const messages = pgTable("message", {
-  id: uuid("id").defaultRandom().notNull().primaryKey(),
-  chatId: uuid("chatId")
-    .notNull()
-    .references(() => chats.id, { onDelete: "cascade" }),
-  content: text("content").notNull(),
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-}, (message) => ({
-  chatIdIdx: index("message_chatId_idx").on(message.chatId),
-}))
-
-// New messagesRelations
-export const messagesRelations = relations(messages, ({ one }) => ({
-  chat: one(chats, {
-    fields: [messages.chatId],
-    references: [chats.id],
-  }),
 }))
 
 export const users = pgTable("user", {
@@ -250,9 +229,6 @@ export type NewNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert
 
 export type Chat = typeof chats.$inferSelect
 export type NewChat = typeof chats.$inferInsert
-
-export type Message = typeof messages.$inferSelect
-export type NewMessage = typeof messages.$inferInsert
 
 export type PromptTemplate = typeof promptTemplates.$inferSelect
 export type NewPromptTemplate = typeof promptTemplates.$inferInsert

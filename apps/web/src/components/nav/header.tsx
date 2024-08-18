@@ -79,8 +79,8 @@ export async function Header(): Promise<JSX.Element> {
                 href="/dashboard/settings"
                 className={`${cn(buttonVariants({ size: "sm" }), "ml-2")} cursor-pointer`}
               >
-                Get Started
-                <span className="sr-only">Get Started</span>
+                Sign Up
+                <span className="sr-only">Sign Up</span>
               </Link>
             )}
           </nav>

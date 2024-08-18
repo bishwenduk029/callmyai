@@ -1,36 +1,35 @@
-// AudioReactiveInterface.tsx
-"use client"
-
-import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
-  DailyVoiceClient,
-  useDailyVoiceClient,
-  useDailyVoiceClientEvent,
+    useDailyVoiceClient,
+    useDailyVoiceClientEvent
 } from "@bishwenduk029/ai-voice/ui"
-import { Spinner } from "@phosphor-icons/react"
-import { PhoneCall, PhonePause } from "@phosphor-icons/react/dist/ssr"
+import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
+import { useRef, useState } from "react"
 import { VoiceEvent } from "realtime-ai"
 
+import { useToast } from "@/hooks/use-toast"
+
+import { LoadingSpinner } from "./chat-room-provider"
 import { GooeyDiv } from "./gooey-div"
 import { InnerOrb } from "./inner-orb"
 
-interface AudioReactiveInterfaceProps {
-  chatId: string
-  personalMode: boolean
-  allowedCallDuration: number
+export interface ChatSession {
+  id: string
+  userId: string
+  prompt: string
+  exhausted: boolean
+  duration: number
+  private: boolean
 }
 
-export const AudioReactiveInterface = ({
-  chatId,
-  personalMode,
-  allowedCallDuration,
-}: AudioReactiveInterfaceProps & { allowedCallDuration: number }) => {
-  const [primaryColor, setPrimaryColor] = useState("black")
-  const [secondaryColor, setSecondaryColor] = useState("#fdfdfd")
-  const [audioData, setAudioData] = useState<number[]>(new Array(6).fill(1))
+interface ChatRoomUIProps {
+  chatSession: ChatSession
+}
+
+export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
   const [isListening, setIsListening] = useState(false)
   const [isLoadingBot, setIsLoadingBot] = useState(false)
+  const [audioData, setAudioData] = useState<number[]>(new Array(6).fill(1))
   const [averageFrequency, setAverageFrequency] = useState(0)
   const [elapsedTime, setElapsedTime] = useState(0)
 
@@ -39,32 +38,23 @@ export const AudioReactiveInterface = ({
   const animationFrameRef = useRef<number | null>(null)
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const voiceClient = useDailyVoiceClient()
+  const { toast } = useToast()
 
-  // Wait for the bot to enter a ready state and trigger it to say hello
   useDailyVoiceClientEvent(VoiceEvent.BotConnected, async () => {
-    await startAudioVisualization()
+    startAudioVisualization()
     startTimer()
     setIsLoadingBot(false)
+    setIsListening(true)
   })
-
-  useEffect(() => {
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
-      }
-      if (audioContextRef.current) {
-        audioContextRef.current.close()
-      }
-    }
-  }, [])
 
   const startTimer = () => {
     setElapsedTime(0)
     timerIntervalRef.current = setInterval(() => {
       setElapsedTime((prevTime) => {
-        if (prevTime >= allowedCallDuration) {
+        if (prevTime >= chatSession.duration) {
           clearInterval(timerIntervalRef.current!)
-          return allowedCallDuration
+          toggleListening()
+          return chatSession.duration
         }
         return prevTime + 1
       })
@@ -130,11 +120,23 @@ export const AudioReactiveInterface = ({
   }
 
   const toggleListening = async () => {
+    setIsLoadingBot(!isListening)
     if (isListening) {
-      voiceClient?.disconnect()
+      await voiceClient?.disconnect()
+      setIsListening(false)
     } else {
-      setIsLoadingBot(true)
-      voiceClient?.start()
+      try {
+        await voiceClient?.start()
+        setIsListening(true)
+      } catch (error) {
+        console.error("Failed to start voice client:", error)
+        toast({
+          title: "Failed to Connect",
+          description: "Call Assistant is unavailable",
+          variant: "destructive",
+        })
+        setIsListening(false)
+      }
     }
     const actions = isListening
       ? {
@@ -157,15 +159,7 @@ export const AudioReactiveInterface = ({
         }
       })
     )
-
-    setIsListening(!isListening)
   }
-
-  useEffect(() => {
-    if (elapsedTime >= allowedCallDuration) {
-      toggleListening()
-    }
-  }, [elapsedTime, allowedCallDuration])
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center">
@@ -175,14 +169,14 @@ export const AudioReactiveInterface = ({
             <GooeyDiv
               key={i}
               index={i}
-              primaryColor={primaryColor}
-              secondaryColor={secondaryColor}
-              scale={scale}
+              primaryColor={"black"}
+              secondaryColor={"#fdfdfd"}
+              scale={1 + scale}
             />
           ))}
           <InnerOrb
-            primaryColor={primaryColor}
-            secondaryColor={secondaryColor}
+            primaryColor={"black"}
+            secondaryColor={"#fdfdfd"}
             scale={1 + averageFrequency}
           />
         </div>
@@ -193,24 +187,20 @@ export const AudioReactiveInterface = ({
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
             )}
-            {!personalMode && (
-              <span>
-                {elapsedTime}s of {allowedCallDuration}s
-              </span>
-            )}
+            <span>
+              {elapsedTime}s of {chatSession.duration}s
+            </span>
           </div>
           <motion.button
             className="rounded px-5 py-2.5 text-white transition-colors"
-            whileHover={{
-              scale: 1.2,
-            }}
+            whileHover={{ scale: 1.2 }}
             onClick={toggleListening}
             disabled={isLoadingBot}
           >
             {isLoadingBot ? (
-              <Spinner
+              <LoadingSpinner
                 size={75}
-                className="animate-spin rounded-full bg-primary p-2"
+                className=""
               />
             ) : isListening ? (
               <PhonePause size={75} className="rounded-full bg-primary p-2" />

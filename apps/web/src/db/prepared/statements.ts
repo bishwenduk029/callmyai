@@ -1,7 +1,7 @@
-import { and, desc, eq, ne, sql } from "drizzle-orm"
+import { and, desc, eq, isNotNull, ne, sql } from "drizzle-orm"
 
 import { db } from "@/config/db"
-import { chats, messages, newsletterSubscribers, users } from "@/db/schema"
+import { chats, newsletterSubscribers, users } from "@/db/schema"
 
 export const psGetUserById = db
   .select()
@@ -80,21 +80,6 @@ export const psGetUserByUsername = db
   .limit(1)
   .prepare("psGetUserByUsername")
 
-export const psGetMessagesByChatId = db
-  .select()
-  .from(messages)
-  .where(eq(messages.chatId, sql.placeholder("chatId")))
-  .orderBy(messages.createdAt)
-  .prepare("psGetMessagesByChatId")
-
-export const psAddMessageToChat = db
-  .insert(messages)
-  .values({
-    chatId: sql.placeholder("chatId"),
-    content: sql.placeholder("content"),
-  })
-  .prepare("psAddMessageToChat")
-
 export const psUpdateChatSummary = db
   .update(chats)
   .set({
@@ -106,13 +91,15 @@ export const psUpdateChatSummary = db
   .where(sql`id = ${sql.placeholder("chatId")}`)
   .prepare("psUpdateChatSummary")
 
-export const psGetChatsByUserId = db
+  export const psGetChatsByUserId = db
   .select()
   .from(chats)
   .where(
     and(
       eq(chats.userId, sql.placeholder("userId")),
-      ne(chats.userId, chats.visitorId)
+      ne(chats.userId, chats.visitorId),
+      isNotNull(chats.summary),
+      isNotNull(chats.title)
     )
   )
   .orderBy(desc(chats.createdAt))

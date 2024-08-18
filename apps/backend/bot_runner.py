@@ -33,7 +33,7 @@ REQUIRED_ENV_VARS = [
     'FLY_APP_NAME',]
 
 FLY_API_HOST = os.getenv("FLY_API_HOST", "https://api.machines.dev/v1")
-FLY_APP_NAME = os.getenv("FLY_APP_NAME", "pipecat-fly-example")
+FLY_APP_NAME = os.getenv("FLY_APP_NAME", "")
 FLY_API_KEY = os.getenv("FLY_API_KEY", "")
 FLY_HEADERS = {
     'Authorization': f"Bearer {FLY_API_KEY}",
@@ -60,7 +60,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[os.getenv("ALLOWED_ORIGIN")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
