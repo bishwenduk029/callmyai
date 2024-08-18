@@ -51,8 +51,8 @@ export function HeroSection() {
         <h1
           className="font-urbanist text-5xl font-extrabold sm:text-6xl"
         >
-          AI powered answering machine{" "}
-          <span className="bg-clip-text underline">on web</span>
+          AI powered Call Assitant{" "}
+          <span className="bg-clip-text underline">in seconds</span>
         </h1>
 
         <motion.h3
@@ -69,15 +69,15 @@ export function HeroSection() {
 
         <motion.div
           className="z-10 flex flex-col justify-center gap-4 sm:flex-row"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.5 }}
         >
           <Link
             href="/dashboard/settings"
             className={cn(buttonVariants({ size: "lg" }))}
           >
-            Get Your Handle
+            Get Your AI Call Assistant Now
           </Link>
         </motion.div>
       </div>

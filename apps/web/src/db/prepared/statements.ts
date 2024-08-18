@@ -43,7 +43,7 @@ export const psUpdateUserUsernameAndSystemPrompt = db
   .update(users)
   .set({
     username: sql`${sql.placeholder("username")}`,
-    systemPrompt: sql`${sql.placeholder("systemPrompt")}`,
+    name: sql`${sql.placeholder("name")}`,
   })
   .where(eq(users.id, sql.placeholder("id")))
   .prepare("psUpdateUserUsernameAndSystemPrompt")

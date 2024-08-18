@@ -1,11 +1,12 @@
 "use server"
 
+import { cache } from "react"
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
 import { CoreMessage, generateObject } from "ai"
-import { unstable_noStore as noStore, revalidatePath } from "next/cache"
-import { cache } from "react"
 import { z } from "zod"
 
+import { env } from "@/env.mjs"
 import {
   psCheckExistingUsername,
   psCreateChat,
@@ -19,7 +20,6 @@ import {
   psUpdateUserCalls,
   psUpdateUserUsernameAndSystemPrompt,
 } from "@/db/prepared/statements"
-import { env } from "@/env.mjs"
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -76,7 +76,7 @@ Based on the conversation transcript provided, generate a title and summary foll
 
 export async function updateUserHandle(userId: string, formData: FormData) {
   const username = formData.get("username")?.toString()
-  const systemPrompt = formData.get("systemPrompt")?.toString()
+  const name = formData.get("name")?.toString()
 
   if (!username) {
     return { error: "Username is required" }
@@ -97,7 +97,7 @@ export async function updateUserHandle(userId: string, formData: FormData) {
     await psUpdateUserUsernameAndSystemPrompt.execute({
       id: userId,
       username,
-      systemPrompt,
+      name,
     })
 
     revalidatePath("/settings")
@@ -213,15 +213,15 @@ export async function createNewChatSession(
     throw new Error("Invalid request from host")
   }
 
-  const systemPrompt = JSON.parse(host.systemPrompt || "")
+  const systemPrompt = env.SYSTEM_PROMPT?.replace(/\${name}/g, host.name!)
 
   if (visitor.id == host.id) {
     return {
       exhausted: false,
       id: "dummy",
       userId: host.id,
-      duration: 25,
-      prompt: `Remember this is test simulation to understand if the system propmpt will work as per user's needs. Guide the user to act as a caller and simulate some scenario to verify if the prompt set by them is working as per expectation. Below is the prompt set by user\n${systemPrompt.promptTemplate}`,
+      duration: 50,
+      prompt: `Remember this is test simulation to understand if the system propmpt will work as per user's needs. So greet the user with 'Hey ${host.name} welcome to simulation, shall we test if I meet your expectations'. Guide the user to act as a caller and simulate some scenario to verify if the prompt set by them is working as per expectation. Below is the prompt set by user\n${systemPrompt}`,
       private: true,
     }
   }
@@ -275,7 +275,7 @@ export async function createNewChatSession(
     ...newChat,
     exhausted: false,
     duration,
-    prompt: systemPrompt.promptTemplate,
+    prompt: systemPrompt,
     private: false,
   }
 }

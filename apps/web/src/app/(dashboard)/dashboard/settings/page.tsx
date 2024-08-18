@@ -40,7 +40,7 @@ export default async function SettingsPage() {
             user={{
               id: user.id,
               username: user.username,
-              systemPrompt: user.systemPrompt,
+              name: user.name,
             }}
           />
         </TabsContent>

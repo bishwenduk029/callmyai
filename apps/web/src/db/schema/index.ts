@@ -116,7 +116,6 @@ export const users = pgTable("user", {
   }),
   image: text("image"),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-  systemPrompt: text("systemPrompt"),
   calls: integer("calls").default(50),
 }, (user) => ({
   emailIdx: index("user_email_idx").on(user.email),

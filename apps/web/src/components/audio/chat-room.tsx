@@ -200,7 +200,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
             {isLoadingBot ? (
               <LoadingSpinner
                 size={75}
-                className=""
+                className="text-primary"
               />
             ) : isListening ? (
               <PhonePause size={75} className="rounded-full bg-primary p-2" />
