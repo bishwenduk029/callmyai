@@ -34,7 +34,7 @@ export async function resendEmailVerificationLink(
     const userUpdated = await db
       .update(users)
       .set({ emailVerificationToken })
-      .where(eq(users.email, validatedInput.data.email))
+      .where(eq(users.email, validatedInput.data.email!))
 
     // const emailSent = await resend.emails.send({
     //   from: env.RESEND_EMAIL_FROM,

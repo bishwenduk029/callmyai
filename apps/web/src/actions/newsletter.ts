@@ -47,7 +47,7 @@ export async function subscribeToNewsletter(
 
     const newSubscriber = await db
       .insert(newsletterSubscribers)
-      .values({ email: validatedInput.data.email })
+      .values({ email: validatedInput.data.email! })
 
     // const emailSent = await resend.emails.send({
     //   from: env.RESEND_EMAIL_FROM,

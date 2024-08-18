@@ -42,7 +42,7 @@ export async function signUpWithPassword(
       .insert(users)
       .values({
         id: crypto.randomUUID(),
-        email: validatedInput.data.email,
+        email: validatedInput.data.email!,
         passwordHash,
         emailVerificationToken,
       })
