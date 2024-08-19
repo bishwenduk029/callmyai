@@ -106,7 +106,8 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
             <Analytics />
           </ThemeProvider>
         </SmoothScrollProvider>
-        <noscript>
+      </body>
+      <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5J5ZJMMC"
             height="0"
@@ -114,7 +115,6 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-      </body>
     </html>
   )
 }
