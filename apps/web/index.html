@@ -1,0 +1,93 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Mic, MicOff } from 'lucide-react';
+
+const VoiceAnimatedShape = () => {
+  const [isListening, setIsListening] = useState(false);
+  const [volume, setVolume] = useState(0);
+  const audioContext = useRef(null);
+  const analyser = useRef(null);
+  const microphone = useRef(null);
+
+  useEffect(() => {
+    audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
+    analyser.current = audioContext.current.createAnalyser();
+    return () => {
+      if (audioContext.current.state !== 'closed') {
+        audioContext.current.close();
+      }
+    };
+  }, []);
+
+  const startListening = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      microphone.current = audioContext.current.createMediaStreamSource(stream);
+      microphone.current.connect(analyser.current);
+      setIsListening(true);
+      updateVolume();
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+    }
+  };
+
+  const stopListening = () => {
+    if (microphone.current) {
+      microphone.current.disconnect();
+      microphone.current = null;
+    }
+    setIsListening(false);
+    setVolume(0);
+  };
+
+  const updateVolume = () => {
+    if (!analyser.current || !isListening) return;
+
+    const dataArray = new Uint8Array(analyser.current.frequencyBinCount);
+    analyser.current.getByteFrequencyData(dataArray);
+    const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+    setVolume(average / 255);
+
+    requestAnimationFrame(updateVolume);
+  };
+
+  const shapeSize = 100 + volume * 100; // Shape size varies between 100px and 200px
+  const shapeColor = `hsl(${volume * 360}, 100%, 50%)`; // Color changes based on volume
+
+  return (
+    <Card className="p-6 flex flex-col items-center space-y-4">
+      <div
+        className="w-[200px] h-[200px] flex items-center justify-center transition-all duration-75"
+        style={{
+          backgroundColor: shapeColor,
+          borderRadius: `${50 + volume * 50}%`,
+          transform: `scale(${0.5 + volume * 0.5})`,
+        }}
+      >
+        <span className="text-white font-bold text-lg">
+          {Math.round(volume * 100)}%
+        </span>
+      </div>
+      <Button
+        onClick={isListening ? stopListening : startListening}
+        variant="outline"
+        className="flex items-center space-x-2"
+      >
+        {isListening ? (
+          <>
+            <MicOff className="w-4 h-4" />
+            <span>Stop Listening</span>
+          </>
+        ) : (
+          <>
+            <Mic className="w-4 h-4" />
+            <span>Start Listening</span>
+          </>
+        )}
+      </Button>
+    </Card>
+  );
+};
+
+export default VoiceAnimatedShape;

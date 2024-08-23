@@ -17,7 +17,9 @@ import {
   psGetUserByResetPasswordToken,
   psGetUserByUsername,
   psUpdateChatSummary,
+  psUpdateUserCallHandle,
   psUpdateUserCalls,
+  psUpdateUserUsername,
   psUpdateUserUsernameAndSystemPrompt,
 } from "@/db/prepared/statements"
 import {
@@ -30,6 +32,8 @@ import {
   type GetUserByIdInput,
   type GetUserByResetPasswordTokenInput,
 } from "@/validations/user"
+
+import { actionClient } from "@/lib/safe-action"
 
 import { ChatSession } from "@/components/audio/chat-room-provider"
 
@@ -74,39 +78,70 @@ Remember, your goal is to create a summary that allows the user to quickly grasp
 Based on the conversation transcript provided, generate a title and summary following these guidelines.
   `
 
-export async function updateUserHandle(userId: string, formData: FormData) {
-  const username = formData.get("username")?.toString()
-  const name = formData.get("name")?.toString()
-
-  if (!username) {
-    return { error: "Username is required" }
-  }
-
-  try {
-    // Check if username already exists
-    const existingUser = await psCheckExistingUsername.execute({
-      username,
-      id: userId,
-    })
-
-    if (existingUser.length > 0) {
-      return { error: "Username already taken" }
-    }
-
-    // Update username and systemPrompt
-    await psUpdateUserUsernameAndSystemPrompt.execute({
-      id: userId,
-      username,
-      name,
-    })
-
-    revalidatePath("/settings")
-    return { success: "Username and system prompt updated successfully" }
-  } catch (error) {
-    console.error("Error updating user:", error)
-    return { error: "An error occurred while updating user information" }
-  }
+interface UpdateUserDetailsResult {
+  message: string
 }
+
+const userCallHandleSchema = z.object({
+  username: z
+    .string()
+    .min(4, { message: "Username must be at least 4 characters long." }),
+  id: z.string(),
+})
+
+export const updateUserByCallHandle = actionClient
+  .schema(userCallHandleSchema)
+  .action(async ({ parsedInput: { username, id } }) => {
+    try {
+      // Check if username already exists
+      const existingUser = await psCheckExistingUsername.execute({
+        username: username,
+        id: id,
+      })
+      console.log(existingUser)
+
+      if (existingUser.length > 0) {
+        return { error: "Username already taken" }
+      }
+
+      // Update username and systemPrompt
+      await psUpdateUserCallHandle.execute({
+        username: username,
+        id: id,
+      })
+
+      revalidatePath("/settings")
+      return { message: "Username and system prompt updated successfully" }
+    } catch (error) {
+      console.error("Error updating user:", error)
+      return { message: "An error occurred while updating user information" }
+    }
+  })
+
+const usernameSchema = z.object({
+  name: z
+    .string()
+    .min(4, { message: "Username must be at least 4 characters long." }),
+  id: z.string(),
+})
+
+export const updateUserByUsername = actionClient
+  .schema(usernameSchema)
+  .action(async ({ parsedInput: { name, id } }) => {
+    try {
+      // Update username and systemPrompt
+      await psUpdateUserUsername.execute({
+        name,
+        id: id,
+      })
+
+      revalidatePath("/settings")
+      return { message: "Username and system prompt updated successfully" }
+    } catch (error) {
+      console.error("Error updating user:", error)
+      return { error: "An error occurred while updating user information" }
+    }
+  })
 
 export async function getUserById(
   rawInput: GetUserByIdInput

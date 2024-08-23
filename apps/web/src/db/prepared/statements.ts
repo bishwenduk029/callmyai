@@ -39,14 +39,22 @@ export const psLinkOAuthAccount = db
   .where(eq(users.id, sql.placeholder("userId")))
   .prepare("psLinkOAuthAccount")
 
-export const psUpdateUserUsernameAndSystemPrompt = db
+export const psUpdateUserUsername = db
   .update(users)
   .set({
-    username: sql`${sql.placeholder("username")}`,
     name: sql`${sql.placeholder("name")}`,
   })
   .where(eq(users.id, sql.placeholder("id")))
   .prepare("psUpdateUserUsernameAndSystemPrompt")
+
+  export const psUpdateUserCallHandle = db
+  .update(users)
+  .set({
+    username: sql`${sql.placeholder("username")}`,
+  })
+  .where(eq(users.id, sql.placeholder("id")))
+  .prepare("psUpdateUserUsernameAndSystemPrompt")
+
 
 export const psUpdateUserCalls = db
   .update(users)
@@ -59,7 +67,7 @@ export const psCheckExistingUsername = db
   .select({ id: users.id })
   .from(users)
   .where(
-    sql`username = ${sql.placeholder("username")} AND id != ${sql.placeholder("id")}`
+    sql`username = ${sql.placeholder("username")} AND id = ${sql.placeholder("id")}`
   )
   .limit(1)
   .prepare("psCheckExistingUsername")

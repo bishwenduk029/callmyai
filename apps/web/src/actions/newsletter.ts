@@ -11,6 +11,9 @@ import {
   type CheckIfSubscribedToNewsletterInput,
   type NewsletterSignUpFormInput,
 } from "@/validations/newsletter"
+import { resend } from "@/config/email"
+import { env } from "@/env.mjs"
+import { NewsletterWelcomeEmail } from "@/components/emails/newsletter-welcome-email"
 
 export async function checkIfSubscribedToNewsletter(
   rawInput: CheckIfSubscribedToNewsletterInput
@@ -49,15 +52,14 @@ export async function subscribeToNewsletter(
       .insert(newsletterSubscribers)
       .values({ email: validatedInput.data.email! })
 
-    // const emailSent = await resend.emails.send({
-    //   from: env.RESEND_EMAIL_FROM,
-    //   to: validatedInput.data.email,
-    //   subject: "Welcome to our newsletter!",
-    //   react: NewsletterWelcomeEmail(),
-    // })
+    const emailSent = await resend.emails.send({
+      from: env.RESEND_EMAIL_FROM,
+      to: validatedInput.data.email!,
+      subject: "Welcome to our newsletter!",
+      react: NewsletterWelcomeEmail(),
+    })
 
-    // return newSubscriber && emailSent ? "success" : "error"
-    return "success"
+    return newSubscriber && emailSent ? "success" : "error"
   } catch (error) {
     console.error(error)
     throw new Error("Error subscribing to the newsletter")

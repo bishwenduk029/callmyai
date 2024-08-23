@@ -4,7 +4,7 @@ import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 
 import { CallSummaries } from "@/components/calls"
-import Settings from "@/components/settings"
+import Settings from "@/components/dashboard/settings"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default async function SettingsPage() {
@@ -35,13 +35,9 @@ export default async function SettingsPage() {
             </TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value="settings">
+        <TabsContent value="settings" className="w-full">
           <Settings
-            user={{
-              id: user.id,
-              username: user.username,
-              name: user.name,
-            }}
+            user={user}
           />
         </TabsContent>
         <TabsContent value="call-history">

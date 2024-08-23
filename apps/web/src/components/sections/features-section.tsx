@@ -89,7 +89,7 @@ const Feature = ({
           {title}
         </span>
       </div>
-      <p className="dark:text-neutral-300 relative z-10 max-w-xs px-10 text-sm text-neutral-600">
+      <p className="dark:text-neutral-300 relative z-10 max-w-xs px-10 text-md text-neutral-600">
         {description}
       </p>
     </motion.div>
