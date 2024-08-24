@@ -74,7 +74,6 @@ export const chats = pgTable("chat", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   visitorId: text("visitorId")
-    .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   summary: text("summary"),
   title: text("title"),

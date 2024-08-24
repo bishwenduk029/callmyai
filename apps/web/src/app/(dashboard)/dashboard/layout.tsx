@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
 
 import auth from "@/lib/auth"
+
 import { Header } from "@/components/nav/header"
 
 interface DashboardLayoutProps {
@@ -16,5 +17,12 @@ export default async function DashboardLayout({
   const session = await auth()
   if (!session) redirect(DEFAULT_UNAUTHENTICATED_REDIRECT)
 
-  return <div><Header />{children}</div>
+  return (
+    <div>
+      <Header />
+      <div className="container mx-auto flex w-full flex-row justify-center space-x-12 text-lg lg:w-3/4">
+        {children}
+      </div>
+    </div>
+  )
 }

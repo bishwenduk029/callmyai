@@ -45,13 +45,9 @@ export function HeroSection() {
         priority
       />
 
-      <div
-        className="container mx-auto flex flex-col items-center gap-6 text-center"
-      >
-        <h1
-          className="font-urbanist text-5xl font-extrabold sm:text-6xl"
-        >
-          AI powered Call Assitant{" "}
+      <div className="container mx-auto flex flex-col items-center gap-6 text-center">
+        <h1 className="font-urbanist text-5xl font-extrabold sm:text-6xl">
+          AI powered Call Assistant{" "}
           <span className="bg-clip-text underline">in seconds</span>
         </h1>
 
@@ -62,8 +58,9 @@ export function HeroSection() {
           transition={{ delay: 1, duration: 0.5 }}
         >
           <Balancer>
-            Your own call assistant. Ready to take calls on your behalf and
-            filter out spams, unwanted calls and more.
+            Create AI-powered voice assistants for multiple roles:
+            receptionists, customer support, and more. Never miss a call and
+            boost conversions with human-like interactions.
           </Balancer>
         </motion.h3>
 

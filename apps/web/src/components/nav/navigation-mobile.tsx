@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Icons } from "@/components/icons"
 
+import { Separator } from "../ui/separator"
+
 interface NavigationMobileProps {
   navItems: NavItem[]
 }
@@ -76,6 +78,23 @@ export function NavigationMobile({ navItems }: NavigationMobileProps) {
           </Link>
         </div>
         <div className="flex flex-col gap-4 pl-16 text-xl font-medium leading-none tracking-wide">
+          <MobileLink
+            key={"calls"}
+            href="/dashboard/calls"
+            segment={String(segment)}
+            setIsOpen={setIsOpen}
+          >
+            Calls
+          </MobileLink>
+          <MobileLink
+            key={"settings"}
+            href="/dashboard/settings"
+            segment={String(segment)}
+            setIsOpen={setIsOpen}
+          >
+            Settings
+          </MobileLink>
+          <Separator />
           {navItems.map((item) => (
             <MobileLink
               key={item.title}

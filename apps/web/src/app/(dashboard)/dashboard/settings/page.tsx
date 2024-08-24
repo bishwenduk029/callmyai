@@ -1,11 +1,12 @@
 // page.tsx
+import Link from "next/link"
+import { redirect } from "next/navigation"
 import { getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
-import { redirect } from "next/navigation"
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CallSummaries } from "@/components/calls"
 import Settings from "@/components/dashboard/settings"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default async function SettingsPage() {
   const session = await auth()
@@ -23,30 +24,15 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="container mx-auto mt-5 flex w-full flex-col justify-center space-y-5 text-lg lg:w-1/2">
-      <Tabs defaultValue="settings" className="w-full space-y-6">
-        <div className="flex w-full justify-center">
-          <TabsList>
-            <TabsTrigger value="settings" className="text-lg">
-              Settings
-            </TabsTrigger>
-            <TabsTrigger value="call-history" className="text-lg">
-              Call History
-            </TabsTrigger>
-          </TabsList>
-        </div>
-        <TabsContent value="settings" className="w-full">
-          <Settings
-            user={user}
-          />
-        </TabsContent>
-        <TabsContent value="call-history">
-          <h2 className="mb-4 font-inter text-3xl font-extrabold tracking-tight sm:text-3xl">
-            Call history
-          </h2>
-          <CallSummaries userId={user.id} />
-        </TabsContent>
-      </Tabs>
-    </div>
+    <>
+      <nav className="hidden text-md mx-3 mt-3 sm:grid max-h-5 gap-4 text-muted-foreground">
+        <Link href="/dashboard/settings" className="font-semibold text-primary">
+          Settings
+        </Link>
+        <Link href="/dashboard/calls">Calls</Link>
+        <Link href="#">Assistants</Link>
+      </nav>
+      <Settings user={user} />
+    </>
   )
 }

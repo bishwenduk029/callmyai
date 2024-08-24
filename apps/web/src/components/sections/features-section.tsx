@@ -72,7 +72,7 @@ const Feature = ({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={cn(
-        "font-urbanist group/feature dark:border-neutral-800 relative  flex flex-col py-10 lg:border-r",
+        "font-urbanist group/feature dark:border-neutral-800 relative  flex flex-col py-10 lg:border-r z-0",
         (index === 0 || index === 4) && "dark:border-neutral-800 lg:border-l",
         index < 4 && "dark:border-neutral-800 lg:border-b"
       )}

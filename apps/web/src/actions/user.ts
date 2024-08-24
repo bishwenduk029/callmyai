@@ -1,12 +1,10 @@
 "use server"
 
-import { cache } from "react"
-import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
 import { CoreMessage, generateObject } from "ai"
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { z } from "zod"
 
-import { env } from "@/env.mjs"
 import {
   psCheckExistingUsername,
   psCreateChat,
@@ -19,9 +17,9 @@ import {
   psUpdateChatSummary,
   psUpdateUserCallHandle,
   psUpdateUserCalls,
-  psUpdateUserUsername,
-  psUpdateUserUsernameAndSystemPrompt,
+  psUpdateUserUsername
 } from "@/db/prepared/statements"
+import { env } from "@/env.mjs"
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -98,7 +96,6 @@ export const updateUserByCallHandle = actionClient
         username: username,
         id: id,
       })
-      console.log(existingUser)
 
       if (existingUser.length > 0) {
         return { error: "Username already taken" }
@@ -111,7 +108,7 @@ export const updateUserByCallHandle = actionClient
       })
 
       revalidatePath("/settings")
-      return { message: "Username and system prompt updated successfully" }
+      return { message: "Username updated successfully" }
     } catch (error) {
       console.error("Error updating user:", error)
       return { message: "An error occurred while updating user information" }
@@ -136,7 +133,7 @@ export const updateUserByUsername = actionClient
       })
 
       revalidatePath("/settings")
-      return { message: "Username and system prompt updated successfully" }
+      return { message: "Username updated successfully" }
     } catch (error) {
       console.error("Error updating user:", error)
       return { error: "An error occurred while updating user information" }
@@ -229,11 +226,8 @@ export async function createNewChatSession(
   hostUsername: string,
   visitor: User | null | undefined
 ): Promise<ChatSession> {
-  if (!visitor) {
-    throw new Error("Invalid visitor")
-  }
   const hostResult =
-    visitor.username === hostUsername
+    visitor?.username === hostUsername
       ? [visitor]
       : await psGetUserByUsername.execute({
           username: hostUsername,
@@ -250,7 +244,7 @@ export async function createNewChatSession(
 
   const systemPrompt = env.SYSTEM_PROMPT?.replace(/\${name}/g, host.name!)
 
-  if (visitor.id == host.id) {
+  if (visitor?.id == host.id) {
     return {
       exhausted: false,
       id: "dummy",
@@ -261,7 +255,7 @@ export async function createNewChatSession(
     }
   }
 
-  if (visitor.id !== host.id) {
+  if (visitor?.id !== host.id) {
     if (host.calls !== null && host.calls <= 0) {
       return {
         id: "",
@@ -276,10 +270,10 @@ export async function createNewChatSession(
 
   const [newChat] = await psCreateChat.execute({
     userId: host.id,
-    visitorId: visitor.id,
+    visitorId: visitor?.id || null,
   })
 
-  if (visitor.id != host.id) {
+  if (visitor?.id != host.id) {
     const visitorCalls = host?.calls || 0 - 1
     await updateUserCalls(host.id, visitorCalls)
   }

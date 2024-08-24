@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { getCallSummariesForUser } from "@/actions/user"
 import { ArrowClockwise } from "@phosphor-icons/react"
 
@@ -13,6 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import { PAGE_SIZE } from "../lib/utils"
+import CallSummaryLoadingState from "./call-summary-loader"
 import { Skeleton } from "./ui/skeleton"
 
 interface CallSummary {
@@ -24,15 +26,22 @@ interface CallSummary {
 
 interface CallSummariesProps {
   userId: string
+  initialSummaries: {
+    summaries: CallSummary[]
+    hasMore: boolean
+  }
 }
 
-const PAGE_SIZE = 20
-
-export function CallSummaries({ userId }: CallSummariesProps) {
-  const [callSummaries, setCallSummaries] = useState<CallSummary[]>([])
+export function CallSummaries({
+  userId,
+  initialSummaries,
+}: CallSummariesProps) {
+  const [callSummaries, setCallSummaries] = useState<CallSummary[]>(
+    initialSummaries.summaries
+  )
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
-  const [hasMore, setHasMore] = useState(true)
+  const [hasMore, setHasMore] = useState(initialSummaries.hasMore)
 
   const loadCallSummaries = async () => {
     if (loading || !hasMore) return
@@ -51,12 +60,8 @@ export function CallSummaries({ userId }: CallSummariesProps) {
     }
   }
 
-  useEffect(() => {
-    loadCallSummaries()
-  }, [])
-
   const renderCallSummary = (summary: CallSummary) => (
-    <Card key={summary.id} className="my-4 w-full">
+    <Card key={summary.id} className="w-full">
       <CardHeader>
         <CardTitle>{summary.title || "Untitled Call"}</CardTitle>
         <CardDescription>
@@ -70,23 +75,9 @@ export function CallSummaries({ userId }: CallSummariesProps) {
   )
 
   return (
-    <div className="space-y-4 px-4 font-urbanist mb-5">
+    <div className="mb-5 w-full space-y-4 font-urbanist">
       {callSummaries.map(renderCallSummary)}
-      {loading && (
-        <Card className="my-4 w-full">
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="h-4 w-[95%] rounded-xl" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="h-4 w-[20%] rounded-xl" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-[125px] w-[95%] rounded-xl" />
-          </CardContent>
-        </Card>
-      )}
+      {loading && <CallSummaryLoadingState />}
       {hasMore && (
         <Button
           onClick={loadCallSummaries}

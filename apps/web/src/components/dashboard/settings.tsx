@@ -18,7 +18,7 @@ const currentDomain = process.env["NEXT_PUBLIC_APP_URL"]
 
 export default function Settings({ user }: SettingsProps) {
   return (
-    <div className="grid gap-6">
+    <div className="grid w-full gap-y-6">
       <CallHandleForm user={user} />
 
       <UserNameForm user={user} />

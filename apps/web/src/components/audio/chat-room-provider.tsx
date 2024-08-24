@@ -25,7 +25,7 @@ export interface ChatSession {
 }
 
 interface ChatRoomProps {
-  visitor: User | null | undefined
+  visitor?: User | null | undefined
   hostUsername: string
 }
 

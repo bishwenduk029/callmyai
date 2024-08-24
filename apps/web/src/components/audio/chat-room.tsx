@@ -162,7 +162,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center">
+    <div className="fixed inset-0 flex flex-col items-center justify-center mb-10">
       <div className="relative aspect-square h-full max-h-[600px] w-full max-w-[600px]">
         <div className="absolute inset-0 flex items-center justify-center">
           {audioData.map((scale, i) => (

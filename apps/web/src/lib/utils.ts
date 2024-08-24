@@ -86,3 +86,5 @@ export function takeUniqueOrThrow<T extends unknown[]>(values: T): T[number] {
     throw new Error("Found non unique or inexistent value");
   return values[0];
 }
+
+export const PAGE_SIZE = 5
