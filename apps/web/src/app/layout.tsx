@@ -15,6 +15,7 @@ import { ThemeProvider } from "@/providers/theme-provider"
 import { cn } from "@/lib/utils"
 
 import { Toaster } from "@/components/ui/toaster"
+import CallMyAIIframe from "@/components/callmyai-frame"
 
 export const viewport: Viewport = {
   width: "device-width",

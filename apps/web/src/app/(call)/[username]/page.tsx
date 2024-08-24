@@ -1,12 +1,13 @@
-
-import { getUserByEmail } from "@/actions/user"
 import { redirect } from "next/navigation"
+import { getUserByEmail } from "@/actions/user"
 
 import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
 
 import auth from "@/lib/auth"
 
 import { ChatRoomProvider } from "@/components/audio/chat-room-provider"
+import { SessionProvider } from "next-auth/react"
+import { Header } from "@/components/nav/header"
 
 export default async function ChatRoomPage({
   params,
@@ -19,8 +20,13 @@ export default async function ChatRoomPage({
   if (!session) redirect(DEFAULT_UNAUTHENTICATED_REDIRECT)
 
   return (
-    <div className="container">
-      <ChatRoomProvider visitor={visitor} hostUsername={params.username} />
-    </div>
+    <SessionProvider>
+      <div>
+        <Header />
+        <div className="container">
+          <ChatRoomProvider visitor={visitor} hostUsername={params.username} />
+        </div>
+      </div>
+    </SessionProvider>
   )
 }
