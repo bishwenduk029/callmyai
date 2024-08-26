@@ -42,11 +42,11 @@ export const siteConfig = {
     // },
     {
       title: "Pricing",
-      href: "/#pricing-section",
+      href: "/pricing",
     },
     {
       title: "FAQ",
-      href: "/#faq-section",
+      href: "/faq",
     },
     // {
     //   title: "Docs",

@@ -19,6 +19,10 @@ export const getUserByEmailSchema = z.object({
   email: emailSchema,
 })
 
+export const getUserByUsernameSchema = z.object({
+  username: z.string(),
+})
+
 export const getUserByIdSchema = z.object({
   id: userIdSchema,
 })
@@ -66,7 +70,7 @@ export const checkIfUserExistsSchema = z.object({
 })
 
 export type GetUserByEmailInput = z.infer<typeof getUserByEmailSchema>
-
+export type GetUserByUsernameInput = z.infer<typeof getUserByUsernameSchema>
 export type GetUserByIdInput = z.infer<typeof getUserByIdSchema>
 
 export type GetUserByResetPasswordTokenInput = z.infer<

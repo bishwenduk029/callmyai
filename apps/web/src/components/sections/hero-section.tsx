@@ -1,9 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import Balancer from "react-wrap-balancer"
 
 import { env } from "@/env.mjs"
@@ -14,23 +13,7 @@ import { buttonVariants } from "@/components/ui/button"
 
 import { Input } from "../ui/input"
 
-const FADE_DOWN_ANIMATION_VARIANTS = {
-  hidden: { opacity: 0, y: -10 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" } },
-}
-
 export function HeroSection() {
-  const ref = useRef(null)
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) {
-    return null
-  }
-
   return (
     <motion.div
       id="hero-section"
@@ -69,7 +52,7 @@ export function HeroSection() {
         </motion.h3>
 
         <motion.div
-          className="z-10 flex w-full flex-col items-baseline justify-center gap-4 lg:w-[65%] lg:flex-row"
+          className="z-10 flex w-full flex-col items-baseline justify-center gap-4 lg:w-[3/4] lg:flex-row"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.5 }}

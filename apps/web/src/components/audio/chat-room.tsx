@@ -14,8 +14,6 @@ import { GooeyDiv } from "./gooey-div"
 import { InnerOrb } from "./inner-orb"
 
 export interface ChatSession {
-  id: string
-  userId: string
   prompt: string
   exhausted: boolean
   duration: number

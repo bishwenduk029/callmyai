@@ -1,8 +1,8 @@
+import { Subscription } from "@lemonsqueezy/lemonsqueezy.js"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { env } from "@/env.mjs"
-import { Subscription } from "@lemonsqueezy/lemonsqueezy.js"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -50,41 +50,48 @@ export async function getGitHubStars(): Promise<number | null> {
 }
 
 export function formatPrice(priceInCents: string) {
-  const price = parseFloat(priceInCents);
-  const dollars = price / 100;
+  const price = parseFloat(priceInCents)
+  const dollars = price / 100
 
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     // Use minimumFractionDigits to handle cases like $59.00 -> $59
     minimumFractionDigits: dollars % 1 !== 0 ? 2 : 0,
-  }).format(dollars);
+  }).format(dollars)
 }
 
 export function checkRequiredEnv() {
   if (!process.env.LEMONSQUEEZY_API_KEY) {
-    throw new Error("Missing LEMONSQUEEZY_API_KEY. Set it in your .env file.");
+    throw new Error("Missing LEMONSQUEEZY_API_KEY. Set it in your .env file.")
   }
 
   if (!process.env.LEMONSQUEEZY_STORE_ID) {
-    throw new Error("Missing LEMONSQUEEZY_STORE_ID. Set it in your .env file.");
+    throw new Error("Missing LEMONSQUEEZY_STORE_ID. Set it in your .env file.")
   }
 
   if (!process.env.LEMONSQUEEZY_STORE_ID) {
-    throw new Error("Missing LEMONSQUEEZY_API_KEY. Set it in your .env file.");
+    throw new Error("Missing LEMONSQUEEZY_API_KEY. Set it in your .env file.")
   }
 }
 
 export function isValidSubscription(
-  status: Subscription["data"]["attributes"]["status"],
+  status: Subscription["data"]["attributes"]["status"]
 ) {
-  return status !== "cancelled" && status !== "expired" && status !== "unpaid";
+  return status !== "cancelled" && status !== "expired" && status !== "unpaid"
 }
 
 export function takeUniqueOrThrow<T extends unknown[]>(values: T): T[number] {
   if (values.length !== 1)
-    throw new Error("Found non unique or inexistent value");
-  return values[0];
+    throw new Error("Found non unique or inexistent value")
+  return values[0]
 }
 
 export const PAGE_SIZE = 5
+
+export const RATE_LIMIT_KEY = "rate_limit_key"
+
+//define rateLimit function
+export function rateLimit(ip: string) {
+  return true
+}

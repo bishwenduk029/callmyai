@@ -1,10 +1,11 @@
 "use server"
 
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
 import { CoreMessage, generateObject } from "ai"
-import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { z } from "zod"
 
+import { env } from "@/env.mjs"
 import {
   psCheckExistingUsername,
   psCreateChat,
@@ -17,14 +18,15 @@ import {
   psUpdateChatSummary,
   psUpdateUserCallHandle,
   psUpdateUserCalls,
-  psUpdateUserUsername
+  psUpdateUserUsername,
 } from "@/db/prepared/statements"
-import { env } from "@/env.mjs"
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
   getUserByIdSchema,
   getUserByResetPasswordTokenSchema,
+  GetUserByUsernameInput,
+  getUserByUsernameSchema,
   type GetUserByEmailInput,
   type GetUserByEmailVerificationTokenInput,
   type GetUserByIdInput,
@@ -156,6 +158,24 @@ export async function getUserById(
   }
 }
 
+export async function getUserByUsername(
+  rawInput: GetUserByUsernameInput
+): Promise<User | null> {
+  try {
+    const validatedInput = getUserByUsernameSchema.safeParse(rawInput)
+    if (!validatedInput.success) return null
+
+    const [user] = await psGetUserByUsername.execute({
+      username: validatedInput.data.username,
+    })
+    console.log(user)
+    return user || null
+  } catch (error) {
+    console.error(error)
+    throw new Error("Error getting user by username")
+  }
+}
+
 export async function getUserByEmail(
   rawInput: GetUserByEmailInput
 ): Promise<User | null> {
@@ -247,8 +267,6 @@ export async function createNewChatSession(
   if (visitor?.id == host.id) {
     return {
       exhausted: false,
-      id: "dummy",
-      userId: host.id,
       duration: 50,
       prompt: `Remember this is test simulation to understand if the system propmpt will work as per user's needs. So greet the user with 'Hey ${host.name} welcome to simulation, shall we test if I meet your expectations'. Guide the user to act as a caller and simulate some scenario to verify if the prompt set by them is working as per expectation. Below is the prompt set by user\n${systemPrompt}`,
       private: true,
@@ -258,8 +276,6 @@ export async function createNewChatSession(
   if (visitor?.id !== host.id) {
     if (host.calls !== null && host.calls <= 0) {
       return {
-        id: "",
-        userId: "",
         exhausted: true,
         duration: 0,
         prompt: "",
@@ -268,22 +284,13 @@ export async function createNewChatSession(
     }
   }
 
-  const [newChat] = await psCreateChat.execute({
-    userId: host.id,
-    visitorId: visitor?.id || null,
-  })
-
   if (visitor?.id != host.id) {
     const visitorCalls = host?.calls || 0 - 1
     await updateUserCalls(host.id, visitorCalls)
   }
 
-  if (!newChat) {
-    throw new Error("Failed to create chat")
-  }
-
   // Fetch user subscriptions
-  const userSubscriptions = await getUserSubscriptions(newChat.userId)
+  const userSubscriptions = await getUserSubscriptions(host.id)
 
   // Define a mapping of variantIds to durations
   const variantDurations: { [key: string]: number } = {
@@ -301,7 +308,6 @@ export async function createNewChatSession(
   }
 
   return {
-    ...newChat,
     exhausted: false,
     duration,
     prompt: systemPrompt,

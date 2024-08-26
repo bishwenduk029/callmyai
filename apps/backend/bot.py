@@ -106,7 +106,7 @@ async def main(room_url: str, token: str, client_config: dict):
                     }
                     raw_body = json.dumps(payload)
                     
-                    # Compute HMAC signature
+                    # Compute HMAC signatureØ
                     api_secret_key = os.getenv("API_SECRET_KEY", "").encode()
                     signature = hmac.new(api_secret_key, raw_body.encode(), hashlib.sha256).hexdigest()
 

@@ -16,8 +16,6 @@ import { cn } from "@/lib/utils"
 import { ChatRoomUI } from "./chat-room"
 
 export interface ChatSession {
-  id: string
-  userId: string
   prompt: string
   exhausted: boolean
   duration: number
@@ -56,7 +54,7 @@ export const ChatRoomProvider = ({ visitor, hostUsername }: ChatRoomProps) => {
               voice: "b7d50908-b17c-442d-ad8d-810c63997ed9",
             },
             // @ts-ignore
-            chatId: newChatSession.id,
+            userName: hostUsername,
           },
         })
         setVoiceClient(client)
