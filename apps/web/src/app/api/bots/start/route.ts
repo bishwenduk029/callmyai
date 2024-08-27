@@ -1,22 +1,29 @@
-import { env } from "@/env.mjs"
+import { getUserByUsername } from "@/actions/user"
 
-import auth from "@/lib/auth"
+import { env } from "@/env.mjs"
+import { psCreateChat } from "@/db/prepared/statements"
 
 export async function POST(request: Request) {
-  const session = await auth()
-
-  if (!session)
-    return Response.json({ error: "You must be logged in." }, { status: 401 })
-
   try {
-    const body = await request.text()
+    const body = await request.json()
+    const { userName, ...rest } = body.config
+    const user = await getUserByUsername({ username: userName })
+
+    if (!user) throw new Error("User not found")
+
+    const results = await psCreateChat.execute({
+      userId: user.id,
+      visitorId: null,
+    })
+
     const response = await fetch(env.VOICE_BACKEND_URL, {
       method: "POST",
       headers: {
-        "Content-Type":
-          request.headers.get("Content-Type") || "application/json",
+        "Content-Type": "application/json",
       },
-      body: body,
+      body: JSON.stringify({
+        config: { ...rest, chatId: results[0]?.id },
+      }),
     })
 
     const data = await response.text()
@@ -24,8 +31,7 @@ export async function POST(request: Request) {
     return new Response(data, {
       status: response.status,
       headers: {
-        "Content-Type":
-          response.headers.get("Content-Type") || "application/json",
+        "Content-Type": "application/json",
       },
     })
   } catch (error) {

@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import { getCallSummariesForUser } from "@/actions/user"
-import { ArrowClockwise } from "@phosphor-icons/react"
+import { ArrowClockwise, Star } from "@phosphor-icons/react"
 
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -16,6 +17,7 @@ import {
 import { PAGE_SIZE } from "../lib/utils"
 import CallSummaryLoadingState from "./call-summary-loader"
 import { Skeleton } from "./ui/skeleton"
+import { Icons } from "./icons"
 
 interface CallSummary {
   id: string
@@ -71,11 +73,23 @@ export function CallSummaries({
       <CardContent>
         <p>{summary.summary || "No summary available."}</p>
       </CardContent>
+      <CardFooter>
+        <div className="flex items-center">
+          <Star className={`text-yellow-500 cursor-pointer ${summary.isInteresting ? 'text-yellow-500' : 'text-gray-500'}`} />
+          <span className="ml-2 text-sm text-gray-500">Mark as interesting to update AI assistant</span>
+        </div>
+      </CardFooter>
     </Card>
   )
 
   return (
     <div className="mb-5 w-full space-y-4 font-urbanist">
+      {callSummaries.length === 0 && (
+        <p className="text-md mt-4 text-center text-gray-500">
+          No call summaries found. Share your call handle with others to get
+          started.
+        </p>
+      )}
       {callSummaries.map(renderCallSummary)}
       {loading && <CallSummaryLoadingState />}
       {hasMore && (

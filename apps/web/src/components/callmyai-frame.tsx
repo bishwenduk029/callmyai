@@ -1,6 +1,8 @@
 "use client"
-import { env } from "@/env.mjs"
+
 import { useState } from "react"
+
+import { env } from "@/env.mjs"
 
 export default function CallMyAIIframe() {
   const [isIframeVisible, setIsIframeVisible] = useState(false)
@@ -40,12 +42,12 @@ export default function CallMyAIIframe() {
             borderColor: "black",
             right: "20px",
             width: "450px",
-            height: "700px",
+            height: "650px",
             boxShadow: "0 80px 80px rgba(0,0,0,.6)",
             borderRadius: "5px",
             overflow: "hidden",
             border: "2px solid black",
-            zIndex: 45,
+            zIndex: 100,
             scrollbarWidth: "none",
           }}
           scrolling="no"

@@ -2,11 +2,14 @@ import { type Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-import { env } from "@/env.mjs"
 import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults"
+import { env } from "@/env.mjs"
 
 import auth from "@/lib/auth"
 
+import { OAuthButtons } from "@/components/auth/oauth-buttons"
+import { SignUpWithPasswordForm } from "@/components/forms/signup-with-password-form"
+import { Icons } from "@/components/icons"
 import {
   Card,
   CardContent,
@@ -15,10 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { OAuthButtons } from "@/components/auth/oauth-buttons"
-import { SignInWithEmailForm } from "@/components/forms/signin-with-email-form"
-import { SignUpWithPasswordForm } from "@/components/forms/signup-with-password-form"
-import { Icons } from "@/components/icons"
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -46,17 +45,6 @@ export default async function SignUpPage(): Promise<JSX.Element> {
         </CardHeader>
         <CardContent className="max-sm:w-full max-sm:max-w-[340px] max-sm:px-10">
           <OAuthButtons />
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative mb-3 mt-6 flex justify-center text-xs uppercase">
-              <span className="bg-background px-2">
-                Or continue with magic link
-              </span>
-            </div>
-          </div>
-          <SignInWithEmailForm />
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />

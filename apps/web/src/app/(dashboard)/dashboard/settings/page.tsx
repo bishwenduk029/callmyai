@@ -1,11 +1,9 @@
 // page.tsx
-import Link from "next/link"
-import { redirect } from "next/navigation"
 import { getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CallSummaries } from "@/components/calls"
 import Settings from "@/components/dashboard/settings"
 
 export default async function SettingsPage() {
@@ -30,7 +28,6 @@ export default async function SettingsPage() {
           Settings
         </Link>
         <Link href="/dashboard/calls">Calls</Link>
-        <Link href="#">Assistants</Link>
       </nav>
       <Settings user={user} />
     </>

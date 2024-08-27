@@ -1,7 +1,7 @@
 import { and, desc, eq, isNotNull, ne, sql } from "drizzle-orm"
 
 import { db } from "@/config/db"
-import { chats, newsletterSubscribers, users } from "@/db/schema"
+import { chats, newsletterSubscribers, users, assistants } from "@/db/schema"
 
 export const psGetUserById = db
   .select()
@@ -114,3 +114,10 @@ export const psUpdateChatSummary = db
   .limit(sql.placeholder("limit"))
   .offset(sql.placeholder("offset"))
   .prepare("psGetChatsByUserId")
+
+export const psGetAssistantById = db
+  .select()
+  .from(assistants)
+  .where(eq(assistants.id, sql.placeholder("id")))
+  .limit(1)
+  .prepare("psGetAssistantById")

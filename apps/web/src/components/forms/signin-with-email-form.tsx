@@ -38,7 +38,9 @@ export function SignInWithEmailForm(): JSX.Element {
   })
 
   function onSubmit(formData: SignInWithEmailFormInput): void {
+    console.log("onSubmit", formData)
     startTransition(async () => {
+      console.log("startTransition")
       try {
         await signIn("resend", { email: formData.email })
       } catch (error) {
@@ -83,7 +85,7 @@ export function SignInWithEmailForm(): JSX.Element {
           )}
         />
 
-        <Button>
+        <Button type="submit">
           {isPending ? (
             <>
               <Icons.spinner

@@ -16,29 +16,26 @@ import { cn } from "@/lib/utils"
 import { ChatRoomUI } from "./chat-room"
 
 export interface ChatSession {
-  id: string
-  userId: string
   prompt: string
   exhausted: boolean
   duration: number
   private: boolean
+  username?: string
+  assistantId?: string
 }
 
 interface ChatRoomProps {
-  visitor?: User | null | undefined
-  hostUsername: string
+  chatSession: ChatSession
 }
 
-export const ChatRoomProvider = ({ visitor, hostUsername }: ChatRoomProps) => {
+export const ChatRoomProvider = ({ chatSession }: ChatRoomProps) => {
   const [voiceClient, setVoiceClient] = useState<DailyVoiceClient | null>(null)
-  const [chatSession, setChatSession] = useState<ChatSession | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
 
   useEffect(() => {
     const initializeVoiceClient = async () => {
       try {
-        const newChatSession = await createNewChatSession(hostUsername, visitor)
         const client = new DailyVoiceClient({
           baseUrl: "/api/bots/start",
           enableMic: true,
@@ -48,7 +45,7 @@ export const ChatRoomProvider = ({ visitor, hostUsername }: ChatRoomProps) => {
               messages: [
                 {
                   role: "system",
-                  content: newChatSession?.prompt || "",
+                  content: chatSession?.prompt || "",
                 },
               ],
             },
@@ -56,11 +53,10 @@ export const ChatRoomProvider = ({ visitor, hostUsername }: ChatRoomProps) => {
               voice: "b7d50908-b17c-442d-ad8d-810c63997ed9",
             },
             // @ts-ignore
-            chatId: newChatSession.id,
+            userName: chatSession?.username,
           },
         })
         setVoiceClient(client)
-        setChatSession(newChatSession)
         setIsLoading(false)
       } catch (error) {
         console.error("Error initializing voice client:", error)

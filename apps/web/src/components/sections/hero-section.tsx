@@ -1,32 +1,19 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import Balancer from "react-wrap-balancer"
+
+import { env } from "@/env.mjs"
 
 import { cn } from "@/lib/utils"
 
 import { buttonVariants } from "@/components/ui/button"
 
-const FADE_DOWN_ANIMATION_VARIANTS = {
-  hidden: { opacity: 0, y: -10 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" } },
-}
+import { Input } from "../ui/input"
 
 export function HeroSection() {
-  const ref = useRef(null)
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) {
-    return null
-  }
-
   return (
     <motion.div
       id="hero-section"
@@ -65,16 +52,20 @@ export function HeroSection() {
         </motion.h3>
 
         <motion.div
-          className="z-10 flex flex-col justify-center gap-4 sm:flex-row"
+          className="z-10 flex w-full flex-col items-baseline justify-center gap-4 lg:w-[3/4] lg:flex-row"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.5 }}
         >
+          <Input
+            placeholder={`${env.NEXT_PUBLIC_APP_URL}/your_name`}
+            className="h-12 w-full border-primary text-lg"
+          />
           <Link
             href="/dashboard/settings"
-            className={cn(buttonVariants({ size: "lg" }))}
+            className={`${cn(buttonVariants({ size: "lg" }))} mx-auto lg:mx-0`}
           >
-            Get Your AI Call Assistant Now
+            Claim your CallMyAI
           </Link>
         </motion.div>
       </div>

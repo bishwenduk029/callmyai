@@ -1,9 +1,9 @@
 // page.tsx
-import { getCallSummariesForUser, getUserByEmail } from "@/actions/user"
-import { auth } from "@/auth"
+import { Suspense } from "react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { Suspense } from "react"
+import { getCallSummariesForUser, getUserByEmail } from "@/actions/user"
+import { auth } from "@/auth"
 
 import { PAGE_SIZE } from "@/lib/utils"
 
@@ -27,15 +27,16 @@ export default async function CallsPage() {
   const initialSummaries = await getCallSummariesForUser(user.id, 1, PAGE_SIZE)
 
   return (
-    <Suspense fallback={<CallSummaryLoadingState />}>
+    <>
       <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid">
         <Link href="/dashboard/settings">Settings</Link>
         <Link href="/dashboard/calls" className="font-semibold text-primary">
           Calls
         </Link>
-        <Link href="#">Assistants</Link>
       </nav>
-      <CallSummaries userId={user.id} initialSummaries={initialSummaries} />
-    </Suspense>
+      <Suspense fallback={<CallSummaryLoadingState />}>
+        <CallSummaries userId={user.id} initialSummaries={initialSummaries} />
+      </Suspense>
+    </>
   )
 }

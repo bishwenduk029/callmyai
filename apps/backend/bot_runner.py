@@ -127,7 +127,6 @@ async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
 async def start_bot(request: Request) -> JSONResponse:
     try:
         client_config = await request.json()
-        print(f"Client Config: {client_config}")
         # Is this a webhook creation request?
         if "test" in client_config:
             return JSONResponse({"test": True})
@@ -164,7 +163,6 @@ async def start_bot(request: Request) -> JSONResponse:
 
     # Launch a new fly.io machine, or run as a shell process (not recommended)
     run_as_process = os.getenv("RUN_AS_PROCESS", False)
-    print(f"Running as process: {run_as_process}")
 
     if run_as_process:
         try:

@@ -20,7 +20,7 @@ export default async function DashboardLayout({
   return (
     <div>
       <Header />
-      <div className="container mx-auto flex w-full flex-row justify-center space-x-12 text-lg lg:w-3/4">
+      <div className="container mx-auto flex w-full flex-row justify-center text-lg sm:space-x-12 lg:w-3/4">
         {children}
       </div>
     </div>
