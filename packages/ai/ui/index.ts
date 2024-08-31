@@ -1,6 +1,6 @@
 "use client";
 
-import { VoiceClient as DailyVoiceClient } from "realtime-ai";
+import { VoiceClient as DailyVoiceClient, VoiceEvent as DailyVoiceEvent } from "realtime-ai";
 import {
   VoiceClientAudio as DailyVoiceClientAudio,
   VoiceClientProvider as DailyVoiceClientProvider,
@@ -10,6 +10,7 @@ import {
 
 export {
   DailyVoiceClient,
+  DailyVoiceEvent,
   DailyVoiceClientAudio,
   DailyVoiceClientProvider,
   useDailyVoiceClient,

@@ -5,7 +5,7 @@ import {
 import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 import { useRef, useState } from "react"
-import { VoiceEvent } from "realtime-ai"
+import { DailyVoiceEvent } from "@callmyai/ai/ui"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -38,7 +38,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
   const voiceClient = useDailyVoiceClient()
   const { toast } = useToast()
 
-  useDailyVoiceClientEvent(VoiceEvent.BotConnected, async () => {
+  useDailyVoiceClientEvent(DailyVoiceEvent.BotConnected, async () => {
     startAudioVisualization()
     startTimer()
     setIsLoadingBot(false)
