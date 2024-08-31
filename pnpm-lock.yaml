@@ -163,9 +163,6 @@ importers:
       '@upstash/ratelimit':
         specifier: ^2.0.2
         version: 2.0.2
-      '@upstash/redis':
-        specifier: ^1.34.0
-        version: 1.34.0
       '@vercel/analytics':
         specifier: ^1.2.2
         version: 1.2.2(next@14.2.4(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -226,12 +223,6 @@ importers:
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      nodemailer:
-        specifier: ^6.9.13
-        version: 6.9.14
-      onnxruntime-web:
-        specifier: ^1.17.0
-        version: 1.17.1
       openai:
         specifier: ^4.42.0
         version: 4.52.2(encoding@0.1.13)
@@ -244,12 +235,6 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
-      react-cool-virtual:
-        specifier: ^0.7.0
-        version: 0.7.0(react@18.3.1)
-      react-day-picker:
-        specifier: ^8.10.1
-        version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
@@ -265,12 +250,6 @@ importers:
       react-wrap-balancer:
         specifier: ^1.1.0
         version: 1.1.1(react@18.3.1)
-      realtime-ai:
-        specifier: ^0.0.9
-        version: 0.0.9(@daily-co/daily-js@0.69.0)
-      realtime-ai-react:
-        specifier: ^0.0.9
-        version: 0.0.9(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(realtime-ai@0.0.9(@daily-co/daily-js@0.69.0))
       resend:
         specifier: ^4.0.0
         version: 4.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -289,15 +268,9 @@ importers:
       tls:
         specifier: ^0.0.1
         version: 0.0.1
-      undici:
-        specifier: ^6.16.0
-        version: 6.19.2
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
-      vocode:
-        specifier: ^1.0.37
-        version: 1.0.37(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -3927,10 +3900,6 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  automation-events@7.0.5:
-    resolution: {integrity: sha512-Ni6vhZg0mKmVlew1kxWAzWL7QY1LYDdoYgp6yF9OHeskDrjyJp2SqoKoPQYeiMYjeIlbSpnxXm/JI55VcmX5Wg==}
-    engines: {node: '>=18.2.0'}
-
   autoprefixer@10.4.19:
     resolution: {integrity: sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==}
     engines: {node: ^10 || ^12 || >=14}
@@ -4023,9 +3992,6 @@ packages:
 
   breakword@1.0.6:
     resolution: {integrity: sha512-yjxDAYyK/pBvws9H4xKYpLDpYKEH6CzrBPAuXq3x18I+c/2MkVtT3qAr7Oloi6Dss9qNhPVueAAVU1CSeNDIXw==}
-
-  broker-factory@3.0.98:
-    resolution: {integrity: sha512-IgwhsnhlIF2S014S61XGcZkxZVDTrPxeYAg78P9xOmVFFyoaa+liGiQfd5f0seCB3nEaUgnbSreh6xnElbsd0g==}
 
   browserslist@4.23.0:
     resolution: {integrity: sha512-QW8HiM1shhT2GuzkvklfjcKDiWFXHOeFCIA/huJPwHsslwcydgk7X+z2zXpEijP98UCY7HbubZt5J2Zgvf0CaQ==}
@@ -4510,9 +4476,6 @@ packages:
 
   domutils@3.1.0:
     resolution: {integrity: sha512-H78uMmQtI2AhgDJjWeQmHwJJ2bLPD3GMmO7Zja/ZZh84wkm+4ut+IUnUdRa8uCGX88DiVx1j6FRe1XfxEgjEZA==}
-
-  dot-case@3.0.4:
-    resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
 
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
@@ -5027,18 +4990,6 @@ packages:
   extendable-error@0.1.7:
     resolution: {integrity: sha512-UOiS2in6/Q0FK0R0q6UY9vYpQ21mr/Qn1KOnte7vsACuNJf514WvCCUHSRCPcgjPT2bAhNIJdlE6bVap1GKmeg==}
 
-  extendable-media-recorder-wav-encoder-broker@7.0.102:
-    resolution: {integrity: sha512-TwamIdx6IpE/unEwdL/LnCPvu7YAZ31KZ18LXLpKiRHGknvI1kAsr2IFSjhaburwMqhPGhn/cfSp+7ua+VJjoQ==}
-
-  extendable-media-recorder-wav-encoder-worker@8.0.99:
-    resolution: {integrity: sha512-CgelTHa9w9eF7TZZ88XLASvyVrVuSB9Yoru/Z6bhcajCHp/JmhcEyZyTvvQigZ5Hu5rQGOPPnayNVWJnVVuEyA==}
-
-  extendable-media-recorder-wav-encoder@7.0.111:
-    resolution: {integrity: sha512-wGrCr0f1dbKuYZ9V04zKOn58F8cghutrD+dTW2YZpGsyKIS02gKU9h0kV66kB8B2nL0kXJA6v/UXjSTYERCVFA==}
-
-  extendable-media-recorder@7.1.22:
-    resolution: {integrity: sha512-MYaknwradvtQKrPJZQVXBBS8HngT0/7gye41TPM3WlbRXCBkcLi680aRxdbKn0/Tw3sCrdLUaceYUriR59IXQQ==}
-
   external-editor@3.1.0:
     resolution: {integrity: sha512-hMQ4CX1p1izmuLYyZqLMO/qGNw10wSv9QDCPfzXfyFrOaCSSoRfqE1Kf1s5an66J5JZC62NewG+mK49jOCtQew==}
     engines: {node: '>=4'}
@@ -5058,10 +5009,6 @@ packages:
 
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
-
-  fast-unique-numbers@9.0.5:
-    resolution: {integrity: sha512-wVA1YcLQn0eAo4P1DXu4UI3wx68Llwm2/iCtpoOGuTi3jm/13KFYjCt3Nlq2fseSuyaBz43RKimj5G68GDzjjg==}
-    engines: {node: '>=18.2.0'}
 
   fastq@1.17.1:
     resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
@@ -5109,9 +5056,6 @@ packages:
   flat-cache@4.0.1:
     resolution: {integrity: sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==}
     engines: {node: '>=16'}
-
-  flatbuffers@1.12.0:
-    resolution: {integrity: sha512-c7CZADjRcl6j0PlvFy0ZqXQ67qSEZfrVPynmnL+2zPc+NtMvrF8Y0QceMo7QqnSPc7+uWjUIAbvCQ5WIKlMVdQ==}
 
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
@@ -5314,9 +5258,6 @@ packages:
   gray-matter@4.0.3:
     resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
     engines: {node: '>=6.0'}
-
-  guid-typescript@1.0.9:
-    resolution: {integrity: sha512-Y8T4vYhEfwJOTbouREvG+3XDsjr8E3kIr7uf+JZ0BYloFsttiHU0WfvANVsR7TxNUJa/WpCnw/Ino/p+DeBhBQ==}
 
   hanji@0.0.5:
     resolution: {integrity: sha512-Abxw1Lq+TnYiL4BueXqMau222fPSPMFtya8HdpWsz/xVAhifXou71mPh/kY2+08RgFcVccjG3uZHs6K5HAe3zw==}
@@ -6253,15 +6194,6 @@ packages:
     peerDependencies:
       esbuild: 0.*
 
-  media-encoder-host-broker@7.1.0:
-    resolution: {integrity: sha512-Emu3f45Wbf6AoRJxfvZ8e5nh8fRVviBfkABgYNvVUsVBgJ7+l137gn324g/JmNVQhhVQ89fjmGT1kHIJ9JG5Nw==}
-
-  media-encoder-host-worker@9.2.0:
-    resolution: {integrity: sha512-LrJJgNBDZH2y1PYBLaiYQw9uFU5i3yPvDkDxdko+L3Z4qzhKq9+4eYxKDqlwO4EdOlaiggvMpkgZl3roOniz2A==}
-
-  media-encoder-host@8.1.0:
-    resolution: {integrity: sha512-VwX3ex48ltl+K1ObGEq3IcZp/XqpNTWemd9brC9ovo89rYmCRKTZAp1FCyfAY86RdvSMrUs26lbo45DIDVyERg==}
-
   memfs@3.5.3:
     resolution: {integrity: sha512-UERzLsxzllchadvbPs5aolHh65ISpKpM+ccLbOJ8/vvpBKmAWf+la7dXFy7Mr0ySHbdHrFv5kGFCUHHe6GFEmw==}
     engines: {node: '>= 4.0.0'}
@@ -6516,10 +6448,6 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  multi-buffer-data-view@5.0.14:
-    resolution: {integrity: sha512-MaATo4p+GrnsfQIoOfr6ZRaUFdkHiDgaXv7fghTzEAnfWMdhkC2VJg5cduGQIhdmgbRoXMqJ8AEgIRYGt7MX4g==}
-    engines: {node: '>=16.1.0'}
-
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
@@ -6749,12 +6677,6 @@ packages:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
 
-  onnxruntime-common@1.17.1:
-    resolution: {integrity: sha512-6wLNhpn+1hnsKN+jq6ulqUEJ61TdRmyFkGCvtRNnZkAupH8Yfr805UeNxjl9jtiX9B1q48pq6Q/67fEFpxT7Dw==}
-
-  onnxruntime-web@1.17.1:
-    resolution: {integrity: sha512-EotY9uJU4xFY/ZVZ2Zrl2OZmBcbTVTWn/2OOh4cCWODPwtsYN2xeJYgoz8LfCgZSrhenGg0q4ceYUWATXqEsYQ==}
-
   oo-ascii-tree@1.101.0:
     resolution: {integrity: sha512-hNE9Nfvo4HLa9/dAiaiXUm64KHUvgBa7jPftsb8gZdTv1G1wSMMnd9j7SMcRzaMbDEqi+0cfgeBSIcsKy+k0vA==}
     engines: {node: '>= 14.17.0'}
@@ -6936,9 +6858,6 @@ packages:
   pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
-
-  platform@1.3.6:
-    resolution: {integrity: sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg==}
 
   pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
@@ -7194,23 +7113,6 @@ packages:
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
 
-  react-cool-virtual@0.7.0:
-    resolution: {integrity: sha512-oWRsF0Pf9dRWncpFvsCNWm0W/d/UEbUqxNIuhGEcLzdW16leokcl9gSYG9Ha5raaF/qq029W1cj65zAwgJyR7A==}
-    peerDependencies:
-      react: '>= 16.8.0'
-
-  react-day-picker@8.10.1:
-    resolution: {integrity: sha512-TMx7fNbhLk15eqcMt+7Z7S2KF7mfTId/XJDjKE8f+IUcFn0l08/kI4FiYTL/0yuOLmEcbR4Fwe3GJf/NiiMnPA==}
-    peerDependencies:
-      date-fns: ^2.28.0 || ^3.0.0
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-
-  react-device-detect@2.2.3:
-    resolution: {integrity: sha512-buYY3qrCnQVlIFHrC5UcUoAj7iANs/+srdkwsnNjI7anr3Tt7UY6MqNxtMLlr0tMBied0O49UZVK8XKs3ZIiPw==}
-    peerDependencies:
-      react: '>= 0.14.0'
-      react-dom: '>= 0.14.0'
-
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
@@ -7328,12 +7230,6 @@ packages:
     resolution: {integrity: sha512-24+D832LrKxaAy0joG++SNcqmV2EcIcV1L2ktKw57abkiccN472sDaSFuqVUfNSLVntg5CBTccQk6c+q6PWOcQ==}
     peerDependencies:
       '@daily-co/daily-js': '>=0.68.0'
-
-  recorder-audio-worklet-processor@5.0.20:
-    resolution: {integrity: sha512-uG5uB/1gJYyavDgHaiRY7u9nfh4LnGqGJoN7+o18U8UylGUMbVgNe4SA2vhrzneu2MjKOVQ9gz+zY0c+cMsGIA==}
-
-  recorder-audio-worklet@6.0.28:
-    resolution: {integrity: sha512-5xMfy/iYBYaFxCnLyT50E0w/OCrkU0lo6hw/lTHsxq6iW66ROKXkkh8/7sJGcIEGSrDV8IY/UXCGKHjgOOBI5w==}
 
   redent@3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
@@ -7485,9 +7381,6 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
-  rxjs-interop@2.0.0:
-    resolution: {integrity: sha512-ASEq9atUw7lualXB+knvgtvwkCEvGWV2gDD/8qnASzBkzEARZck9JAyxmY8OS6Nc1pCPEgDTKNcx+YqqYfzArw==}
-
   rxjs@7.8.1:
     resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
 
@@ -7623,9 +7516,6 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  snake-case@3.0.4:
-    resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
-
   socket.io-adapter@2.5.5:
     resolution: {integrity: sha512-eLDQas5dzPgOWCk9GuuJC2lBqItuhKI4uxGgo9aIV7MYbk2h9Q6uULEh8WBzThoI7l+qU9Ast9fVUmkqPP9wYg==}
 
@@ -7712,9 +7602,6 @@ packages:
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}
     engines: {node: '>=10'}
-
-  standardized-audio-context@25.3.72:
-    resolution: {integrity: sha512-Dvwu2NuqafQqWxUWoo6G9ze/cvVNlFDpmIOA8XjuItrfR0h/REjgjoYCT3Y7nbkUJKGoz8SqqVzR7JATQV4XeQ==}
 
   stream-transform@2.1.3:
     resolution: {integrity: sha512-9GHUiM5hMiCi6Y03jD2ARC1ettBXkQBoQAe7nJsPknnI0ow10aXjTnew8QtYQmLjzn974BnmWEAJgCY6ZP1DeQ==}
@@ -7807,9 +7694,6 @@ packages:
 
   stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
-
-  subscribable-things@2.1.36:
-    resolution: {integrity: sha512-IAFC0jGsoMFiG6LTXEcp7hMrRS2RvEXPVFOGGH7xV5/c36DWet93x5aGD8KOrht/7dSiOdaV9rnPehnHB8BnGw==}
 
   sucrase@3.34.0:
     resolution: {integrity: sha512-70/LQEZ07TEcxiU2dz51FKaE6hCTWC6vr7FOk3Gr0U60C3shtAN+H+BFr9XlYe5xqf3RA8nrc+VIwzCfnxuXJw==}
@@ -8151,18 +8035,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  ua-parser-js@1.0.38:
-    resolution: {integrity: sha512-Aq5ppTOfvrCMgAPneW1HfWj66Xi7XL+/mIy996R1/CLS/rcyJQm6QZdsKrUeivDFQ+Oc9Wyuwor8Ze8peEoUoQ==}
-
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
-
-  undici@6.19.2:
-    resolution: {integrity: sha512-JfjKqIauur3Q6biAtHJ564e3bWa8VvT+7cSiOJHFbX4Erv6CLGDpg8z+Fmg/1OI/47RA+GI2QZaF48SSaLvyBA==}
-    engines: {node: '>=18.17'}
 
   unicorn-magic@0.1.0:
     resolution: {integrity: sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==}
@@ -8303,9 +8180,6 @@ packages:
   vfile@6.0.1:
     resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
 
-  vocode@1.0.37:
-    resolution: {integrity: sha512-/r1tnCE39P0fmOV9x5BfJfWl7rKd4G4Y7juMe/ohis/pYWKKrN9S2NCBLCU8rW2zghvPAjf3maTXtDXxNBn5Aw==}
-
   vue@3.4.27:
     resolution: {integrity: sha512-8s/56uK6r01r1icG/aEOHqyMVxd1bkYcSe9j8HcKtr/xTOFWvnzIVTehNW+5Yt89f+DLBe4A569pnZLS5HzAMA==}
     peerDependencies:
@@ -8397,9 +8271,6 @@ packages:
 
   wordwrap@1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
-
-  worker-factory@7.0.25:
-    resolution: {integrity: sha512-JIcaoOIuYgIC6PNy7jB35mR129x6MQT+g6xBo2c0x+uQuZyOa31gxIW9Z6FdSFOgLpSj5Z3CQieTRV+F9GWB1Q==}
 
   wrap-ansi@6.2.0:
     resolution: {integrity: sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==}
@@ -12403,11 +12274,6 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  automation-events@7.0.5:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      tslib: 2.6.2
-
   autoprefixer@10.4.19(postcss@8.4.38):
     dependencies:
       browserslist: 4.23.0
@@ -12528,13 +12394,6 @@ snapshots:
   breakword@1.0.6:
     dependencies:
       wcwidth: 1.0.1
-
-  broker-factory@3.0.98:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      fast-unique-numbers: 9.0.5
-      tslib: 2.6.2
-      worker-factory: 7.0.25
 
   browserslist@4.23.0:
     dependencies:
@@ -13029,11 +12888,6 @@ snapshots:
       dom-serializer: 2.0.0
       domelementtype: 2.3.0
       domhandler: 5.0.3
-
-  dot-case@3.0.4:
-    dependencies:
-      no-case: 3.0.4
-      tslib: 2.6.2
 
   dotenv@16.0.3: {}
 
@@ -13873,36 +13727,6 @@ snapshots:
 
   extendable-error@0.1.7: {}
 
-  extendable-media-recorder-wav-encoder-broker@7.0.102:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      broker-factory: 3.0.98
-      extendable-media-recorder-wav-encoder-worker: 8.0.99
-      tslib: 2.6.2
-
-  extendable-media-recorder-wav-encoder-worker@8.0.99:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      tslib: 2.6.2
-      worker-factory: 7.0.25
-
-  extendable-media-recorder-wav-encoder@7.0.111:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      extendable-media-recorder-wav-encoder-broker: 7.0.102
-      extendable-media-recorder-wav-encoder-worker: 8.0.99
-      tslib: 2.6.2
-
-  extendable-media-recorder@7.1.22:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      media-encoder-host: 8.1.0
-      multi-buffer-data-view: 5.0.14
-      recorder-audio-worklet: 6.0.28
-      standardized-audio-context: 25.3.72
-      subscribable-things: 2.1.36
-      tslib: 2.6.2
-
   external-editor@3.1.0:
     dependencies:
       chardet: 0.7.0
@@ -13924,11 +13748,6 @@ snapshots:
   fast-json-stable-stringify@2.1.0: {}
 
   fast-levenshtein@2.0.6: {}
-
-  fast-unique-numbers@9.0.5:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      tslib: 2.6.2
 
   fastq@1.17.1:
     dependencies:
@@ -13986,8 +13805,6 @@ snapshots:
     dependencies:
       flatted: 3.3.1
       keyv: 4.5.4
-
-  flatbuffers@1.12.0: {}
 
   flatted@3.3.1: {}
 
@@ -14205,8 +14022,6 @@ snapshots:
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
-
-  guid-typescript@1.0.9: {}
 
   hanji@0.0.5:
     dependencies:
@@ -15595,28 +15410,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  media-encoder-host-broker@7.1.0:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      broker-factory: 3.0.98
-      fast-unique-numbers: 9.0.5
-      media-encoder-host-worker: 9.2.0
-      tslib: 2.6.2
-
-  media-encoder-host-worker@9.2.0:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      extendable-media-recorder-wav-encoder-broker: 7.0.102
-      tslib: 2.6.2
-      worker-factory: 7.0.25
-
-  media-encoder-host@8.1.0:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      media-encoder-host-broker: 7.1.0
-      media-encoder-host-worker: 9.2.0
-      tslib: 2.6.2
-
   memfs@3.5.3:
     dependencies:
       fs-monkey: 1.0.6
@@ -16107,11 +15900,6 @@ snapshots:
 
   ms@2.1.3: {}
 
-  multi-buffer-data-view@5.0.14:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      tslib: 2.6.2
-
   mz@2.7.0:
     dependencies:
       any-promise: 1.3.0
@@ -16248,7 +16036,8 @@ snapshots:
 
   node-releases@2.0.14: {}
 
-  nodemailer@6.9.14: {}
+  nodemailer@6.9.14:
+    optional: true
 
   nopt@7.2.1:
     dependencies:
@@ -16325,17 +16114,6 @@ snapshots:
   onetime@5.1.2:
     dependencies:
       mimic-fn: 2.1.0
-
-  onnxruntime-common@1.17.1: {}
-
-  onnxruntime-web@1.17.1:
-    dependencies:
-      flatbuffers: 1.12.0
-      guid-typescript: 1.0.9
-      long: 5.2.3
-      onnxruntime-common: 1.17.1
-      platform: 1.3.6
-      protobufjs: 7.2.6
 
   oo-ascii-tree@1.101.0: {}
 
@@ -16540,8 +16318,6 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  platform@1.3.6: {}
-
   pluralize@8.0.0: {}
 
   postcss-import@15.1.0(postcss@8.4.38):
@@ -16723,22 +16499,6 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  react-cool-virtual@0.7.0(react@18.3.1):
-    dependencies:
-      '@babel/runtime': 7.24.5
-      react: 18.3.1
-
-  react-day-picker@8.10.1(date-fns@3.6.0)(react@18.3.1):
-    dependencies:
-      date-fns: 3.6.0
-      react: 18.3.1
-
-  react-device-detect@2.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      ua-parser-js: 1.0.38
-
   react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -16895,22 +16655,6 @@ snapshots:
       events: 3.3.0
       nanoid: 5.0.7
       typed-emitter: 2.1.0
-
-  recorder-audio-worklet-processor@5.0.20:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      tslib: 2.6.2
-
-  recorder-audio-worklet@6.0.28:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      broker-factory: 3.0.98
-      fast-unique-numbers: 9.0.5
-      recorder-audio-worklet-processor: 5.0.20
-      standardized-audio-context: 25.3.72
-      subscribable-things: 2.1.36
-      tslib: 2.6.2
-      worker-factory: 7.0.25
 
   redent@3.0.0:
     dependencies:
@@ -17135,8 +16879,6 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
-  rxjs-interop@2.0.0: {}
-
   rxjs@7.8.1:
     dependencies:
       tslib: 2.6.2
@@ -17273,11 +17015,6 @@ snapshots:
       wcwidth: 1.0.1
       yargs: 15.4.1
 
-  snake-case@3.0.4:
-    dependencies:
-      dot-case: 3.0.4
-      tslib: 2.6.2
-
   socket.io-adapter@2.5.5(bufferutil@4.0.8)(utf-8-validate@6.0.4):
     dependencies:
       debug: 4.3.4
@@ -17389,12 +17126,6 @@ snapshots:
     dependencies:
       escape-string-regexp: 2.0.0
 
-  standardized-audio-context@25.3.72:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      automation-events: 7.0.5
-      tslib: 2.6.2
-
   stream-transform@2.1.3:
     dependencies:
       mixme: 0.5.10
@@ -17494,12 +17225,6 @@ snapshots:
       '@babel/core': 7.24.5
 
   stylis@4.2.0: {}
-
-  subscribable-things@2.1.36:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      rxjs-interop: 2.0.0
-      tslib: 2.6.2
 
   sucrase@3.34.0:
     dependencies:
@@ -17867,8 +17592,6 @@ snapshots:
 
   typescript@5.4.5: {}
 
-  ua-parser-js@1.0.38: {}
-
   unbox-primitive@1.0.2:
     dependencies:
       call-bind: 1.0.5
@@ -17877,8 +17600,6 @@ snapshots:
       which-boxed-primitive: 1.0.2
 
   undici-types@5.26.5: {}
-
-  undici@6.19.2: {}
 
   unicorn-magic@0.1.0: {}
 
@@ -18055,16 +17776,6 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  vocode@1.0.37(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      extendable-media-recorder: 7.1.22
-      extendable-media-recorder-wav-encoder: 7.0.111
-      react-device-detect: 2.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      snake-case: 3.0.4
-    transitivePeerDependencies:
-      - react
-      - react-dom
-
   vue@3.4.27(typescript@5.4.5):
     dependencies:
       '@vue/compiler-dom': 3.4.27
@@ -18198,12 +17909,6 @@ snapshots:
   word-wrap@1.2.5: {}
 
   wordwrap@1.0.0: {}
-
-  worker-factory@7.0.25:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      fast-unique-numbers: 9.0.5
-      tslib: 2.6.2
 
   wrap-ansi@6.2.0:
     dependencies:

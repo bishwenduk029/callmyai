@@ -2,14 +2,8 @@ import { getUserByUsername } from "@/actions/user"
 import { env } from "@/env.mjs"
 import { psCreateChat } from "@/db/prepared/statements"
 import { Ratelimit } from "@upstash/ratelimit"
-import { Redis } from "@upstash/redis"
 import { headers } from "next/headers"
-
-// Initialize Redis client
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-})
+import { redis } from "@callmyai/kv"
 
 // Initialize rate limiter
 const ratelimit = new Ratelimit({

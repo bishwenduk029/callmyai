@@ -5,7 +5,7 @@ export default defineConfig((options: Options) => ({
   format: ["esm"],
   esbuildOptions(options) {
     options.banner = {
-      js: '"use client"',
+      js: '"use server"',
     };
   },
   dts: true,
