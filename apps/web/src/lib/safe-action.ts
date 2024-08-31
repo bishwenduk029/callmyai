@@ -1,3 +1,4 @@
+"use server"
 import { headers } from "next/headers"
 import { redis } from "@callmyai/kv"
 import { Ratelimit } from "@upstash/ratelimit"
