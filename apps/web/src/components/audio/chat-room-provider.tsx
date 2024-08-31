@@ -7,7 +7,7 @@ import {
   DailyVoiceClient,
   DailyVoiceClientAudio,
   DailyVoiceClientProvider,
-} from "@bishwenduk029/ai-voice/ui"
+} from "@callmyai/ai/ui"
 
 import { User } from "@/db/schema"
 

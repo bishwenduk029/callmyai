@@ -2,16 +2,18 @@
 
 import crypto from "crypto"
 
-import { unstable_noStore as noStore } from "next/cache"
 import { getUserByEmail, getUserByResetPasswordToken } from "@/actions/user"
 import { signIn } from "@/auth"
 import bcryptjs from "bcryptjs"
 import { eq } from "drizzle-orm"
 import { AuthError } from "next-auth"
+import { unstable_noStore as noStore } from "next/cache"
 
 import { db } from "@/config/db"
+import { resend } from "@/config/email"
 import { psLinkOAuthAccount } from "@/db/prepared/statements"
 import { users } from "@/db/schema"
+import { env } from "@/env.mjs"
 import {
   linkOAuthAccountSchema,
   passwordResetSchema,
@@ -24,8 +26,7 @@ import {
   type SignInWithPasswordFormInput,
   type SignUpWithPasswordFormInput,
 } from "@/validations/auth"
-import { resend } from "@/config/email"
-import { env } from "@/env.mjs"
+
 import { EmailVerificationEmail } from "@/components/emails/email-verification-email"
 import { ResetPasswordEmail } from "@/components/emails/reset-password-email"
 
@@ -88,10 +89,10 @@ export async function signInWithPassword(
     })
     if (!existingUser) return "not-registered"
 
-    if (!existingUser.email || !existingUser.passwordHash)
+    if (!existingUser.data?.email || !existingUser.data?.passwordHash)
       return "incorrect-provider"
 
-    if (!existingUser.emailVerified) return "unverified-email"
+    if (!existingUser.data?.emailVerified) return "unverified-email"
 
     await signIn("credentials", {
       email: validatedInput.data.email,
@@ -123,7 +124,7 @@ export async function resetPassword(
     if (!validatedInput.success) return "invalid-input"
 
     const user = await getUserByEmail({ email: validatedInput.data.email })
-    if (!user) return "not-found"
+    if (!user || !user.data) return "not-found"
 
     const today = new Date()
     const resetPasswordToken = crypto.randomBytes(32).toString("base64url")
@@ -137,7 +138,7 @@ export async function resetPassword(
         resetPasswordToken,
         resetPasswordTokenExpiry,
       })
-      .where(eq(users.id, user.id))
+      .where(eq(users.id, user.data.id))
       .returning()
 
     const emailSent = await resend.emails.send({

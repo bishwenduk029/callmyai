@@ -13,12 +13,4 @@ export default defineConfig([
     dts: true,
     sourcemap: true,
   },
-  {
-    entry: ['server/index.ts'],
-    outDir: 'server/dist',
-    format: ['cjs', 'esm'],
-    external: ['react'],
-    dts: true,
-    sourcemap: true,
-  },
 ]);

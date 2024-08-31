@@ -1,4 +1,4 @@
 module.exports = {
   root: true,
-  extends: ["@bishwenduk029/eslint-config/library.js"],
+  extends: ["@callmyai/eslint-config/library.js"],
 };

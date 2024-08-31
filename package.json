@@ -5,6 +5,7 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "test": "turbo test && ava --example https://github.com/vercel/examples/tree/main/storage/postgres-drizzle",
+    "dev:web": "turbo dev --filter web",
     "clean": "turbo clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
@@ -12,7 +13,7 @@
     "release": "changeset publish"
   },
   "devDependencies": {
-    "@bishwenduk029/eslint-config": "workspace:*",
+    "@callmyai/eslint-config": "workspace:*",
     "@changesets/cli": "^2.27.1",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",

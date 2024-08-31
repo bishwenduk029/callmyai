@@ -119,8 +119,8 @@ export async function PricingSection(): Promise<JSX.Element> {
                           const user = await getUserByEmail({
                             email: session.user.email || "",
                           })
-                          if (!user?.calls) {
-                            await updateUserCalls(user?.id || "", 10)
+                          if (!user?.data?.calls) {
+                            await updateUserCalls(user?.data?.id || "", 10)
                           }
                           redirect("/dashboard/settings")
                           return

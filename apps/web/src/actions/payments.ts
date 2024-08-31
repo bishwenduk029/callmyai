@@ -3,18 +3,13 @@
 
 import crypto from "node:crypto"
 
-import { revalidatePath } from "next/cache"
 import {
-  cancelSubscription,
   createCheckout,
-  createWebhook,
   getPrice,
   getProduct,
   getSubscription,
   listPrices,
   listProducts,
-  listWebhooks,
-  updateSubscription,
   type Variant,
 } from "@lemonsqueezy/lemonsqueezy.js"
 import { eq } from "drizzle-orm"
@@ -31,7 +26,6 @@ import {
 } from "@/db/schema"
 
 import { webhookHasData, webhookHasMeta } from "@/lib/typeguards"
-import { takeUniqueOrThrow } from "@/lib/utils"
 
 import { auth, signOut } from "../auth"
 import { getUserByEmail } from "./user"
@@ -73,7 +67,7 @@ export async function getCheckoutURL(variantId: number, embed = false) {
       checkoutData: {
         email: session.user.email,
         custom: {
-          user_id: user.id,
+          user_id: user.data?.id,
         },
       },
       productOptions: {

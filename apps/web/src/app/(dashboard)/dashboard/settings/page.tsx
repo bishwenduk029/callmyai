@@ -17,7 +17,7 @@ export default async function SettingsPage() {
     email: session.user.email || "",
   })
 
-  if (!user) {
+  if (!user || !user.data) {
     redirect("/signin")
   }
 
@@ -29,7 +29,7 @@ export default async function SettingsPage() {
         </Link>
         <Link href="/dashboard/calls">Calls</Link>
       </nav>
-      <Settings user={user} />
+      <Settings user={user.data} />
     </>
   )
 }

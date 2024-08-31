@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
 import { getCallSummariesForUser } from "@/actions/user"
 import { ArrowClockwise, Star } from "@phosphor-icons/react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,14 +16,13 @@ import {
 
 import { PAGE_SIZE } from "../lib/utils"
 import CallSummaryLoadingState from "./call-summary-loader"
-import { Skeleton } from "./ui/skeleton"
-import { Icons } from "./icons"
 
 interface CallSummary {
   id: string
   title: string | null
   summary: string | null
   createdAt: Date
+  isInteresting?: boolean
 }
 
 interface CallSummariesProps {

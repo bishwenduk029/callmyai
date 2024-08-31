@@ -29,14 +29,14 @@ export default {
           const user = await getUserByEmail({
             email: validatedCredentials.data.email,
           })
-          if (!user || !user.passwordHash) return null
+          if (!user || !user.data?.passwordHash) return null
 
           const passwordIsValid = await bcryptjs.compare(
             validatedCredentials.data.password,
-            user.passwordHash
+            user.data.passwordHash
           )
 
-          if (passwordIsValid) return user
+          if (passwordIsValid) return user.data
         }
         return null
       },
