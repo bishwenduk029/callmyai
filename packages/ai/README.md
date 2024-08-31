@@ -25,7 +25,7 @@ The open-source community has created the following providers:
 ## Installation
 
 ```sh
-pnpm install @bishwenduk029/ai-voice
+pnpm install @callmyai/ai
 ```
 ![alt text](spec_v1.png)
 
@@ -44,7 +44,7 @@ Seamlessly integrate real-time speech transcription into your React applications
 - 🔌 Easy to integrate into your existing React projects, with a simple and intuitive API
 ```ts
 ...
-import { useVoiceChat } from '@bishwenduk029/ai-voice/ui'
+import { useVoiceChat } from '@callmyai/ai/ui'
 ...
 
 export default function Chat({ id, initialMessages, className }: ChatProps) {
@@ -97,7 +97,7 @@ import 'server-only'
 ...
 import { streamText } from 'ai'
 import { ollama, createOllama } from 'ollama-ai-provider'
-import { openaiSpeech, playhtSpeech, streamSpeech } from '@bishwenduk029/ai-voice/server'
+import { openaiSpeech, playhtSpeech, streamSpeech } from '@callmyai/ai/server'
 ...
 
 export const runtime = 'edge'

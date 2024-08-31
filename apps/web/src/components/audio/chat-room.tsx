@@ -1,7 +1,7 @@
 import {
     useDailyVoiceClient,
     useDailyVoiceClientEvent
-} from "@bishwenduk029/ai-voice/ui"
+} from "@callmyai/ai/ui"
 import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 import { useRef, useState } from "react"

@@ -1,5 +1,5 @@
 {
-  "extends": "@bishwenduk029/tsconfig/react-library.json",
+  "extends": "@callmyai/tsconfig/react-library.json",
   "compilerOptions": {
     "lib": [
       "ES2022", "DOM"

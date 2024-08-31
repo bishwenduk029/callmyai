@@ -176,22 +176,17 @@ export async function getUserByUsername(
   }
 }
 
-export async function getUserByEmail(
-  rawInput: GetUserByEmailInput
-): Promise<User | null> {
-  try {
-    const validatedInput = getUserByEmailSchema.safeParse(rawInput)
-    if (!validatedInput.success) return null
-
-    const [user] = await psGetUserByEmail.execute({
-      email: validatedInput.data.email,
-    })
-    return user || null
-  } catch (error) {
-    console.log(error)
-    throw new Error("Error getting user by email")
-  }
-}
+export const getUserByEmail = actionClient
+  .schema(getUserByEmailSchema)
+  .action(async ({ parsedInput: { email } }): Promise<User | null> => {
+    try {
+      const [user] = await psGetUserByEmail.execute({ email })
+      return user || null
+    } catch (error) {
+      console.error("Error getting user by email:", error)
+      return null
+    }
+  })
 
 export async function getUserByResetPasswordToken(
   rawInput: GetUserByResetPasswordTokenInput

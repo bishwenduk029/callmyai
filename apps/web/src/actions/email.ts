@@ -6,7 +6,9 @@ import { unstable_noStore as noStore } from "next/cache"
 import { getUserByEmail } from "@/actions/user"
 import { eq } from "drizzle-orm"
 
+import { env } from "@/env.mjs"
 import { db } from "@/config/db"
+import { resend } from "@/config/email"
 import { users } from "@/db/schema"
 import {
   checkIfEmailVerifiedSchema,
@@ -18,10 +20,9 @@ import {
   type EmailVerificationFormInput,
   type MarkEmailAsVerifiedInput,
 } from "@/validations/email"
-import { resend } from "@/config/email"
-import { env } from "@/env.mjs"
-import { NewEnquiryEmail } from "@/components/emails/new-enquiry-email"
+
 import { EmailVerificationEmail } from "@/components/emails/email-verification-email"
+import { NewEnquiryEmail } from "@/components/emails/new-enquiry-email"
 
 export async function resendEmailVerificationLink(
   rawInput: EmailVerificationFormInput
@@ -66,7 +67,8 @@ export async function checkIfEmailVerified(
 
     noStore()
     const user = await getUserByEmail({ email: validatedInput.data.email })
-    return user?.emailVerified instanceof Date ? true : false
+    if (!user) return false
+    return user?.data?.emailVerified instanceof Date ? true : false
   } catch (error) {
     console.error(error)
     throw new Error("Error checking if email verified")

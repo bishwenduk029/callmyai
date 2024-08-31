@@ -54,7 +54,7 @@ Coming Soon
 - Nextjs
 - AuthJs
 - pipecat-ai on Fly.io
-- @bishwenduk029/ai-voice (for streaming LLM response into streaming speech)
+- @callmyai/ai (for streaming LLM response into streaming speech)
 - Drizzle (ORM)
 - Supabase
 - Shadcn-UI

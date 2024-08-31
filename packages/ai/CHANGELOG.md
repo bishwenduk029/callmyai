@@ -1,4 +1,4 @@
-# @bishwenduk029/ai-voice
+# @callmyai/ai
 
 ## 1.1.0
 

@@ -1,9 +1,9 @@
 // page.tsx
-import { Suspense } from "react"
-import Link from "next/link"
-import { redirect } from "next/navigation"
 import { getCallSummariesForUser, getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
+import Link from "next/link"
+import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
 import { PAGE_SIZE } from "@/lib/utils"
 
@@ -21,10 +21,14 @@ export default async function CallsPage() {
     email: session.user.email || "",
   })
 
-  if (!user) {
+  if (!user || !user.data) {
     redirect("/signin")
   }
-  const initialSummaries = await getCallSummariesForUser(user.id, 1, PAGE_SIZE)
+  const initialSummaries = await getCallSummariesForUser(
+    user.data?.id,
+    1,
+    PAGE_SIZE
+  )
 
   return (
     <>
@@ -35,7 +39,7 @@ export default async function CallsPage() {
         </Link>
       </nav>
       <Suspense fallback={<CallSummaryLoadingState />}>
-        <CallSummaries userId={user.id} initialSummaries={initialSummaries} />
+        <CallSummaries userId={user.data?.id} initialSummaries={initialSummaries} />
       </Suspense>
     </>
   )
