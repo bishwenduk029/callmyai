@@ -1,11 +1,11 @@
+import { useRef, useState } from "react"
 import {
-    useDailyVoiceClient,
-    useDailyVoiceClientEvent
+  DailyVoiceEvent,
+  useDailyVoiceClient,
+  useDailyVoiceClientEvent,
 } from "@callmyai/ai/ui"
 import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
-import { useRef, useState } from "react"
-import { DailyVoiceEvent } from "@callmyai/ai/ui"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -34,6 +34,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
   const [audioData, setAudioData] = useState<number[]>(new Array(6).fill(1))
   const [averageFrequency, setAverageFrequency] = useState(0)
   const [elapsedTime, setElapsedTime] = useState(0)
+  const [disablePhone, setDisablePhone] = useState(false)
 
   const audioContextRef = useRef<AudioContext | null>(null)
   const analyserRef = useRef<AnalyserNode | null>(null)
@@ -56,6 +57,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
         if (prevTime >= chatSession.duration) {
           clearInterval(timerIntervalRef.current!)
           toggleListening()
+          setDisablePhone(true)
           return chatSession.duration
         }
         return prevTime + 1
@@ -164,7 +166,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center mb-10 bg-white">
+    <div className="fixed inset-0 mb-10 flex flex-col items-center justify-center bg-white">
       <div className="relative aspect-square h-full max-h-[600px] w-full max-w-[600px]">
         <div className="absolute inset-0 flex items-center justify-center">
           {audioData.map((scale, i) => (
@@ -193,26 +195,25 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
               {elapsedTime}s of {chatSession.duration}s
             </span>
           </div>
-          <motion.button
-            className="rounded px-5 py-2.5 text-white transition-colors"
-            whileHover={{ scale: 1.2 }}
-            onClick={toggleListening}
-            disabled={isLoadingBot}
-          >
-            {isLoadingBot ? (
-              <LoadingSpinner
-                size={75}
-                className="text-primary"
-              />
-            ) : isListening ? (
-              <PhonePause size={75} className="rounded-full bg-primary p-2" />
-            ) : (
-              <PhoneCall
-                size={75}
-                className="rounded-full bg-primary p-2 text-primary-foreground"
-              />
-            )}
-          </motion.button>
+          {disablePhone && (
+            <motion.button
+              className="rounded px-5 py-2.5 text-white transition-colors"
+              whileHover={{ scale: 1.2 }}
+              onClick={toggleListening}
+              disabled={isLoadingBot}
+            >
+              {isLoadingBot ? (
+                <LoadingSpinner size={75} className="text-primary" />
+              ) : isListening ? (
+                <PhonePause size={75} className="rounded-full bg-primary p-2" />
+              ) : (
+                <PhoneCall
+                  size={75}
+                  className="rounded-full bg-primary p-2 text-primary-foreground"
+                />
+              )}
+            </motion.button>
+          )}
         </div>
       </div>
     </div>
