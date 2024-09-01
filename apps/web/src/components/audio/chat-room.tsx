@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   DailyVoiceEvent,
   useDailyVoiceClient,
@@ -6,12 +6,18 @@ import {
 } from "@callmyai/ai/ui"
 import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
+import { Howl } from "howler"
 
 import { useToast } from "@/hooks/use-toast"
 
 import { LoadingSpinner } from "./chat-room-provider"
 import { GooeyDiv } from "./gooey-div"
 import { InnerOrb } from "./inner-orb"
+
+const ringtone = new Howl({
+  src: ["/ringtone.mp3"],
+  volume: 0.5,
+})
 
 export interface ChatRoomSession {
   assistantId?: string
@@ -165,6 +171,14 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
     )
   }
 
+  useEffect(() => {
+    if (isLoadingBot) {
+      ringtone.play()
+      return
+    }
+    ringtone.stop()
+  }, [isLoadingBot])
+
   return (
     <div className="fixed inset-0 mb-10 flex flex-col items-center justify-center bg-white">
       <div className="relative aspect-square h-full max-h-[600px] w-full max-w-[600px]">
@@ -195,7 +209,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
               {elapsedTime}s of {chatSession.duration}s
             </span>
           </div>
-          {disablePhone && (
+          {!disablePhone && (
             <motion.button
               className="rounded px-5 py-2.5 text-white transition-colors"
               whileHover={{ scale: 1.2 }}

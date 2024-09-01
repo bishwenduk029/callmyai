@@ -89,6 +89,7 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",
     "framer-motion": "^11.2.12",
+    "howler": "^2.2.4",
     "jsonwebtoken": "^9.0.2",
     "net": "^1.0.2",
     "next": "14.2.4",
