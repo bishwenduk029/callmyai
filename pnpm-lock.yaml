@@ -275,6 +275,9 @@ importers:
       '@types/eslint':
         specifier: ^8.56.10
         version: 8.56.10
+      '@types/howler':
+        specifier: ^2.2.11
+        version: 2.2.11
       '@types/jsonwebtoken':
         specifier: ^9.0.6
         version: 9.0.6
@@ -3223,6 +3226,9 @@ packages:
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
+
+  '@types/howler@2.2.11':
+    resolution: {integrity: sha512-7aBoUL6RbSIrqKnpEgfa1wSNUBK06mn08siP2QI0zYk7MXfEJAaORc4tohamQYqCqVESoDyRWSdQn2BOKWj2Qw==}
 
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
@@ -11302,6 +11308,8 @@ snapshots:
   '@types/hast@3.0.4':
     dependencies:
       '@types/unist': 3.0.2
+
+  '@types/howler@2.2.11': {}
 
   '@types/istanbul-lib-coverage@2.0.6': {}
 
