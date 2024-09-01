@@ -3,22 +3,30 @@
 import * as React from "react"
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons"
 
+import { cn } from "@/lib/utils"
+
 import { Button, type ButtonProps } from "@/components/ui/button"
 
-export function CopyButton({ value, ...props }: ButtonProps): JSX.Element {
+const CopyButton = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  ButtonProps & { value: string }
+>(({ value, className, ...props }, ref) => {
   const [isCopied, setIsCopied] = React.useState(false)
+
+  const handleCopy = () => {
+    if (typeof window === "undefined") return
+    setIsCopied(true)
+    void window.navigator.clipboard.writeText(value)
+    setTimeout(() => setIsCopied(false), 2000)
+  }
 
   return (
     <Button
-      variant="outline"
+      ref={ref}
+      variant="ghost"
       size="sm"
-      className="absolute right-5 top-4 z-20 size-6 px-0"
-      onClick={() => {
-        if (typeof window === "undefined") return
-        setIsCopied(true)
-        void window.navigator.clipboard.writeText(value?.toString() ?? "")
-        setTimeout(() => setIsCopied(false), 2000)
-      }}
+      className={cn("px-0", className)}
+      onClick={handleCopy}
       {...props}
     >
       {isCopied ? (
@@ -31,4 +39,7 @@ export function CopyButton({ value, ...props }: ButtonProps): JSX.Element {
       </span>
     </Button>
   )
-}
+})
+CopyButton.displayName = "CopyButton"
+
+export { CopyButton }

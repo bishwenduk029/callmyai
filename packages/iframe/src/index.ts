@@ -35,7 +35,8 @@ button.onmouseout = function (this: HTMLButtonElement) {
 
 // Create iframe (initially hidden)
 const iframe = document.createElement("iframe");
-iframe.src = "http://localhost:3000/embed/bishu";
+const assistantId = document.currentScript?.getAttribute('data-assistant-id') || 'default-assistant-id';
+iframe.src = `https://www.callmyai.app/assistants/${assistantId}`;
 iframe.style.position = "fixed";
 iframe.style.border = "2px solid black";
 iframe.style.display = "none";
@@ -43,7 +44,7 @@ iframe.style.zIndex = "10000";
 iframe.style.overflow = "hidden";
 iframe.style.scrollbarWidth = "none";
 iframe.style.transition = "all 0.3s ease-in-out";
-iframe.style.boxShadow = "0 0 15px 2px rgba(0, 255, 0, 0.5)";
+iframe.style.boxShadow = "0 0 15px 2px rgba(0, 0, 0, 0.5)";
 
 // Create close button for mobile
 const closeButton = document.createElement("button");

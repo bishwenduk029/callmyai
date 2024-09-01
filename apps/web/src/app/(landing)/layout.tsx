@@ -1,5 +1,5 @@
-import Script from "next/script"
 import * as React from "react"
+import Script from "next/script"
 
 import { Footer } from "@/components/nav/footer"
 import { Header } from "@/components/nav/header"
@@ -20,6 +20,7 @@ export default function LandingLayout({
         id="callmyai-frame"
         strategy="afterInteractive"
         src="/index.js"
+        data-assistant-id="67104047-a634-4360-be64-7f2e56a40a25"
       ></Script>
     </div>
   )

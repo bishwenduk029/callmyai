@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Callout } from "@/components/mdx/callout"
-import { CodeBlock } from "@/components/mdx/code-block"
 import { MdxCard } from "@/components/mdx/mdx-card"
 
 const components = {
@@ -126,16 +125,6 @@ const components = {
     <td
       className={cn(
         "border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right",
-        className
-      )}
-      {...props}
-    />
-  ),
-  pre: CodeBlock,
-  code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
-    <code
-      className={cn(
-        "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm",
         className
       )}
       {...props}

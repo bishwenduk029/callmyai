@@ -10,6 +10,7 @@ import {
   psCheckExistingUsername,
   psCreateChat,
   psGetChatsByUserId,
+  psGetUserByAssistantId,
   psGetUserByEmail,
   psGetUserByEmailVerificationToken,
   psGetUserById,
@@ -21,12 +22,14 @@ import {
   psUpdateUserUsername,
 } from "@/db/prepared/statements"
 import {
+  getUserByAssistantIdSchema,
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
   getUserByIdSchema,
   getUserByResetPasswordTokenSchema,
   GetUserByUsernameInput,
   getUserByUsernameSchema,
+  type GetUserByAssistantIdInput,
   type GetUserByEmailInput,
   type GetUserByEmailVerificationTokenInput,
   type GetUserByIdInput,
@@ -35,7 +38,7 @@ import {
 
 import { actionClient } from "@/lib/safe-action"
 
-import { ChatSession } from "@/components/audio/chat-room-provider"
+import { ChatRoomSession } from "@/components/audio/chat-room"
 
 import { User } from "../db/schema/index"
 import { getUserSubscriptions } from "./payments"
@@ -168,7 +171,6 @@ export async function getUserByUsername(
     const [user] = await psGetUserByUsername.execute({
       username: validatedInput.data.username,
     })
-    console.log(user)
     return user || null
   } catch (error) {
     console.error(error)
@@ -240,7 +242,7 @@ export async function updateUserCalls(
 export async function createNewChatSession(
   hostUsername: string,
   visitor: User | null | undefined
-): Promise<ChatSession> {
+): Promise<ChatRoomSession> {
   const hostResult =
     visitor?.username === hostUsername
       ? [visitor]
@@ -261,20 +263,24 @@ export async function createNewChatSession(
 
   if (visitor?.id == host.id) {
     return {
+      baseUrl: "/api/bots/start",
       exhausted: false,
       duration: 50,
-      prompt: `Remember this is test simulation to understand if the system propmpt will work as per user's needs. So greet the user with 'Hey ${host.name} welcome to simulation, shall we test if I meet your expectations'. Guide the user to act as a caller and simulate some scenario to verify if the prompt set by them is working as per expectation. Below is the prompt set by user\n${systemPrompt}`,
+      userPrompt: `Remember this is test simulation to understand if the system propmpt will work as per user's needs. So greet the user with 'Hey ${host.name} welcome to simulation, shall we test if I meet your expectations'. Guide the user to act as a caller and simulate some scenario to verify if the prompt set by them is working as per expectation. Below is the prompt set by user\n${systemPrompt}`,
       private: true,
+      userName: hostUsername || "",
     }
   }
 
   if (visitor?.id !== host.id) {
     if (host.calls !== null && host.calls <= 0) {
       return {
+        baseUrl: "/api/bots/start",
         exhausted: true,
         duration: 0,
-        prompt: "",
+        userPrompt: "",
         private: false,
+        userName: hostUsername || "",
       }
     }
   }
@@ -303,10 +309,12 @@ export async function createNewChatSession(
   }
 
   return {
+    baseUrl: "/api/bots/start",
     exhausted: false,
     duration,
-    prompt: systemPrompt,
+    userPrompt: systemPrompt,
     private: false,
+    userName: hostUsername || "",
   }
 }
 
@@ -372,5 +380,22 @@ export async function summarizeCall(
   } catch (error) {
     console.error(`Failed to update chat ${chatId} with summary:`, error)
     return { success: false, error: "Failed to update chat summary" }
+  }
+}
+
+export async function getUserByAssistantId(
+  rawInput: GetUserByAssistantIdInput
+): Promise<User | null> {
+  try {
+    const validatedInput = getUserByAssistantIdSchema.safeParse(rawInput)
+    if (!validatedInput.success) return null
+
+    const [result] = await psGetUserByAssistantId.execute({
+      assistantId: validatedInput.data.assistantId,
+    })
+    return result?.user || null
+  } catch (error) {
+    console.error(error)
+    throw new Error("Error getting user by assistant ID")
   }
 }

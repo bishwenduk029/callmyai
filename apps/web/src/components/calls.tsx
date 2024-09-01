@@ -1,8 +1,9 @@
 "use client"
 
+import { useState } from "react"
+import { getChatSummariesByAssistantId } from "@/actions/assistant"
 import { getCallSummariesForUser } from "@/actions/user"
 import { ArrowClockwise, Star } from "@phosphor-icons/react"
-import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,7 +18,7 @@ import {
 import { PAGE_SIZE } from "../lib/utils"
 import CallSummaryLoadingState from "./call-summary-loader"
 
-interface CallSummary {
+export interface CallSummary {
   id: string
   title: string | null
   summary: string | null
@@ -26,7 +27,8 @@ interface CallSummary {
 }
 
 interface CallSummariesProps {
-  userId: string
+  userId?: string
+  assistantId?: string
   initialSummaries: {
     summaries: CallSummary[]
     hasMore: boolean
@@ -35,6 +37,7 @@ interface CallSummariesProps {
 
 export function CallSummaries({
   userId,
+  assistantId,
   initialSummaries,
 }: CallSummariesProps) {
   const [callSummaries, setCallSummaries] = useState<CallSummary[]>(
@@ -49,8 +52,9 @@ export function CallSummaries({
 
     setLoading(true)
     try {
-      const { summaries, hasMore: moreAvailable } =
-        await getCallSummariesForUser(userId, page, PAGE_SIZE)
+      const { summaries, hasMore: moreAvailable } = userId
+        ? await getCallSummariesForUser(userId, page, PAGE_SIZE)
+        : await getChatSummariesByAssistantId(assistantId!, page, PAGE_SIZE)
       setCallSummaries((prev) => [...prev, ...summaries])
       setHasMore(moreAvailable)
       setPage((prevPage) => prevPage + 1)
@@ -74,8 +78,12 @@ export function CallSummaries({
       </CardContent>
       <CardFooter>
         <div className="flex items-center">
-          <Star className={`text-yellow-500 cursor-pointer ${summary.isInteresting ? 'text-yellow-500' : 'text-gray-500'}`} />
-          <span className="ml-2 text-sm text-gray-500">Mark as interesting to update AI assistant</span>
+          <Star
+            className={`cursor-pointer text-yellow-500 ${summary.isInteresting ? "text-yellow-500" : "text-gray-500"}`}
+          />
+          <span className="ml-2 text-sm text-gray-500">
+            Mark as interesting to update AI assistant
+          </span>
         </div>
       </CardFooter>
     </Card>

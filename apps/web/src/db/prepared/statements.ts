@@ -1,7 +1,7 @@
 import { and, desc, eq, isNotNull, ne, sql } from "drizzle-orm"
 
 import { db } from "@/config/db"
-import { chats, newsletterSubscribers, users } from "@/db/schema"
+import { assistants, chats, newsletterSubscribers, users } from "@/db/schema"
 
 export const psGetUserById = db
   .select()
@@ -47,14 +47,13 @@ export const psUpdateUserUsername = db
   .where(eq(users.id, sql.placeholder("id")))
   .prepare("psUpdateUserUsernameAndSystemPrompt")
 
-  export const psUpdateUserCallHandle = db
+export const psUpdateUserCallHandle = db
   .update(users)
   .set({
     username: sql`${sql.placeholder("username")}`,
   })
   .where(eq(users.id, sql.placeholder("id")))
   .prepare("psUpdateUserUsernameAndSystemPrompt")
-
 
 export const psUpdateUserCalls = db
   .update(users)
@@ -99,7 +98,7 @@ export const psUpdateChatSummary = db
   .where(sql`id = ${sql.placeholder("chatId")}`)
   .prepare("psUpdateChatSummary")
 
-  export const psGetChatsByUserId = db
+export const psGetChatsByUserId = db
   .select()
   .from(chats)
   .where(
@@ -114,3 +113,70 @@ export const psUpdateChatSummary = db
   .limit(sql.placeholder("limit"))
   .offset(sql.placeholder("offset"))
   .prepare("psGetChatsByUserId")
+
+export const psGetUserByAssistantId = db
+  .select()
+  .from(assistants)
+  .innerJoin(users, eq(assistants.userId, users.id))
+  .where(eq(assistants.id, sql.placeholder("assistantId")))
+  .limit(1)
+  .prepare("psGetUserByAssistantId")
+
+export const psCreateChatForAssistant = db
+  .insert(chats)
+  .values({
+    userId: sql.placeholder("userId"),
+    visitorId: sql.placeholder("visitorId"),
+    assistantId: sql.placeholder("assistantId"),
+  })
+  .returning({
+    id: chats.id,
+    userId: chats.userId,
+    assistantId: chats.assistantId,
+  })
+  .prepare("psCreateChatForAssistant")
+
+export const psCreateAssistant = db
+  .insert(assistants)
+  .values({
+    id: sql.placeholder("id"),
+    name: sql.placeholder("name"),
+    duration: sql.placeholder("duration"),
+    userId: sql.placeholder("userId"),
+  })
+  .returning()
+  .prepare("psCreateAssistant")
+
+export const psUpdateAssistant = db
+  .update(assistants)
+  .set({
+    name: sql<string>`${sql.placeholder("name")}`,
+    duration: sql<number>`${sql.placeholder("duration")}`,
+  })
+  .where(eq(assistants.id, sql.placeholder("id")))
+  .returning()
+  .prepare("psUpdateAssistant")
+
+export const psDeleteAssistant = db
+  .delete(assistants)
+  .where(eq(assistants.id, sql.placeholder("id")))
+  .returning()
+  .prepare("psDeleteAssistant")
+
+export const psGetAssistantsByUserId = db
+  .select()
+  .from(assistants)
+  .where(eq(assistants.userId, sql.placeholder("userId")))
+  .prepare("psGetAssistantsByUserId")
+
+export const psGetChatsByAssistantId = db
+  .select()
+  .from(chats)
+  .where(eq(chats.assistantId, sql.placeholder("assistantId")))
+  .prepare("psGetChatsByAssistantId")
+
+export const psGetAssistantById = db
+  .select()
+  .from(assistants)
+  .where(eq(assistants.id, sql.placeholder("assistantId")))
+  .prepare("psGetAssistantById")

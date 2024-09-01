@@ -2,7 +2,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createNewChatSession } from "@/actions/user"
 import {
   DailyVoiceClient,
   DailyVoiceClientAudio,
@@ -13,52 +12,36 @@ import { User } from "@/db/schema"
 
 import { cn } from "@/lib/utils"
 
-import { ChatRoomUI } from "./chat-room"
-
-export interface ChatSession {
-  prompt: string
-  exhausted: boolean
-  duration: number
-  private: boolean
-}
+import { ChatRoomSession, ChatRoomUI } from "./chat-room"
 
 interface ChatRoomProps {
   visitor?: User | null | undefined
-  hostUsername: string
+  session: ChatRoomSession
+  configuration: any
 }
 
-export const ChatRoomProvider = ({ visitor, hostUsername }: ChatRoomProps) => {
+export const DailyChatRoomProvider = ({
+  visitor,
+  session,
+  configuration,
+}: ChatRoomProps) => {
   const [voiceClient, setVoiceClient] = useState<DailyVoiceClient | null>(null)
-  const [chatSession, setChatSession] = useState<ChatSession | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
 
   useEffect(() => {
     const initializeVoiceClient = async () => {
       try {
-        const newChatSession = await createNewChatSession(hostUsername, visitor)
         const client = new DailyVoiceClient({
-          baseUrl: "/api/bots/start",
+          baseUrl: session.baseUrl,
           enableMic: true,
           config: {
-            llm: {
-              model: "gpt-4o-mini",
-              messages: [
-                {
-                  role: "system",
-                  content: newChatSession?.prompt || "",
-                },
-              ],
-            },
-            tts: {
-              voice: "b7d50908-b17c-442d-ad8d-810c63997ed9",
-            },
-            // @ts-ignore
-            userName: hostUsername,
+            ...configuration,
+            assistantId: session.assistantId,
+            userName: session.userName,
           },
         })
         setVoiceClient(client)
-        setChatSession(newChatSession)
         setIsLoading(false)
       } catch (error) {
         console.error("Error initializing voice client:", error)
@@ -70,14 +53,14 @@ export const ChatRoomProvider = ({ visitor, hostUsername }: ChatRoomProps) => {
     initializeVoiceClient()
   }, [])
 
-  if (!chatSession || !voiceClient || isLoading) {
+  if (!voiceClient || isLoading) {
     return <Loader isLoading={isLoading} error={error} />
   }
 
   return (
     <DailyVoiceClientProvider voiceClient={voiceClient}>
       <div>
-        <ChatRoomUI chatSession={chatSession} />
+        <ChatRoomUI chatSession={session} />
         <DailyVoiceClientAudio />
       </div>
     </DailyVoiceClientProvider>

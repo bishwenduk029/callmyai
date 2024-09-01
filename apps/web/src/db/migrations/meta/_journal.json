@@ -99,6 +99,27 @@
       "when": 1724489807371,
       "tag": "0013_smooth_invaders",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1725174297248,
+      "tag": "0014_magenta_kylun",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1725174384319,
+      "tag": "0015_sweet_living_lightning",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1725175375837,
+      "tag": "0016_legal_ghost_rider",
+      "breakpoints": true
     }
   ]
 }

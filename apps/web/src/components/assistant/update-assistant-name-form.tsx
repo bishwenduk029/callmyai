@@ -1,4 +1,6 @@
-import { updateUserByUsername } from "@/actions/user"
+"use client"
+
+import { updateAssistant } from "@/actions/assistant"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
@@ -15,68 +17,69 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import { User } from "../../db/schema/index"
+import { Assistant } from "../../db/schema/index"
 import { Input } from "../ui/input"
 import { SubmitButton } from "../ui/submit-button"
 
-interface UserNameFormProps {
-  user: User
+interface UpdateAssistantNameFormProps {
+  assistant: Assistant
 }
 
-const usernameSchema = z.object({
+const assistantNameSchema = z.object({
   name: z
     .string()
     .min(2, { message: "Your name must be at least 4 characters long." }),
 })
 
-export default function UserNameForm({ user }: UserNameFormProps) {
+export function UpdateAssistantNameForm({
+  assistant,
+}: UpdateAssistantNameFormProps) {
   const { toast } = useToast()
 
   const form = useForm({
-    resolver: zodResolver(usernameSchema),
-    defaultValues: { name: user.name || "" },
+    resolver: zodResolver(assistantNameSchema),
+    defaultValues: { name: assistant.name },
   })
 
-  const updateUser = useAction(updateUserByUsername, {
+  const updateAssistantAction = useAction(updateAssistant, {
     onSuccess: (result) => {
       if (result?.data?.error) {
         toast({
-          title: "Error updating your name",
+          title: "Error updating assistant name",
           description: result?.data?.error,
           variant: "destructive",
         })
       } else {
         toast({
-          title: "Call Handle Updated",
-          description: result?.data?.message,
+          title: "Assistant Name Updated",
+          description: result?.data?.error,
         })
       }
     },
     onError: (error) => {
       console.log(error)
       toast({
-        title: "Error updating your name",
-        description: "We encountered some error when updating your name.",
+        title: "Error updating assistant name",
+        description:
+          "We encountered some error when updating your assistant name.",
       })
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof usernameSchema>) => {
-    updateUser.execute({
-      id: user.id,
+  const onSubmit = async (values: z.infer<typeof assistantNameSchema>) => {
+    updateAssistantAction.execute({
+      id: assistant.id,
       name: values.name,
+      duration: assistant.duration,
     })
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full" {...form}>
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
       <Card>
         <CardHeader>
-          <CardTitle>Your Name</CardTitle>
-          <CardDescription>
-            Enter the name you want your AI call assistant to use when referring
-            to you.
-          </CardDescription>
+          <CardTitle>Assistant Name</CardTitle>
+          <CardDescription>Enter the name of your assistant</CardDescription>
         </CardHeader>
         <CardContent>
           <Input
@@ -84,6 +87,7 @@ export default function UserNameForm({ user }: UserNameFormProps) {
             {...form.register("name")}
             placeholder="Enter your preferred name"
             className="mb-4 w-full px-2 py-3"
+            defaultValue={assistant.name}
           />
           {form.formState.errors && (
             <p className="text-sm text-destructive">
@@ -94,7 +98,7 @@ export default function UserNameForm({ user }: UserNameFormProps) {
         <CardFooter className="border-t px-6 py-4">
           <SubmitButton
             isDisabled={false}
-            isSubmitting={updateUser.isExecuting}
+            isSubmitting={updateAssistantAction.isExecuting}
           >
             Save Name
           </SubmitButton>

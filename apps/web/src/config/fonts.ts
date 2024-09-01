@@ -1,16 +1,16 @@
-import { Nunito, Josefin_Sans } from "next/font/google"
+import { Nunito } from "next/font/google"
 
-export const fontInter = Josefin_Sans({
+export const fontInter = Nunito({
   subsets: ["latin"],
   variable: "--font-inter",
 })
 
-export const fontUrbanist = Josefin_Sans({
+export const fontUrbanist = Nunito({
   subsets: ["latin"],
   variable: "--font-urbanist",
 })
 
-export const fontHeading = Josefin_Sans({
+export const fontHeading = Nunito({
   subsets: ["latin"],
   variable: "--font-heading",
 })

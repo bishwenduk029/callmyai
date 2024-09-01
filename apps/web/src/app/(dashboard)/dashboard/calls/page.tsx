@@ -37,6 +37,9 @@ export default async function CallsPage() {
         <Link href="/dashboard/calls" className="font-semibold text-primary">
           Calls
         </Link>
+        <Link href="/dashboard/assistants">
+          Assistants
+        </Link>
       </nav>
       <Suspense fallback={<CallSummaryLoadingState />}>
         <CallSummaries userId={user.data?.id} initialSummaries={initialSummaries} />

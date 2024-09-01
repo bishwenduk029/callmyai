@@ -86,3 +86,11 @@ export type UpdateUserInput = z.infer<typeof updateUserSchema>
 export type DeleteUserInput = z.infer<typeof deleteUserSchema>
 
 export type CheckIfUserExistsInput = z.infer<typeof checkIfUserExistsSchema>
+
+export const getUserByAssistantIdSchema = z.object({
+  assistantId: z.string().uuid({ message: "Invalid assistant ID format" })
+})
+
+export interface GetUserByAssistantIdInput {
+  assistantId: string
+}

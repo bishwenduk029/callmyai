@@ -13,15 +13,19 @@ import { LoadingSpinner } from "./chat-room-provider"
 import { GooeyDiv } from "./gooey-div"
 import { InnerOrb } from "./inner-orb"
 
-export interface ChatSession {
-  prompt: string
+export interface ChatRoomSession {
+  assistantId?: string
+  userId?: string
+  userName?: string
   exhausted: boolean
   duration: number
   private: boolean
+  baseUrl: string
+  userPrompt?: string
 }
 
 interface ChatRoomUIProps {
-  chatSession: ChatSession
+  chatSession: ChatRoomSession
 }
 
 export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {

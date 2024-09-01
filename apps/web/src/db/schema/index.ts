@@ -1,18 +1,18 @@
 import type { AdapterAccount } from "@auth/core/adapters"
 import { relations } from "drizzle-orm"
 import {
+  boolean,
+  index,
   integer,
   json,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
+  serial,
   text,
   timestamp,
   uuid,
-  index,
-  serial,
-  jsonb,
-  boolean,
 } from "drizzle-orm/pg-core"
 
 export const userRoleEnum = pgEnum("user_role", ["USER", "ADMIN"])
@@ -50,15 +50,19 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
   }),
 }))
 
-export const sessions = pgTable("session", {
-  sessionToken: text("sessionToken").notNull().primaryKey(),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-}, (session) => ({
-  userIdIdx: index("session_userId_idx").on(session.userId),
-}))
+export const sessions = pgTable(
+  "session",
+  {
+    sessionToken: text("sessionToken").notNull().primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (session) => ({
+    userIdIdx: index("session_userId_idx").on(session.userId),
+  })
+)
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, {
@@ -68,29 +72,40 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 }))
 
 // Modified chats table
-export const chats = pgTable("chat", {
-  id: uuid("id").defaultRandom().notNull().primaryKey(),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  visitorId: text("visitorId")
-    .references(() => users.id, { onDelete: "cascade" }),
-  summary: text("summary"),
-  title: text("title"),
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
-  systemPromptOverride: text("systemPromptOverride"),
-}, (chat) => ({
-  userIdIdx: index("chat_userId_idx").on(chat.userId),
-  visitorIdIdx: index("chat_visitorId_idx").on(chat.visitorId),
-}))
+export const chats = pgTable(
+  "chat",
+  {
+    id: uuid("id").defaultRandom().notNull().primaryKey(),
+    userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
+    assistantId: text("assistantId").references(() => assistants.id, {
+      onDelete: "cascade",
+    }),
+    visitorId: text("visitorId").references(() => users.id, {
+      onDelete: "cascade",
+    }),
+    summary: text("summary"),
+    title: text("title"),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+    systemPromptOverride: text("systemPromptOverride"),
+  },
+  (chat) => ({
+    userIdIdx: index("chat_userId_idx").on(chat.userId),
+    assistantIdIdx: index("chat_assistantId_idx").on(chat.assistantId),
+    visitorIdIdx: index("chat_visitorId_idx").on(chat.visitorId),
+  })
+)
 
-// Modified chatsRelations
 export const chatsRelations = relations(chats, ({ one, many }) => ({
   user: one(users, {
     fields: [chats.userId],
     references: [users.id],
     relationName: "userChats",
+  }),
+  assistant: one(assistants, {
+    fields: [chats.assistantId],
+    references: [assistants.id],
+    relationName: "assistantChats",
   }),
   visitor: one(users, {
     fields: [chats.visitorId],
@@ -99,26 +114,56 @@ export const chatsRelations = relations(chats, ({ one, many }) => ({
   }),
 }))
 
-export const users = pgTable("user", {
-  id: text("id").notNull().primaryKey(),
-  role: userRoleEnum("role").notNull().default("USER"),
-  name: text("name"),
-  surname: text("surname"),
-  username: text("username").unique(),
-  email: text("email").unique().notNull(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
-  emailVerificationToken: text("emailVerificationToken").unique(),
-  passwordHash: text("passwordHash"),
-  resetPasswordToken: text("resetPasswordToken").unique(),
-  resetPasswordTokenExpiry: timestamp("resetPasswordTokenExpiry", {
-    mode: "date",
+export const users = pgTable(
+  "user",
+  {
+    id: text("id").notNull().primaryKey(),
+    role: userRoleEnum("role").notNull().default("USER"),
+    name: text("name"),
+    surname: text("surname"),
+    username: text("username").unique(),
+    email: text("email").unique().notNull(),
+    emailVerified: timestamp("emailVerified", { mode: "date" }),
+    emailVerificationToken: text("emailVerificationToken").unique(),
+    passwordHash: text("passwordHash"),
+    resetPasswordToken: text("resetPasswordToken").unique(),
+    resetPasswordTokenExpiry: timestamp("resetPasswordTokenExpiry", {
+      mode: "date",
+    }),
+    image: text("image"),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    calls: integer("calls").default(50),
+  },
+  (user) => ({
+    emailIdx: index("user_email_idx").on(user.email),
+    usernameIdx: index("user_username_idx").on(user.username),
+  })
+)
+
+export const assistants = pgTable(
+  "assistant",
+  {
+    id: text("id").notNull().primaryKey(),
+    name: text("name").notNull(),
+    duration: integer("duration").notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id),
+  },
+  (assistant) => ({
+    idIdx: index("assistant_id_idx").on(assistant.id),
+    userIdIdx: index("assistant_userId_idx").on(assistant.userId),
+  })
+)
+
+export const assistantsRelations = relations(assistants, ({ one, many }) => ({
+  user: one(users, {
+    fields: [assistants.userId],
+    references: [users.id],
   }),
-  image: text("image"),
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-  calls: integer("calls").default(50),
-}, (user) => ({
-  emailIdx: index("user_email_idx").on(user.email),
-  usernameIdx: index("user_username_idx").on(user.username),
+  assistantChats: many(chats, {
+    relationName: "assistantChats",
+  }),
 }))
 
 export const usersRelations = relations(users, ({ one, many }) => ({
@@ -127,6 +172,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
     references: [accounts.userId],
   }),
   session: many(sessions),
+  assistants: many(assistants),
   userChats: many(chats, {
     relationName: "userChats",
   }),
@@ -161,7 +207,7 @@ export const webhookEvents = pgTable("webhookEvent", {
   processed: boolean("processed").default(false),
   body: jsonb("body").notNull(),
   processingError: text("processingError"),
-});
+})
 
 export const plans = pgTable("plan", {
   id: serial("id").primaryKey(),
@@ -177,7 +223,7 @@ export const plans = pgTable("plan", {
   trialInterval: text("trialInterval"),
   trialIntervalCount: integer("trialIntervalCount"),
   sort: integer("sort"),
-});
+})
 
 export const subscriptions = pgTable("subscription", {
   id: serial("id").primaryKey(),
@@ -200,7 +246,7 @@ export const subscriptions = pgTable("subscription", {
   planId: integer("planId")
     .notNull()
     .references(() => plans.id),
-});
+})
 
 export const promptTemplates = pgTable("promptTemplate", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
@@ -231,6 +277,8 @@ export type NewChat = typeof chats.$inferInsert
 export type PromptTemplate = typeof promptTemplates.$inferSelect
 export type NewPromptTemplate = typeof promptTemplates.$inferInsert
 
-export type NewPlan = typeof plans.$inferInsert;
-export type NewWebhookEvent = typeof webhookEvents.$inferInsert;
-export type NewSubscription = typeof subscriptions.$inferInsert;
+export type NewPlan = typeof plans.$inferInsert
+export type NewWebhookEvent = typeof webhookEvents.$inferInsert
+export type NewSubscription = typeof subscriptions.$inferInsert
+
+export type Assistant = typeof assistants.$inferSelect

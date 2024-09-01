@@ -18,7 +18,7 @@ export default async function CallMyAIFrameLayout({
       {children}
       <div className="fixed bottom-0 w-full bg-black py-2.5 text-center text-white">
         <div className="flex flex-row justify-center space-x-2">
-          <span className="text-background">Powered By</span>{" "}
+          <span className="text-white">Powered By</span>{" "}
           <Numpad size={25} className="text-green-500" />{" "}
           <Link
             className="font-bold tracking-wide text-white underline-offset-4 transition-colors hover:underline"
