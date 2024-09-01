@@ -19,7 +19,7 @@ export default function LandingLayout({
       <Script
         id="callmyai-frame"
         strategy="afterInteractive"
-        src="/index.js"
+        src="https://unpkg.com/@callmyai/iframe@latest/dist/index.js"
         data-assistant-id="67104047-a634-4360-be64-7f2e56a40a25"
       ></Script>
     </div>
