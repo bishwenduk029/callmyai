@@ -7,9 +7,9 @@ import Link from "next/link"
 export const Logo = () => (
   <Link
     href="/"
-    className="flex items-center justify-center gap-2 text-lg font-bold tracking-wide transition-all duration-300 ease-in-out"
+    className="flex items-center justify-center gap-2 text-lg font-bold tracking-wide transition-all duration-300 ease-in-out text-background"
   >
     <Numpad size={25} className="text-green-500" />
-    <span className="hidden md:flex">{siteConfig.name}</span>
+    <span className="hidden md:flex text-primary">{siteConfig.name}</span>
   </Link>
 )

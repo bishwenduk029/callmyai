@@ -1,0 +1,28 @@
+{
+  "name": "@callmyai/iframe",
+  "version": "1.0.0",
+  "private": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup --format esm,cjs --dts --external react",
+    "dev": "concurrently \"tsup --format esm,cjs --dts --external react --watch\" \"nodemon --watch dist/index.js --exec 'cp dist/index.js ../../apps/web/public/'\"",
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "format": "eslint --fix \"src/**/*.ts*\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "devDependencies": {
+    "@callmyai/eslint-config": "workspace:*",
+    "@callmyai/tsconfig": "workspace:*",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.4",
+    "tsup": "^6.1.3"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}

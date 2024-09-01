@@ -1,18 +1,18 @@
 import "@/styles/globals.css"
 import "@/styles/mdx.css"
 
-import * as React from "react"
+import { Analytics } from "@vercel/analytics/react"
 import type { Metadata, Viewport } from "next"
 import Script from "next/script"
-import { Analytics } from "@vercel/analytics/react"
+import * as React from "react"
 
-import { env } from "@/env.mjs"
 import { fontHeading, fontInter, fontUrbanist } from "@/config/fonts"
 import { siteConfig } from "@/config/site"
+import { env } from "@/env.mjs"
 
+import { cn } from "@/lib/utils"
 import { SmoothScrollProvider } from "@/providers/smooth-scroll-provider"
 import { ThemeProvider } from "@/providers/theme-provider"
-import { cn } from "@/lib/utils"
 
 import { Toaster } from "@/components/ui/toaster"
 

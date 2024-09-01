@@ -1,20 +1,11 @@
 window.CallMyAIWindow = zoid.create({
-  // The html tag used to render my component
-
   tag: "callmyai-iframe",
-
-  // The url that will be loaded in the iframe or popup, when someone includes my component on their page
-
-  url: new URL("http://localhost:3000/embed/bishwenduk029"),
-
+  url: "http://localhost:3000/embed/bishwenduk029",
   dimensions: {
     width: "400px",
     height: "600px",
   },
-
-  // The background overlay
-
-  containerTemplate: ({ uid, tag, context, focus, close, doc }) => {
+  containerTemplate: ({ context, focus, close, doc }) => {
     function closeComponent(event) {
       event.preventDefault()
       event.stopPropagation()
@@ -27,71 +18,73 @@ window.CallMyAIWindow = zoid.create({
       return focus()
     }
 
-    return pragmatic
-      .node(
-        "div",
-        {
-          id: uid,
-          onClick: focusComponent,
-          class: `${tag} ${tag}-context-${context} ${tag}-focus`,
-        },
+    const container = document.createElement('div')
+    container.className = 'callmyai-container'
+    container.onclick = focusComponent
 
-        pragmatic.node("a", {
-          href: "#",
-          onClick: closeComponent,
-          class: `${tag}-close`,
-        }),
+    const closeButton = document.createElement('a')
+    closeButton.href = '#'
+    closeButton.className = 'callmyai-close'
+    closeButton.onclick = closeComponent
 
-        pragmatic.node(
-          "style",
-          null,
-          `
-                  #${uid} {
-                      position: fixed;
-                      top: 0;
-                      left: 0;
-                      width: 100%;
-                      height: 100%;
-                      background-color: rgba(0, 0, 0, 0.8);
-                  }
-  
-                  #${uid}.${tag}-context-${zoid.CONTEXT.POPUP} {
-                      cursor: pointer;
-                  }
-  
-                  #${uid} .${tag}-close {
-                      position: absolute;
-                      right: 16px;
-                      top: 16px;
-                      width: 16px;
-                      height: 16px;
-                      opacity: 0.6;
-                  }
-  
-                  #${uid} .${tag}-close:hover {
-                      opacity: 1;
-                  }
-  
-                  #${uid} .${tag}-close:before,
-                  #${uid} .${tag}-close:after {
-                      position: absolute;
-                      left: 8px;
-                      content: ' ';
-                      height: 16px;
-                      width: 2px;
-                      background-color: white;
-                  }
-  
-                  #${uid} .${tag}-close:before {
-                      transform: rotate(45deg);
-                  }
-  
-                  #${uid} .${tag}-close:after {
-                      transform: rotate(-45deg);
-                  }
-              `
-        )
-      )
-      .render(pragmatic.dom({ doc }))
+    const style = document.createElement('style')
+    style.textContent = `
+      .callmyai-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 600px;
+        border: 2px solid black;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        overflow: hidden;
+      }
+
+      .callmyai-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .callmyai-close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 20px;
+        height: 20px;
+        opacity: 0.6;
+        cursor: pointer;
+      }
+
+      .callmyai-close:hover {
+        opacity: 1;
+      }
+
+      .callmyai-close:before,
+      .callmyai-close:after {
+        position: absolute;
+        left: 9px;
+        content: ' ';
+        height: 20px;
+        width: 2px;
+        background-color: black;
+      }
+
+      .callmyai-close:before {
+        transform: rotate(45deg);
+      }
+
+      .callmyai-close:after {
+        transform: rotate(-45deg);
+      }
+    `
+
+    container.appendChild(closeButton)
+    document.head.appendChild(style)
+
+    return container
   },
 })

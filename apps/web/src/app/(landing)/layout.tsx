@@ -1,3 +1,4 @@
+import Script from "next/script"
 import * as React from "react"
 
 import { Footer } from "@/components/nav/footer"
@@ -15,6 +16,11 @@ export default function LandingLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <Script
+        id="callmyai-frame"
+        strategy="afterInteractive"
+        src="/index.js"
+      ></Script>
     </div>
   )
 }
