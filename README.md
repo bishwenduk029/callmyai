@@ -54,6 +54,7 @@ Coming Soon
 - Nextjs
 - AuthJs
 - pipecat-ai on Fly.io
+- Daily.co for Webrtc
 - @callmyai/ai (for streaming LLM response into streaming speech)
 - Drizzle (ORM)
 - Supabase
