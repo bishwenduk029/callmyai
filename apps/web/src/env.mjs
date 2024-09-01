@@ -28,6 +28,7 @@ export const env = createEnv({
     LEMONSQUEEZY_VARIANT_ID: z.string(),
     API_SECRET_KEY: z.string(),
     VOICE_BACKEND_URL: z.string(),
+    CALLMYAI_SALES_AGENT_ID: z.string(),
   },
 
   /**
@@ -68,5 +69,6 @@ export const env = createEnv({
     LEMONSQUEEZY_VARIANT_ID: process.env.LEMONSQUEEZY_VARIANT_ID,
     API_SECRET_KEY: process.env.API_SECRET_KEY,
     VOICE_BACKEND_URL: process.env.VOICE_BACKEND_URL,
+    CALLMYAI_SALES_AGENT_ID: process.env.CALLMYAI_SALES_AGENT_ID,
   },
 })

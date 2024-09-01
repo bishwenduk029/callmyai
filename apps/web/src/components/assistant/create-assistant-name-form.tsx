@@ -58,7 +58,7 @@ export function CreateAssistantNameForm() {
       config: {
         llm: {
           model: {
-            name: "gpt-4-turbo",
+            name: "gpt-4o-mini",
             provider: "openai",
           },
           messages: [],

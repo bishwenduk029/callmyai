@@ -33,7 +33,7 @@ export function HeroSection() {
       />
 
       <div className="container mx-auto flex flex-col items-center gap-6 text-center">
-        <h1 className="font-urbanist text-5xl font-extrabold sm:text-6xl">
+        <h1 className="font-urbanist text-5xl sm:text-6xl">
           AI powered Call Assistant{" "}
           <span className="bg-clip-text underline">in seconds</span>
         </h1>

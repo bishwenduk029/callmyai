@@ -27,8 +27,8 @@ export default async function ChatRoomPage({
       ],
     },
     tts: {
-      provider: "elevenlabs",
-      voice: "Bella",
+      provider: "openai",
+      voice: "nova",
     },
   }
 

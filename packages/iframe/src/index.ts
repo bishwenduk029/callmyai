@@ -80,8 +80,8 @@ function setIframeStyles(animate = false): void {
     // Desktop devices
     iframe.style.bottom = "100px";
     iframe.style.right = "20px";
-    iframe.style.width = animate ? "0" : "400px";
-    iframe.style.height = animate ? "0" : "600px";
+    iframe.style.width = animate ? "0" : "450px";
+    iframe.style.height = animate ? "0" : "650px";
     iframe.style.borderRadius = "10px";
     closeButton.style.display = "none";
   }
