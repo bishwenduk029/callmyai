@@ -29,6 +29,7 @@ export const env = createEnv({
     API_SECRET_KEY: z.string(),
     VOICE_BACKEND_URL: z.string(),
     CALLMYAI_SALES_AGENT_ID: z.string(),
+    CALLMYAI_AGENT_CALL_DURATION: z.string(),
   },
 
   /**
@@ -70,5 +71,6 @@ export const env = createEnv({
     API_SECRET_KEY: process.env.API_SECRET_KEY,
     VOICE_BACKEND_URL: process.env.VOICE_BACKEND_URL,
     CALLMYAI_SALES_AGENT_ID: process.env.CALLMYAI_SALES_AGENT_ID,
+    CALLMYAI_AGENT_CALL_DURATION: process.env.CALLMYAI_AGENT_CALL_DURATION,
   },
 })

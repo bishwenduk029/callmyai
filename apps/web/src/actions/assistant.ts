@@ -24,6 +24,7 @@ import type { ChatRoomSession } from "@/components/audio/chat-room"
 import { CallSummary } from "@/components/calls"
 
 import { getUserByEmail } from "./user"
+import { env } from "@/env.mjs"
 
 const initiateNewSessionSchema = z.object({
   assistantId: z.string().uuid(),
@@ -41,7 +42,7 @@ export const initiateNewSessionforAssistant = actionClient
 
         const chatRoomSession: ChatRoomSession = {
           exhausted: false,
-          duration: 50,
+          duration: parseInt(env.CALLMYAI_AGENT_CALL_DURATION),
           private: false,
           assistantId,
           userId: result.user.id,
