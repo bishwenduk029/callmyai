@@ -5,6 +5,7 @@ import { redis } from "@callmyai/kv"
 import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"
 
+import { env } from "@/env.mjs"
 import type { ActionResponse } from "@/types/actions"
 import {
   psCreateAssistant,
@@ -24,7 +25,6 @@ import type { ChatRoomSession } from "@/components/audio/chat-room"
 import { CallSummary } from "@/components/calls"
 
 import { getUserByEmail } from "./user"
-import { env } from "@/env.mjs"
 
 const initiateNewSessionSchema = z.object({
   assistantId: z.string().uuid(),

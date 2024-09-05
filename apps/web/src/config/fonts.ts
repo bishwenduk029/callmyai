@@ -10,7 +10,7 @@ export const fontUrbanist = Inter({
   variable: "--font-urbanist",
 })
 
-export const fontHeading = Inter({
-  subsets: ["latin"],
+export const fontHeading = Nunito({
+  subsets: ["cyrillic"],
   variable: "--font-heading",
 })

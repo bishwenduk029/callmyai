@@ -88,6 +88,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",
+    "embla-carousel-react": "^8.2.0",
     "framer-motion": "^11.2.12",
     "howler": "^2.2.4",
     "jsonwebtoken": "^9.0.2",
@@ -111,6 +112,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "tls": "^0.0.1",
+    "typewriter-effect": "^2.21.0",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },
