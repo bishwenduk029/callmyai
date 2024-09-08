@@ -1,4 +1,4 @@
-import { Nunito, Inter } from "next/font/google"
+import { Inter, Lora, Nunito } from "next/font/google"
 
 export const fontInter = Inter({
   subsets: ["latin"],
@@ -10,7 +10,7 @@ export const fontUrbanist = Inter({
   variable: "--font-urbanist",
 })
 
-export const fontHeading = Nunito({
-  subsets: ["cyrillic"],
+export const fontHeading = Inter({
+  subsets: ["latin"],
   variable: "--font-heading",
 })

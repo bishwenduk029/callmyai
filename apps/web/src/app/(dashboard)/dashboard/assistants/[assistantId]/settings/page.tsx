@@ -3,6 +3,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getAssistantById } from "@/actions/assistant"
 import { auth } from "@/auth"
+import { Gear, Headset, Phone } from "@phosphor-icons/react/dist/ssr"
 
 import {
   Breadcrumb,
@@ -32,10 +33,18 @@ export default async function SettingsPage({
   return (
     <>
       <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid">
-        <Link href="/dashboard/settings" className="font-semibold text-primary">
+        <Link
+          href={`/dashboard/assistants/${params.assistantId}/settings`}
+          className="flex items-center font-semibold text-primary hover:underline"
+        >
+          <Gear className="mr-2 h-5 w-5" weight="duotone" />
           Settings
         </Link>
-        <Link href={`/dashboard/assistants/${result.data.assistant.id}/calls`}>
+        <Link
+          href={`/dashboard/assistants/${params.assistantId}/calls`}
+          className="flex items-center hover:underline"
+        >
+          <Phone className="mr-2 h-5 w-5" />
           Calls
         </Link>
       </nav>
@@ -43,7 +52,11 @@ export default async function SettingsPage({
         <Breadcrumb className="mx-3 mb-3">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard/assistants">
+              <BreadcrumbLink
+                href="/dashboard/assistants"
+                className="flex flex-row"
+              >
+                <Headset className="mr-2 h-5 w-5" weight="duotone" />
                 Assistants
               </BreadcrumbLink>
               <BreadcrumbSeparator />

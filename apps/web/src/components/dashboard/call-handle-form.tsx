@@ -95,14 +95,14 @@ export default function CallHandleForm({ user }: CallHandleFormProps) {
         </CardHeader>
         <CardContent className="space-y-1">
           <div className="flex w-full items-center rounded-md border-2 border-slate-900">
-            <span className="text-sm sm:text-lg bg-primary px-2 py-3 text-primary-foreground">
+            <span className="bg-primary px-2 py-3 text-primary-foreground">
               callmyai.com/
             </span>
             <Input
               id="username"
               {...form.register("username")}
               placeholder="Enter your handle here"
-              className="text-sm sm:text-lg flex-1 rounded-none border-none px-2 py-3 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="flex-1 rounded-none border-none px-2 py-3 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
 
             <Button
