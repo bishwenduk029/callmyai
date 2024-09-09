@@ -77,7 +77,7 @@ export async function Header(): Promise<JSX.Element> {
               <Link
                 aria-label="Get started"
                 href="/dashboard/settings"
-                className={`${cn(buttonVariants({ size: "sm" }), "ml-2")} cursor-pointer`}
+                className={`${cn(buttonVariants({ size: "md" }), "ml-2")} cursor-pointer`}
               >
                 Sign Up
                 <span className="sr-only">Sign Up</span>

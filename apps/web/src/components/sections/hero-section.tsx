@@ -63,12 +63,12 @@ export function HeroSection() {
           transition={{ duration: 1 }}
           viewport={{ once: true }}
         >
-          <h1 className="mb-4 font-heading font-bold text-5xl sm:text-7xl">
+          <h1 className="mb-4 font-heading font-bold text-6xl">
             AI Powered Voice Assistant{" "}
             <span className="bg-clip-text underline">in seconds</span>
           </h1>
 
-          <motion.h3 className="mb-6 max-w-2xl font-urbanist text-lg text-foreground font-semibold sm:text-2xl lg:text-4xl">
+          <motion.h3 className="mb-6 max-w-2xl font-urbanist text-4xl text-foreground">
             <Balancer>
               Create AI-Powered voice assistants for multiple roles: <br />
               <span className="flex flex-row">
@@ -99,7 +99,7 @@ export function HeroSection() {
               href="/dashboard/settings"
               className={cn(buttonVariants({ size: "lg" }), "w-full lg:w-auto")}
             >
-              <span className="dark:from-white dark:to-slate-900/10 whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white lg:text-lg">
+              <span className="dark:from-white dark:to-slate-900/10 whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-background lg:text-lg">
                 Claim your CallMyAI
               </span>
             </Link>
