@@ -3,7 +3,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getAssistantById } from "@/actions/assistant"
 import { auth } from "@/auth"
-import { Gear, Headset, Phone } from "@phosphor-icons/react/dist/ssr"
+import { Gear, Headset, PhoneIncoming } from "@phosphor-icons/react/dist/ssr"
 
 import {
   Breadcrumb,
@@ -44,7 +44,7 @@ export default async function SettingsPage({
           href={`/dashboard/assistants/${params.assistantId}/calls`}
           className="flex items-center hover:underline"
         >
-          <Phone className="mr-2 h-5 w-5" />
+          <PhoneIncoming className="mr-2 h-5 w-5" />
           Calls
         </Link>
       </nav>

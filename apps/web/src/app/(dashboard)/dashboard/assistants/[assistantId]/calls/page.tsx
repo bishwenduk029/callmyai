@@ -7,7 +7,7 @@ import {
   getChatSummariesByAssistantId,
 } from "@/actions/assistant"
 import { auth } from "@/auth"
-import { Gear, Headset, Phone } from "@phosphor-icons/react/dist/ssr"
+import { Gear, Headset, PhoneIncoming } from "@phosphor-icons/react/dist/ssr"
 
 import { PAGE_SIZE } from "@/lib/utils"
 
@@ -59,7 +59,7 @@ export default async function CallsPage({
           href={`/dashboard/assistants/${assistantId}/calls`}
           className="flex items-center font-semibold text-primary hover:underline"
         >
-          <Phone className="mr-2 h-5 w-5" weight="duotone" />
+          <PhoneIncoming className="mr-2 h-5 w-5" weight="duotone" />
           Calls
         </Link>
       </nav>

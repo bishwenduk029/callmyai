@@ -173,6 +173,9 @@ export const psGetChatsByAssistantId = db
   .select()
   .from(chats)
   .where(eq(chats.assistantId, sql.placeholder("assistantId")))
+  .limit(sql.placeholder("limit"))
+  .offset(sql.placeholder("offset"))
+  .orderBy(desc(chats.createdAt))
   .prepare("psGetChatsByAssistantId")
 
 export const psGetAssistantById = db

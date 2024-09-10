@@ -63,12 +63,12 @@ export function HeroSection() {
           transition={{ duration: 1 }}
           viewport={{ once: true }}
         >
-          <h1 className="mb-4 font-heading font-bold text-6xl">
+          <h1 className="mb-4 font-heading font-bold text-3xl sm:text-6xl">
             AI Powered Voice Assistant{" "}
             <span className="bg-clip-text underline">in seconds</span>
           </h1>
 
-          <motion.h3 className="mb-6 max-w-2xl font-urbanist text-4xl text-foreground">
+          <motion.h3 className="mb-6 max-w-2xl font-urbanist text-2xl sm:text-4xl text-foreground">
             <Balancer>
               Create AI-Powered voice assistants for multiple roles: <br />
               <span className="flex flex-row">
@@ -77,9 +77,11 @@ export function HeroSection() {
                   options={{
                     strings: [
                       "Receptionists",
-                      "Customer Support Agents",
+                      "Customer Support Rep",
                       "Personal Assistant",
-                      "Knowledge Expert",
+                      "Knowledge Bot",
+                      "Call Center Rep",
+                      "Sales Rep",
                     ],
                     autoStart: true,
                     loop: true,
