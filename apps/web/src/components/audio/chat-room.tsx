@@ -16,7 +16,6 @@ import { InnerOrb } from "./inner-orb"
 
 const ringtone = new Howl({
   src: ["/ringtone.mp3"],
-  volume: 0.5,
 })
 
 export interface ChatRoomSession {
