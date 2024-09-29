@@ -10,7 +10,7 @@ export const Logo = () => (
     href="/"
     className="flex items-center justify-center gap-2 text-lg font-bold tracking-wide text-background transition-all duration-300 ease-in-out"
   >
-    <Headset size={35} className="text-black" weight="duotone" />
+    <Headset size={35} className="text-primary" weight="duotone" />
     <span className="hidden text-primary md:flex">{siteConfig.name}</span>
   </Link>
 )
