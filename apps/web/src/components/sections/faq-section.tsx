@@ -28,7 +28,7 @@ export function FAQSection() {
               Find the answers to the most common questions about our product.
               Feel free to{" "}
               <Link
-                href="mailto:bishwenduk029@gmail.com"
+                href="mailto:sayanti.nath@callmyai.app"
                 className="font-semibold text-foreground underline-offset-4 transition-all hover:underline"
               >
                 email us

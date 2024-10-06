@@ -33,7 +33,7 @@ export function Footer(): JSX.Element {
         </div> */}
       </div>
 
-      <div className="container flex items-center justify-between">
+      <div className="container flex items-start">
         <p className="text-sm text-muted-foreground xl:text-base">
           {/* <Balancer>
             Built with ❤️ by{" "}
@@ -69,20 +69,6 @@ export function Footer(): JSX.Element {
             </div>
           ))}
         </p>
-        <div className="flex items-center justify-center">
-          <Link
-            href={siteConfig.links.github}
-            target="_blank"
-            rel="noreferrer"
-            className={cn(
-              buttonVariants({ size: "icon", variant: "ghost" }),
-              "rounded-full"
-            )}
-          >
-            <Icons.gitHub className="size-[18px]" />
-          </Link>
-          <ThemeToggle />
-        </div>
       </div>
     </footer>
   )
