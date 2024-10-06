@@ -11,8 +11,6 @@ import { env } from "@/env.mjs"
 import { cn } from "@/lib/utils"
 
 import { buttonVariants } from "@/components/ui/button"
-
-import { BorderBeam } from "../ui/border-beam"
 import { Input } from "../ui/input"
 
 // Define the review data
