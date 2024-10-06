@@ -1,7 +1,7 @@
 // Create button
 const button = document.createElement("button");
 button.innerHTML =
-  '<img src="https://www.callmyai.app/images/opengraph-image.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
+  '<img src="https://www.callmyai.app/images/headset.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
 button.style.position = "fixed";
 button.style.bottom = "10px";
 button.style.right = "20px";
@@ -112,7 +112,7 @@ button.onclick = (event: MouseEvent) => {
     }
     // @ts-ignore
     this.innerHTML =
-      '<img src="https://www.callmyai.app/images/opengraph-image.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
+      '<img src="https://www.callmyai.app/images/headset.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
   }
 };
 
@@ -122,7 +122,7 @@ closeButton.onclick = function (this: HTMLButtonElement) {
   isOpen = false;
   iframe.style.bottom = "-100%";
   button.innerHTML =
-    '<img src="https://www.callmyai.app/images/opengraph-image.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
+    '<img src="https://www.callmyai.app/images/headset.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
   this.style.display = "none";
 };
 
@@ -151,7 +151,7 @@ iframe.addEventListener("touchend", () => {
     isOpen = false;
     iframe.style.bottom = "-100%";
     button.innerHTML =
-      '<img src="https://www.callmyai.app/images/opengraph-image.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
+      '<img src="https://www.callmyai.app/images/headset.png" alt="CallMyAI" width="48" height="48" style="object-fit: cover; border-radius: 50%;">';
     closeButton.style.display = "none";
   } else {
     iframe.style.transform = "translateY(0)";
