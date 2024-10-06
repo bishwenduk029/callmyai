@@ -76,6 +76,20 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
   return (
     <html lang="en" className="overflow-x-hidden overflow-y-scroll">
       <head>
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={siteConfig.url} />
+        <meta property="og:title" content={siteConfig.name} />
+        <meta property="og:description" content={siteConfig.description} />
+        <meta property="og:image" content={siteConfig.links.openGraphImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={siteConfig.name} />
+        <meta name="twitter:description" content={siteConfig.description} />
+        <meta name="twitter:image" content={siteConfig.links.openGraphImage} />
+        <meta name="twitter:creator" content={siteConfig.author} />
+        <meta property="linkedin:title" content={siteConfig.name} />
+        <meta property="linkedin:description" content={siteConfig.description} />
+        <meta property="linkedin:image" content={siteConfig.links.openGraphImage} />
+        <meta property="linkedin:url" content={siteConfig.url} />
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -97,8 +111,7 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
         <SmoothScrollProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
-            enableSystem
+            defaultTheme="light"
             disableTransitionOnChange
           >
             {children}
