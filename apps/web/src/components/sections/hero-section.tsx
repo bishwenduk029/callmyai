@@ -1,8 +1,8 @@
 "use client"
 
+import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
 import Balancer from "react-wrap-balancer"
 import Typewriter from "typewriter-effect"
 
@@ -11,17 +11,9 @@ import { env } from "@/env.mjs"
 import { cn } from "@/lib/utils"
 
 import { buttonVariants } from "@/components/ui/button"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 
-import HeroVideoDialog from "../ui/hero-video"
+import { BorderBeam } from "../ui/border-beam"
 import { Input } from "../ui/input"
-import ShimmerButton from "../ui/shimmer-button"
 
 // Define the review data
 const demos = [
@@ -40,6 +32,8 @@ const demos = [
   // Add more review objects as needed
 ]
 
+const salesAgentId = env.NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID
+
 export function HeroSection() {
   return (
     <div
@@ -57,18 +51,18 @@ export function HeroSection() {
 
       <div className="container flex w-full flex-col items-start gap-6 lg:flex-row">
         <motion.div
-          className="w-full text-left lg:w-1/2"
+          className="w-full text-left lg:w-1/2 my-auto"
           initial={{ opacity: 0.5, filter: "blur(10px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ duration: 1 }}
           viewport={{ once: true }}
         >
-          <h1 className="mb-4 font-heading font-bold text-3xl sm:text-6xl">
+          <h1 className="mb-4 font-heading text-3xl font-bold sm:text-6xl">
             AI Powered Voice Assistant{" "}
             <span className="bg-clip-text underline">in seconds</span>
           </h1>
 
-          <motion.h3 className="mb-6 max-w-2xl font-urbanist text-2xl sm:text-4xl text-foreground">
+          <motion.h3 className="mb-6 max-w-2xl font-urbanist text-2xl text-foreground sm:text-4xl">
             <Balancer>
               Create AI-Powered voice assistants for multiple roles: <br />
               <span className="flex flex-row">
@@ -110,13 +104,16 @@ export function HeroSection() {
 
         <div className="mt-8 w-full lg:mt-0 lg:w-1/2">
           <div className="flex flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
-            <HeroVideoDialog
-              className="w-full"
-              animationStyle="from-center"
-              videoSrc={demos[0]?.videoUrl ?? ""}
-              thumbnailSrc={demos[0]?.thumbnailSrc ?? ""}
-              thumbnailAlt={`Demo video ${1}`}
-            />
+            <div className="relative h-[650px] w-full rounded-2xl p-[5px] shadow-xl border-transparent">
+              <iframe
+                src={`${env.NEXT_PUBLIC_APP_URL}/assistants/${salesAgentId}`}
+                className="absolute left-0 top-0 h-full w-full border-2 border-black rounded-2xl"
+                style={{ boxShadow: "0 0 15px 2px rgba(0, 0, 0, 0.5)", overflow: "hidden" }}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                scrolling="no"
+              ></iframe>
+            </div>
             {/* <Carousel className="w-full">
               <CarouselContent>
                 {demos.map((demo, index) => (

@@ -28,7 +28,6 @@ export const env = createEnv({
     LEMONSQUEEZY_VARIANT_ID: z.string(),
     API_SECRET_KEY: z.string(),
     VOICE_BACKEND_URL: z.string(),
-    CALLMYAI_SALES_AGENT_ID: z.string(),
     CALLMYAI_AGENT_CALL_DURATION: z.string(),
   },
 
@@ -40,6 +39,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_VOICE_BACKEND_URL: z.string().url().optional(),
+    NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID: z.string(),
   },
 
   /**
@@ -70,7 +70,7 @@ export const env = createEnv({
     LEMONSQUEEZY_VARIANT_ID: process.env.LEMONSQUEEZY_VARIANT_ID,
     API_SECRET_KEY: process.env.API_SECRET_KEY,
     VOICE_BACKEND_URL: process.env.VOICE_BACKEND_URL,
-    CALLMYAI_SALES_AGENT_ID: process.env.CALLMYAI_SALES_AGENT_ID,
+    NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID: process.env.NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID,
     CALLMYAI_AGENT_CALL_DURATION: process.env.CALLMYAI_AGENT_CALL_DURATION,
   },
 })
