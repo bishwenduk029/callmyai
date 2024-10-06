@@ -15,6 +15,10 @@ from pipecat.frames.frames import EndFrame
 from pipecat.services.openai import OpenAILLMService, OpenAITTSService
 from pipecat.transports.services.daily import DailyParams, DailyTransport
 from pipecat.processors.frameworks.rtvi import RTVIProcessor, RTVIConfig
+from pipecat.frames.frames import (
+    LLMMessagesFrame,
+    EndFrame
+)
 from pipecat.vad.silero import SileroVADAnalyzer
 
 from loguru import logger
@@ -90,6 +94,7 @@ async def main(room_url: str, token: str, client_config: dict):
         @transport.event_handler("on_first_participant_joined")
         async def on_first_participant_joined(transport, participant):
             transport.capture_participant_transcription(participant["id"])
+            await task.queue_frames([LLMMessagesFrame(messages)])
 
         @transport.event_handler("on_participant_left")
         async def on_participant_left(transport, participant, reason):
