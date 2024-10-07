@@ -14,3 +14,9 @@ export const fontHeading = Inter({
   subsets: ["latin"],
   variable: "--font-heading",
 })
+
+export const fontNunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-nunito",
+})
+

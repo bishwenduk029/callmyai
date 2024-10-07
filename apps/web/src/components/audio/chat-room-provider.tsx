@@ -13,6 +13,7 @@ import { User } from "@/db/schema"
 import { cn } from "@/lib/utils"
 
 import { ChatRoomSession, ChatRoomUI } from "./chat-room"
+import { CallMyAIRoom } from "./callmyai-room"
 
 interface ChatRoomProps {
   visitor?: User | null | undefined
@@ -60,7 +61,7 @@ export const DailyChatRoomProvider = ({
   return (
     <DailyVoiceClientProvider voiceClient={voiceClient}>
       <div>
-        <ChatRoomUI chatSession={session} />
+        <CallMyAIRoom chatSession={session} />
         <DailyVoiceClientAudio />
       </div>
     </DailyVoiceClientProvider>
