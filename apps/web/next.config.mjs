@@ -19,6 +19,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "uploadthing.com",
       },
+      {
+        protocol: "https",
+        hostname: "fal.media",
+      },
     ],
   },
   webpack: (config) => {

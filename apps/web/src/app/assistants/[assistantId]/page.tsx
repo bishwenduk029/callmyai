@@ -23,15 +23,21 @@ export default async function ChatRoomPage({
 
   const chatRoomSession = await initiateNewSessionforAssistant({
     assistantId: params.assistantId,
+    config: assistantConfiguration
   })
 
   return (
-    <div className="container">
-      <DailyChatRoomProvider
-        visitor={result?.data}
-        configuration={assistantConfiguration}
-        session={chatRoomSession?.data!}
-      />
-    </div>
+    <>
+      <div className="fixed top-0 z-[1000] w-full bg-black py-2.5 text-center text-white font-heading font-bold">
+        {assistantConfiguration.header}
+      </div>
+      <div className="container">
+        <DailyChatRoomProvider
+          visitor={result?.data}
+          configuration={assistantConfiguration}
+          session={chatRoomSession?.data!}
+        />
+      </div>
+    </>
   )
 }

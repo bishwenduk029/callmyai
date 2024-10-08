@@ -15,6 +15,8 @@ import { GooeyDiv } from "./gooey-div"
 import { InnerOrb } from "./inner-orb"
 import { Card, CardContent } from "../ui/card"
 import { fontNunito } from "@/config/fonts"
+import { Avatar } from "../ui/avatar"
+import { AvatarImage } from "@radix-ui/react-avatar"
 
 const ringtone = new Howl({
   src: ["/ringtone.mp3"],
@@ -29,6 +31,9 @@ export interface ChatRoomSession {
   private: boolean
   baseUrl: string
   userPrompt?: string
+  botName: string
+  header: string
+  botDescription: string
 }
 
 interface CallMyAIRoomProps {
@@ -127,17 +132,15 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
   }, [isLoadingBot])
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#E3FDF5] to-[#FFE6FA] p-4 sm:p-0">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B7F8DB] to-[#50A7C2] p-4 sm:p-0">
       <Card className="w-full max-w-md m-auto shadow-lg p-4">
         <CardContent className="flex flex-col items-center">
-          <img
-            src="https://fal.media/files/zebra/Xmqc2PO33YrOLwztHSE_G.png"
-            alt="Avatar"
-            className="w-32 h-32 sm:w-48 sm:h-48 rounded-full mb-4 border-4 shadow-xl shadow-green-300 border-green-500 p-1"
-          />
-          <div className={`text-2xl font-bold mb-2 ${fontNunito.variable}`}>Aisha</div>
-          <div className={`text-lg font-semibold text-gray-600 mb-8 ${fontNunito.variable}`}>AI Sales Agent for CallMyAI</div>
-          <div className="flex flex-row items-baseline justify-center font-urbanist text-2xl font-extrabold text-primary mb-4">
+          <Avatar className="w-32 h-32 sm:w-48 sm:h-48 rounded-full mb-4 border-4 shadow-xl shadow-green-300 border-green-500 p-1">
+            <AvatarImage src="https://fal.media/files/zebra/Xmqc2PO33YrOLwztHSE_G.png" />
+          </Avatar>
+          <div className={`text-2xl font-bold mb-2 ${fontNunito.variable}`}>{chatSession.botName}</div>
+          <div className={`text-lg font-semibold text-gray-600 mb-8 ${fontNunito.variable}`}>{chatSession.botDescription}</div>
+          <div className="flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary mb-4">
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
             )}

@@ -1,16 +1,19 @@
 "use client"
 
-import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import Balancer from "react-wrap-balancer"
 import Typewriter from "typewriter-effect"
 
 import { env } from "@/env.mjs"
 
+import { useMediaQuery } from "@/hooks/use-media"
 import { cn } from "@/lib/utils"
 
 import { buttonVariants } from "@/components/ui/button"
+
+import { CallMyAiMobilePreview } from "../assistant/callmyai-mobile-preview"
 import { Input } from "../ui/input"
 
 // Define the review data
@@ -33,23 +36,17 @@ const demos = [
 const salesAgentId = env.NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID
 
 export function HeroSection() {
+  const isDesktop = useMediaQuery("(min-width: 1280px)")
   return (
     <div
       id="hero-section"
       aria-label="hero section"
       className="md:mt-38 mt-16 w-full"
     >
-      <Image
-        fill
-        src="/images/radial_1.svg"
-        alt="Hero top right corner radial light effect"
-        className="absolute right-0 top-0 opacity-5 lg:opacity-10"
-        priority
-      />
 
       <div className="container flex w-full flex-col items-start gap-6 lg:flex-row">
         <motion.div
-          className="w-full text-left lg:w-1/2 my-auto"
+          className="my-auto w-full text-left lg:w-1/2"
           initial={{ opacity: 0.5, filter: "blur(10px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ duration: 1 }}
@@ -101,18 +98,25 @@ export function HeroSection() {
         </motion.div>
 
         <div className="mt-8 w-full lg:mt-0 lg:w-1/2">
-          <div className="flex flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
-            <div className="relative h-[650px] w-full rounded-2xl p-[5px] shadow-xl border-transparent">
-              <iframe
-                src={`${env.NEXT_PUBLIC_APP_URL}/assistants/${salesAgentId}`}
-                className="absolute left-0 top-0 h-full w-full border-2 border-black rounded-2xl"
-                style={{ boxShadow: "0 0 15px 2px rgba(0, 0, 0, 0.5)", overflow: "hidden" }}
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                scrolling="no"
-              ></iframe>
+          {isDesktop && (
+            <div className="flex flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
+              <div className="relative h-[650px] w-full rounded-2xl border-transparent p-[5px] shadow-xl">
+                <iframe
+                  src={`${env.NEXT_PUBLIC_APP_URL}/assistants/${salesAgentId}`}
+                  className="absolute left-0 top-0 h-full w-full rounded-2xl border-2 border-black"
+                  style={{
+                    boxShadow: "0 0 15px 2px rgba(0, 0, 0, 0.5)",
+                    overflow: "hidden",
+                  }}
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                  scrolling="no"
+                ></iframe>
+              </div>
             </div>
-            {/* <Carousel className="w-full">
+          )}
+          {!isDesktop && <CallMyAiMobilePreview assistantId={salesAgentId} title="Try our AI Sales Agent" />}
+          {/* <Carousel className="w-full">
               <CarouselContent>
                 {demos.map((demo, index) => (
                   <CarouselItem className="relative" key={index}>
@@ -134,7 +138,6 @@ export function HeroSection() {
                 className="absolute right-2 top-1/2 -translate-y-1/2 bg-foreground/80 hover:bg-foreground"
               />
             </Carousel> */}
-          </div>
         </div>
       </div>
     </div>

@@ -12,9 +12,6 @@ export default async function CallMyAIFrameLayout({
 }: CallMyAIFrameLayoutProps): Promise<JSX.Element> {
   return (
     <div>
-      <div className="fixed top-0 z-[1000] w-full bg-black py-2.5 text-center text-white">
-        Know About CallMyAI
-      </div>
       {children}
       <div className="fixed bottom-0 w-full bg-black py-2.5 text-center text-white">
         <div className="flex flex-row justify-center space-x-2">

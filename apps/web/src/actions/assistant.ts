@@ -28,13 +28,14 @@ import { getUserByEmail } from "./user"
 
 const initiateNewSessionSchema = z.object({
   assistantId: z.string().uuid(),
+  config: z.lazy(() => rtviConfigSchema),
 })
 
 export const initiateNewSessionforAssistant = actionClient
   .schema(initiateNewSessionSchema)
   .action(
     async ({
-      parsedInput: { assistantId },
+      parsedInput: { assistantId, config },
     }): Promise<ChatRoomSession | null> => {
       try {
         const [result] = await psGetUserByAssistantId.execute({ assistantId })
@@ -47,6 +48,9 @@ export const initiateNewSessionforAssistant = actionClient
           assistantId,
           userId: result.user.id,
           baseUrl: "/api/assistants/start",
+          botName: result.assistant.name,
+          header: config?.header || "",
+          botDescription: config?.description || "",
         }
 
         return chatRoomSession
@@ -59,6 +63,8 @@ export const initiateNewSessionforAssistant = actionClient
 
 const rtviConfigSchema = z
   .object({
+    header: z.string(),
+    description: z.string(),
     llm: z.object({
       model: z.object({
         provider: z.string(),

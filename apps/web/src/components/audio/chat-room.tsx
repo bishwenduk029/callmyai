@@ -27,6 +27,9 @@ export interface ChatRoomSession {
   private: boolean
   baseUrl: string
   userPrompt?: string
+  botName: string
+  header: string
+  botDescription: string
 }
 
 interface ChatRoomUIProps {
@@ -200,7 +203,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
       </div>
       <div className="absolute bottom-5 rounded px-5 py-2.5 text-white transition-colors">
         <div className="flex flex-col items-center space-y-4">
-          <div className="flex flex-row items-baseline justify-center font-urbanist text-2xl font-extrabold text-primary">
+          <div className="flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary">
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
             )}

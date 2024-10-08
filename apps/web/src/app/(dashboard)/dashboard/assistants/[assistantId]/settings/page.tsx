@@ -3,7 +3,12 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getAssistantById } from "@/actions/assistant"
 import { auth } from "@/auth"
-import { Gear, Headset, PhoneIncoming } from "@phosphor-icons/react/dist/ssr"
+import {
+  Browser,
+  Gear,
+  Headset,
+  PhoneIncoming,
+} from "@phosphor-icons/react/dist/ssr"
 
 import {
   Breadcrumb,
@@ -12,6 +17,8 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { AssistantIframe } from "@/components/assistant/assistant-iframe"
+import { CallMyAiMobilePreview } from "@/components/assistant/callmyai-mobile-preview"
 import Settings from "@/components/assistant/settings"
 
 export default async function SettingsPage({
@@ -71,10 +78,15 @@ export default async function SettingsPage({
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Settings
-          assistant={result.data.assistant!}
-          config={result.data.config!}
-        />
+        <div className="flex flex-col py-4">
+          <div className="w-full md:w-3/4">
+            <Settings
+              assistant={result.data.assistant!}
+              config={result.data.config!}
+            />
+            <CallMyAiMobilePreview assistantId={params.assistantId} />
+          </div>
+        </div>
       </div>
     </>
   )
