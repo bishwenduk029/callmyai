@@ -10,7 +10,7 @@ import { UpdateAssistantDisplayDetails } from "./update-assistant-name-form"
 
 interface SettingsProps {
   assistant: Assistant
-  config: RtviConfig | {}
+  config: RtviConfig
 }
 
 export default function Settings({ assistant, config }: SettingsProps) {

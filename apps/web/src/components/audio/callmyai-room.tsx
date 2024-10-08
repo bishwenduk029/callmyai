@@ -31,9 +31,9 @@ export interface ChatRoomSession {
   private: boolean
   baseUrl: string
   userPrompt?: string
-  botName: string
-  header: string
-  botDescription: string
+  botName?: string
+  header?: string
+  description?: string
 }
 
 interface CallMyAIRoomProps {
@@ -139,7 +139,7 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
             <AvatarImage src="https://fal.media/files/zebra/Xmqc2PO33YrOLwztHSE_G.png" />
           </Avatar>
           <div className={`text-2xl font-bold mb-2 ${fontNunito.variable}`}>{chatSession.botName}</div>
-          <div className={`text-lg font-semibold text-gray-600 mb-8 ${fontNunito.variable}`}>{chatSession.botDescription}</div>
+          <div className={`text-lg font-semibold text-gray-600 mb-8 ${fontNunito.variable}`}>{chatSession.description}</div>
           <div className="flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary mb-4">
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>

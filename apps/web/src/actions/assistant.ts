@@ -50,7 +50,7 @@ export const initiateNewSessionforAssistant = actionClient
           baseUrl: "/api/assistants/start",
           botName: result.assistant.name,
           header: config?.header || "",
-          botDescription: config?.description || "",
+          description: config?.description || "",
         }
 
         return chatRoomSession
@@ -63,8 +63,8 @@ export const initiateNewSessionforAssistant = actionClient
 
 const rtviConfigSchema = z
   .object({
-    header: z.string(),
-    description: z.string(),
+    header: z.string().optional(),
+    description: z.string().optional(),
     llm: z.object({
       model: z.object({
         provider: z.string(),
@@ -164,7 +164,7 @@ const updateAssistantSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   duration: z.number(),
-  config: rtviConfigSchema.optional(),
+  config: rtviConfigSchema,
 })
 
 export const updateAssistant = actionClient
@@ -257,15 +257,17 @@ export const getAssistantById = actionClient
   .action(
     async ({
       parsedInput: { assistantId },
-    }): Promise<{ assistant: Assistant; config: RtviConfig | {} } | null> => {
+    }): Promise<{ assistant: Assistant; config: RtviConfig } | null> => {
       try {
         const [result] = await psGetAssistantById.execute({
           assistantId,
         })
         if (!result) return null
 
-        const config = await redis.get(`assistant:${assistantId}`)
+        const config: RtviConfig | null = await redis.get(`assistant:${assistantId}`)
+        
         if (!config) return null
+        
         return {
           assistant: result,
           config,

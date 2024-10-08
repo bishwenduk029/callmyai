@@ -27,9 +27,9 @@ export interface ChatRoomSession {
   private: boolean
   baseUrl: string
   userPrompt?: string
-  botName: string
-  header: string
-  botDescription: string
+  botName?: string
+  header?: string
+  description?: string
 }
 
 interface ChatRoomUIProps {

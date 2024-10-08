@@ -22,7 +22,7 @@ import { SubmitButton } from "../ui/submit-button"
 
 interface UpdateAssistantNameFormProps {
   assistant: Assistant
-  config: RtviConfig | {}
+  config: RtviConfig
 }
 
 const assistantConfigSchema = z.object({
@@ -81,6 +81,7 @@ export function UpdateAssistantDisplayDetails({
       id: assistant.id,
       name: values.name,
       duration: assistant.duration,
+      // @ts-ignore
       config: {
         ...config,
         header: values.header,
@@ -130,7 +131,7 @@ export function UpdateAssistantDisplayDetails({
                 {...form.register("description")}
                 placeholder="Enter a description for your assistant"
                 className="w-full px-2 py-3"
-                defaultValue={assistant.description}
+                defaultValue={config?.description}
               />
               {form.formState.errors.description && (
                 <p className="text-sm text-destructive">
@@ -150,7 +151,7 @@ export function UpdateAssistantDisplayDetails({
                 {...form.register("header")}
                 placeholder="Enter a header for your assistant"
                 className="w-full px-2 py-3"
-                defaultValue={config.header}
+                defaultValue={config?.header}
               />
               {form.formState.errors.header && (
                 <p className="text-sm text-destructive">
