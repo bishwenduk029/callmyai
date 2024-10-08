@@ -42,6 +42,8 @@
     "@auth/drizzle-adapter": "^1.4.1",
     "@callmyai/ai": "workspace:*",
     "@callmyai/kv": "workspace:*",
+    "@fal-ai/serverless-client": "^0.14.3",
+    "@fal-ai/serverless-proxy": "^0.9.0",
     "@hookform/resolvers": "^3.3.4",
     "@lemonsqueezy/lemonsqueezy.js": "^3.2.0",
     "@phosphor-icons/react": "^2.1.7",

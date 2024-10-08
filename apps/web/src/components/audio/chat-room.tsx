@@ -30,6 +30,7 @@ export interface ChatRoomSession {
   botName?: string
   header?: string
   description?: string
+  avatar?: string
 }
 
 interface ChatRoomUIProps {

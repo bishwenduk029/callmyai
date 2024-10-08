@@ -21,7 +21,7 @@ import { Assistant } from "@/db/schema"
 import auth from "@/lib/auth"
 import { actionClient } from "@/lib/safe-action"
 
-import type { ChatRoomSession } from "@/components/audio/chat-room"
+import type { ChatRoomSession } from "@/components/audio/callmyai-room"
 import { CallSummary } from "@/components/calls"
 
 import { getUserByEmail } from "./user"
@@ -51,6 +51,7 @@ export const initiateNewSessionforAssistant = actionClient
           botName: result.assistant.name,
           header: config?.header || "",
           description: config?.description || "",
+          avatar: config?.avatar || "",
         }
 
         return chatRoomSession
@@ -65,6 +66,9 @@ const rtviConfigSchema = z
   .object({
     header: z.string().optional(),
     description: z.string().optional(),
+    gender: z.string().optional(),
+    ethnicity: z.string().optional(),
+    avatar: z.string().optional(),
     llm: z.object({
       model: z.object({
         provider: z.string(),

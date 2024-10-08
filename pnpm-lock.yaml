@@ -46,6 +46,12 @@ importers:
       '@callmyai/kv':
         specifier: workspace:*
         version: link:../../packages/kv
+      '@fal-ai/serverless-client':
+        specifier: ^0.14.3
+        version: 0.14.3
+      '@fal-ai/serverless-proxy':
+        specifier: ^0.9.0
+        version: 0.9.0(next@14.2.4(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.6.0(react-hook-form@7.51.5(react@18.3.1))
@@ -1442,6 +1448,33 @@ packages:
     resolution: {integrity: sha512-ESiIudvhoYni+MdsI8oD7skpprZ89qKocwRM2KEvhhBJ9nl5MRh7BXU5GTod7Mdygq+AUl+QzId6iWJKR/wABA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@fal-ai/serverless-client@0.14.3':
+    resolution: {integrity: sha512-xroGr51Xi5XlOs+cWKrEY8NvD7VngCGJDIJmBLQ7WLa/HRiPWmarHz00noSQ3Go/508RsdPcstDZnEFLBL3mgw==}
+    engines: {node: '>=18.0.0'}
+
+  '@fal-ai/serverless-proxy@0.9.0':
+    resolution: {integrity: sha512-Nu3AjW+rLAWP4ghcU2atylDQh5SuPW/M23qKrWfoDrdk7BLUXyE2iQD+i0WHy1ujJxShSOezEpmBynn7fljafA==}
+    peerDependencies:
+      '@remix-run/dev': ^2.0.0
+      '@sveltejs/kit': ^2.0.0
+      express: ^4.0.0
+      next: 13.4 - 14
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    peerDependenciesMeta:
+      '@remix-run/dev':
+        optional: true
+      '@sveltejs/kit':
+        optional: true
+      express:
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   '@fal-works/esbuild-plugin-global-externals@2.1.2':
     resolution: {integrity: sha512-cEee/Z+I12mZcFJshKcCqC8tuX5hG3s+d+9nZ3LabqKF1vKdF41B92pJVCBggjAGORAeOzyyDDKrZwIkLffeOQ==}
 
@@ -1631,6 +1664,10 @@ packages:
 
   '@microsoft/tsdoc@0.14.2':
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
+
+  '@msgpack/msgpack@3.0.0-beta2':
+    resolution: {integrity: sha512-y+l1PNV0XDyY8sM3YtuMLK5vE3/hkfId+Do8pLo/OPxfxuFAUwcGz3oiiUuV46/aBpwTzZ+mRWVMtlSKbradhw==}
+    engines: {node: '>= 14'}
 
   '@neondatabase/serverless@0.9.4':
     resolution: {integrity: sha512-D0AXgJh6xkf+XTlsO7iwE2Q1w8981E1cLCPAALMU2YKtkF/1SF6BiAzYARZFYo175ON+b1RNIy9TdSFHm5nteg==}
@@ -7456,6 +7493,9 @@ packages:
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
+  robot3@0.4.1:
+    resolution: {integrity: sha512-hzjy826lrxzx8eRgv80idkf8ua1JAepRc9Efdtj03N3KNJuznQCPlyCJ7gnUmDFwZCLQjxy567mQVKmdv2BsXQ==}
+
   rollup@3.29.4:
     resolution: {integrity: sha512-oWzmBZwvYrU0iJHtDmhsm662rC15FRXmcjCk1xD771dFDx5jJ02ufAQQTn0etB2emNk4J9EZg/yWKpsn9BWGRw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -9505,6 +9545,18 @@ snapshots:
 
   '@eslint/js@9.2.0': {}
 
+  '@fal-ai/serverless-client@0.14.3':
+    dependencies:
+      '@msgpack/msgpack': 3.0.0-beta2
+      eventsource-parser: 1.1.2
+      robot3: 0.4.1
+
+  '@fal-ai/serverless-proxy@0.9.0(next@14.2.4(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    optionalDependencies:
+      next: 14.2.4(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   '@fal-works/esbuild-plugin-global-externals@2.1.2': {}
 
   '@floating-ui/core@1.6.0':
@@ -9879,6 +9931,8 @@ snapshots:
       resolve: 1.19.0
 
   '@microsoft/tsdoc@0.14.2': {}
+
+  '@msgpack/msgpack@3.0.0-beta2': {}
 
   '@neondatabase/serverless@0.9.4':
     dependencies:
@@ -17044,6 +17098,8 @@ snapshots:
   rimraf@3.0.2:
     dependencies:
       glob: 7.2.3
+
+  robot3@0.4.1: {}
 
   rollup@3.29.4:
     optionalDependencies:

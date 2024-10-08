@@ -34,6 +34,7 @@ export interface ChatRoomSession {
   botName?: string
   header?: string
   description?: string
+  avatar?: string
 }
 
 interface CallMyAIRoomProps {
@@ -135,8 +136,8 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B7F8DB] to-[#50A7C2] p-4 sm:p-0">
       <Card className="w-full max-w-md m-auto shadow-lg p-4">
         <CardContent className="flex flex-col items-center">
-          <Avatar className="w-32 h-32 sm:w-48 sm:h-48 rounded-full mb-4 border-4 shadow-xl shadow-green-300 border-green-500 p-1">
-            <AvatarImage src="https://fal.media/files/zebra/Xmqc2PO33YrOLwztHSE_G.png" />
+          <Avatar className="w-48 h-48 rounded-full mb-4 border-4 shadow-xl shadow-green-300 border-green-500">
+            <AvatarImage src={chatSession.avatar} />
           </Avatar>
           <div className={`text-2xl font-bold mb-2 ${fontNunito.variable}`}>{chatSession.botName}</div>
           <div className={`text-lg font-semibold text-gray-600 mb-8 ${fontNunito.variable}`}>{chatSession.description}</div>

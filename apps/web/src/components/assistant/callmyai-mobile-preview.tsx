@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import { Mailbox } from "@phosphor-icons/react/dist/ssr"
 
 import { useMediaQuery } from "@/hooks/use-media"
@@ -17,7 +18,6 @@ import {
 
 import { Avatar, AvatarImage } from "../ui/avatar"
 import { AssistantIframe } from "./assistant-iframe"
-import Image from "next/image"
 
 interface CallMyAiMobilePreviewProps {
   assistantId: string
@@ -28,21 +28,27 @@ export function CallMyAiMobilePreview({
   assistantId,
   title = "CallMyAI Voice Assistant Preview",
 }: CallMyAiMobilePreviewProps) {
-  const isDesktop = useMediaQuery("(min-width: 1280px)")
+  const isDesktop = useMediaQuery("(min-width: 768px)")
 
-  if (isDesktop)
+  if (isDesktop) {
     return (
-      <div className="top-50 fixed right-5 h-3/4 w-1/4">
+      <div className="top-50 fixed right-5 h-5/6 w-1/4">
         <AssistantIframe assistantId={assistantId} />
       </div>
     )
+  }
 
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="w-full h-15">
+        <Button className="h-15 w-full">
           <Avatar className="m-2">
-            <Image src="https://fal.media/files/zebra/Xmqc2PO33YrOLwztHSE_G.png" alt="Avatar" width={48} height={48} />
+            <Image
+              src="https://fal.media/files/zebra/Xmqc2PO33YrOLwztHSE_G.png"
+              alt="Avatar"
+              width={48}
+              height={48}
+            />
           </Avatar>
           {title}
         </Button>

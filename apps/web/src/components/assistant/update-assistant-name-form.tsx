@@ -1,11 +1,17 @@
 "use client"
+
 import { RtviConfig, updateAssistant } from "@/actions/assistant"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Check } from "@phosphor-icons/react/dist/ssr"
+import { AvatarFallback } from "@radix-ui/react-avatar"
+import { ChevronDownIcon } from "@radix-ui/react-icons"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { useToast } from "@/hooks/use-toast"
+import { falClient } from "@/lib/fal"
+import { cn } from "@/lib/utils"
 
 import {
   Card,
@@ -17,8 +23,34 @@ import {
 } from "@/components/ui/card"
 
 import { Assistant } from "../../db/schema/index"
+import { Avatar, AvatarImage } from "../ui/avatar"
+import { Button } from "../ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command"
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form"
 import { Input } from "../ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select"
 import { SubmitButton } from "../ui/submit-button"
+import { Icons } from "../icons"
+import { useState } from "react"
 
 interface UpdateAssistantNameFormProps {
   assistant: Assistant
@@ -31,14 +63,21 @@ const assistantConfigSchema = z.object({
     .min(2, { message: "Your name must be at least 2 characters long." }),
   description: z.string().optional(),
   header: z.string().optional(),
-  config: z.any(),
+  gender: z.string().optional(),
+  ethnicity: z.string().optional(),
+  avatar: z.string().optional(),
 })
+
+interface FalResult {
+  images?: { url: string }[]
+}
 
 export function UpdateAssistantDisplayDetails({
   assistant,
   config,
 }: UpdateAssistantNameFormProps) {
   const { toast } = useToast()
+  const [isGenerating, setIsGenerating] = useState(false)
 
   const form = useForm({
     resolver: zodResolver(assistantConfigSchema),
@@ -46,6 +85,9 @@ export function UpdateAssistantDisplayDetails({
       name: assistant.name,
       description: config?.description,
       header: config?.header,
+      gender: config?.gender,
+      ethnicity: config?.ethnicity,
+      avatar: config?.avatar,
     },
   })
 
@@ -59,10 +101,10 @@ export function UpdateAssistantDisplayDetails({
         })
       } else {
         toast({
-          title: "Assistant Name Updated",
+          title: "Assistant Display Details Updated",
           description: result?.data?.error,
         })
-        const assistantUpdatedEvent = new Event('assistantUpdated')
+        const assistantUpdatedEvent = new Event("assistantUpdated")
         window.dispatchEvent(assistantUpdatedEvent)
       }
     },
@@ -86,6 +128,9 @@ export function UpdateAssistantDisplayDetails({
         ...config,
         header: values.header,
         description: values.description,
+        gender: values.gender,
+        ethnicity: values.ethnicity,
+        avatar: values.avatar,
       },
     })
   }
@@ -102,7 +147,7 @@ export function UpdateAssistantDisplayDetails({
             <div>
               <label
                 htmlFor="name"
-                className="text-sm my-1 block font-semibold text-gray-700"
+                className="my-1 block text-sm font-semibold text-gray-700"
               >
                 Name
               </label>
@@ -122,7 +167,7 @@ export function UpdateAssistantDisplayDetails({
             <div>
               <label
                 htmlFor="botDescription"
-                className="text-sm my-1 block font-semibold text-gray-700"
+                className="my-1 block text-sm font-semibold text-gray-700"
               >
                 Description
               </label>
@@ -142,7 +187,7 @@ export function UpdateAssistantDisplayDetails({
             <div>
               <label
                 htmlFor="header"
-                className="text-sm my-1 block font-semibold text-gray-700"
+                className="my-1 block text-sm font-semibold text-gray-700"
               >
                 Header
               </label>
@@ -158,6 +203,173 @@ export function UpdateAssistantDisplayDetails({
                   {form.formState.errors.header.message}
                 </p>
               )}
+            </div>
+            <div className="flex flex-col justify-between align-baseline sm:flex-row">
+              <Avatar className="h-48 w-48">
+                <AvatarImage
+                  src={form.getValues("avatar") || config?.avatar}
+                  alt="@assistant"
+                />
+                <AvatarFallback>BOT</AvatarFallback>
+              </Avatar>
+              <div className="space-y-6">
+                <div>
+                  <label
+                    htmlFor="gender"
+                    className="my-1 block text-sm font-semibold text-gray-700"
+                  >
+                    Gender
+                  </label>
+                  <Select
+                    {...form.register("gender")}
+                    defaultValue={config?.gender}
+                    onValueChange={(value) => {
+                      form.setValue("gender", value)
+                    }}
+                  >
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.gender && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.gender.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="ethnicity"
+                    className="my-1 block text-sm font-semibold text-gray-700"
+                  >
+                    Ethnicity
+                  </label>
+                  <Select
+                    {...form.register("ethnicity")}
+                    defaultValue={config?.ethnicity}
+                    onValueChange={(value) => {
+                      form.setValue("ethnicity", value)
+                    }}
+                  >
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Select ethnicity" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Caucasian">Caucasian</SelectItem>
+                      <SelectItem value="Indian">Indian</SelectItem>
+                      <SelectItem value="African">African</SelectItem>
+                      <SelectItem value="Asian">Asian</SelectItem>
+                      <SelectItem value="Hispanic">Hispanic</SelectItem>
+                      <SelectItem value="Middle Eastern">
+                        Middle Eastern
+                      </SelectItem>
+                      <SelectItem value="South Asian">South Asian</SelectItem>
+                      <SelectItem value="Pacific Islander">
+                        Pacific Islander
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.ethnicity && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.ethnicity.message}
+                    </p>
+                  )}
+                </div>
+
+                <Button
+                  type="button"
+                  disabled={isGenerating}
+                  onClick={async () => {
+                    const gender = form.getValues("gender")
+                    const ethnicity = form.getValues("ethnicity")
+
+                    if (gender && ethnicity) {
+                      try {
+                        setIsGenerating(true)
+                        const prompt = `A passport photo of a charismatic sales agent with gender ${gender} and of ${ethnicity} ethnicity. The agent has long, slightly wavy blonde hair tied back in a ponytail. The face is expressive and confident. The agent is wearing a dark, textured shirt with unique, slightly shimmering patterns. The background is a calm, bright sunny color in a slightly darker shade—something like a muted dark yellow (but not black). The photo is passport-sized.`
+                        const result = await falClient.subscribe(
+                          "fal-ai/flux/schnell",
+                          {
+                            input: {
+                              prompt,
+                              num_images: 1,
+                              num_inference_steps: 4,
+                              enable_safety_checker: true,
+                              image_size: {
+                                width: 48,
+                                height: 48,
+                              },
+                            },
+                            pollInterval: 5000,
+                            logs: false,
+                            onQueueUpdate(update) {
+                              console.log("Queue update", update)
+                            },
+                          }
+                        )
+
+                        const typedResult = result as FalResult
+
+                        if (
+                          !typedResult ||
+                          Object.keys(typedResult).length === 0 ||
+                          !typedResult.images ||
+                          typedResult.images.length === 0
+                        ) {
+                          throw new Error("No result from fal")
+                        }
+
+                        // @ts-ignore
+                        const imageUrl = typedResult.images[0].url
+
+                        // Update the form with the generated image URL
+                        form.setValue("avatar", imageUrl)
+
+                        toast({
+                          title: "Image Generated",
+                          description:
+                            "The avatar image has been generated successfully.",
+                          variant: "default",
+                        })
+                        setIsGenerating(false)
+                      } catch (error) {
+                        console.error("Error generating image:", error)
+                        toast({
+                          title: "Error",
+                          description:
+                            "Failed to generate the image. Please try again.",
+                          variant: "destructive",
+                        })
+                        setIsGenerating(false)
+                      }
+                    } else {
+                      toast({
+                        title: "Error",
+                        description: "Please select both gender and ethnicity.",
+                        variant: "destructive",
+                      })
+                      setIsGenerating(false)
+                    }
+                  }}
+                >
+                  {isGenerating ? (
+                    <>
+                      <Icons.spinner
+                        className="mr-2 size-4 animate-spin"
+                        aria-hidden="true"
+                      />
+                      <span>Generating...</span>
+                    </>
+                  ) : (
+                    <span className="mr-2">Try Another Avatar</span>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </CardContent>
