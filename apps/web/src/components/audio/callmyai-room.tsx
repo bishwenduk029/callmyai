@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react"
 import {
   DailyVoiceEvent,
   useDailyVoiceClient,
@@ -7,16 +6,16 @@ import {
 import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 import { Howl } from "howler"
+import Image from "next/image"
+import { useEffect, useRef, useState } from "react"
+
+import { fontNunito } from "@/config/fonts"
 
 import { useToast } from "@/hooks/use-toast"
 
-import { LoadingSpinner } from "./chat-room-provider"
-import { GooeyDiv } from "./gooey-div"
-import { InnerOrb } from "./inner-orb"
-import { Card, CardContent } from "../ui/card"
-import { fontNunito } from "@/config/fonts"
 import { Avatar } from "../ui/avatar"
-import { AvatarImage } from "@radix-ui/react-avatar"
+import { Card, CardContent } from "../ui/card"
+import { LoadingSpinner } from "./chat-room-provider"
 
 const ringtone = new Howl({
   src: ["/ringtone.mp3"],
@@ -44,14 +43,8 @@ interface CallMyAIRoomProps {
 export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
   const [isListening, setIsListening] = useState(false)
   const [isLoadingBot, setIsLoadingBot] = useState(false)
-  const [audioData, setAudioData] = useState<number[]>(new Array(6).fill(1))
-  const [averageFrequency, setAverageFrequency] = useState(0)
   const [elapsedTime, setElapsedTime] = useState(0)
   const [disablePhone, setDisablePhone] = useState(false)
-
-  const audioContextRef = useRef<AudioContext | null>(null)
-  const analyserRef = useRef<AnalyserNode | null>(null)
-  const animationFrameRef = useRef<number | null>(null)
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const voiceClient = useDailyVoiceClient()
   const { toast } = useToast()
@@ -134,14 +127,25 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B7F8DB] to-[#50A7C2] p-4 sm:p-0">
-      <Card className="w-full max-w-md m-auto shadow-lg p-4">
+      <Card className="m-auto w-full max-w-md p-4 shadow-lg">
         <CardContent className="flex flex-col items-center">
-          <Avatar className="w-48 h-48 rounded-full mb-4 border-4 shadow-xl shadow-green-300 border-green-500">
-            <AvatarImage src={chatSession.avatar} />
+          <Avatar className="mb-4 h-24 w-24 rounded-full border-4 border-green-500 shadow-xl shadow-green-300">
+            <Image
+              src={chatSession.avatar!}
+              width={96}
+              height={96}
+              alt={chatSession.botName || "Bot"}
+            />
           </Avatar>
-          <div className={`text-2xl font-bold mb-2 ${fontNunito.variable}`}>{chatSession.botName}</div>
-          <div className={`text-lg font-semibold text-gray-600 mb-8 ${fontNunito.variable}`}>{chatSession.description}</div>
-          <div className="flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary mb-4">
+          <div className={`mb-2 text-2xl font-bold ${fontNunito.variable}`}>
+            {chatSession.botName}
+          </div>
+          <div
+            className={`mb-8 text-lg font-semibold text-gray-600 ${fontNunito.variable}`}
+          >
+            {chatSession.description}
+          </div>
+          <div className="mb-4 flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary">
             {isListening && (
               <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
             )}

@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Image from "next/image"
-import { Mailbox } from "@phosphor-icons/react/dist/ssr"
 
 import { useMediaQuery } from "@/hooks/use-media"
 
