@@ -9,7 +9,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "avatars.githubusercontent.com",
+        hostname: "*",
       },
       {
         protocol: "https",
@@ -22,6 +22,14 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "fal.media",
+      },
+      {
+        protocol: "https",
+        hostname: "backend.composio.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
       },
     ],
   },

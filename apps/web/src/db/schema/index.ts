@@ -1,5 +1,5 @@
 import type { AdapterAccount } from "@auth/core/adapters"
-import { relations } from "drizzle-orm"
+import { InferModel, relations } from "drizzle-orm"
 import {
   boolean,
   index,
@@ -179,6 +179,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   visitorChats: many(chats, {
     relationName: "visitorChats",
   }),
+  integrations: many(integrations),
 }))
 
 export const verificationTokens = pgTable(
@@ -256,6 +257,37 @@ export const promptTemplates = pgTable("promptTemplate", {
   updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
 })
 
+// Add this new table for integrations
+export const integrations = pgTable(
+  "integration",
+  {
+    id: uuid("id").defaultRandom().notNull().primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    connectedAccountName: text("connectedAccountName").notNull(),
+    appId: text("appId").notNull(),
+    key: text("key").notNull(),
+    description: text("description"),
+    logo: text("logo"),
+    availableActions: text("availableActions").array().default([]),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  },
+  (integration) => ({
+    userIdIdx: index("integration_userId_idx").on(integration.userId),
+    appIdIdx: index("integration_appId_idx").on(integration.appId),
+  })
+)
+
+// Add this new relation
+export const integrationsRelations = relations(integrations, ({ one }) => ({
+  user: one(users, {
+    fields: [integrations.userId],
+    references: [users.id],
+  }),
+}))
+
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 
@@ -280,5 +312,8 @@ export type NewPromptTemplate = typeof promptTemplates.$inferInsert
 export type NewPlan = typeof plans.$inferInsert
 export type NewWebhookEvent = typeof webhookEvents.$inferInsert
 export type NewSubscription = typeof subscriptions.$inferInsert
+
+export type Integration = typeof integrations.$inferSelect
+export type NewIntegration = typeof integrations.$inferInsert
 
 export type Assistant = typeof assistants.$inferSelect

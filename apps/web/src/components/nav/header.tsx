@@ -21,7 +21,7 @@ import { NavigationMobile } from "@/components/nav/navigation-mobile"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "./logo"
 
-export async function Header(): Promise<JSX.Element> {
+export async function Header({showThemeToggle = true}): Promise<JSX.Element> {
   const session = await auth()
 
   return (
@@ -30,7 +30,7 @@ export async function Header(): Promise<JSX.Element> {
         <Logo />
         <Navigation navItems={siteConfig.navItems} />
         <div className="flex items-center justify-center">
-          <ThemeToggle />
+          {showThemeToggle && <ThemeToggle />}
           <NavigationMobile navItems={siteConfig.navItems} />
 
           <nav className="space-x-1">

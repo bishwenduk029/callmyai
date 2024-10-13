@@ -1,19 +1,21 @@
+import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import {
   DailyVoiceEvent,
   useDailyVoiceClient,
   useDailyVoiceClientEvent,
 } from "@callmyai/ai/ui"
 import { PhoneCall, PhonePause } from "@phosphor-icons/react"
+import { Headset } from "@phosphor-icons/react/dist/ssr"
 import { motion } from "framer-motion"
 import { Howl } from "howler"
-import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
 
 import { fontNunito } from "@/config/fonts"
 
 import { useToast } from "@/hooks/use-toast"
 
 import { Avatar } from "../ui/avatar"
+import { BackgroundGradient } from "../ui/background-gradient"
 import { Card, CardContent } from "../ui/card"
 import { LoadingSpinner } from "./chat-room-provider"
 
@@ -127,53 +129,66 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B7F8DB] to-[#50A7C2] p-4 sm:p-0">
-      <Card className="m-auto w-full max-w-md p-4 shadow-lg">
-        <CardContent className="flex flex-col items-center">
-          <Avatar className="mb-4 h-24 w-24 rounded-full border-4 border-green-500 shadow-xl shadow-green-300">
-            <Image
-              src={chatSession.avatar!}
-              width={96}
-              height={96}
-              alt={chatSession.botName || "Bot"}
-            />
-          </Avatar>
-          <div className={`mb-2 text-2xl font-bold ${fontNunito.variable}`}>
-            {chatSession.botName}
-          </div>
-          <div
-            className={`mb-8 text-lg font-semibold text-gray-600 ${fontNunito.variable}`}
-          >
-            {chatSession.description}
-          </div>
-          <div className="mb-4 flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary">
-            {isListening && (
-              <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
-            )}
-            <span>
-              {elapsedTime}s of {chatSession.duration}s
-            </span>
-          </div>
-          {!disablePhone && (
-            <motion.button
-              className="rounded px-5 py-2.5 text-white transition-colors"
-              whileHover={{ scale: 1.2 }}
-              onClick={toggleListening}
-              disabled={isLoadingBot}
-            >
-              {isLoadingBot ? (
-                <LoadingSpinner size={75} className="text-primary" />
-              ) : isListening ? (
-                <PhonePause size={75} className="rounded-full bg-primary p-2" />
-              ) : (
-                <PhoneCall
-                  size={75}
-                  className="rounded-full bg-primary p-2 text-primary-foreground"
+      <BackgroundGradient className="dark:bg-zinc-900 rounded-[22px] bg-white p-4 sm:p-10">
+        <Card className="m-auto w-full max-w-md border-none p-4 shadow-none">
+          <CardContent className="flex flex-col items-center">
+            {chatSession.avatar ? (
+              <Avatar className="mb-4 h-24 w-24 rounded-full border-4 border-green-500 shadow-xl shadow-green-300">
+                (
+                <Image
+                  src={chatSession.avatar!}
+                  width={96}
+                  height={96}
+                  alt={chatSession.botName || "Bot"}
                 />
+                )
+              </Avatar>
+            ) : (
+              <div className="mb-4 rounded-full border-4 border-green-500 bg-white p-2 shadow-xl shadow-green-300">
+                <Headset size={64} className="text-primary" weight="duotone" />
+              </div>
+            )}
+            <div className={`mb-2 text-2xl font-bold ${fontNunito.variable}`}>
+              {chatSession.botName || "AI Receptionist"}
+            </div>
+            <div
+              className={`mb-8 text-lg font-semibold text-gray-600 ${fontNunito.variable}`}
+            >
+              {chatSession.description || "AI powered Call Assistant"}
+            </div>
+            <div className="mb-4 flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary">
+              {isListening && (
+                <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
               )}
-            </motion.button>
-          )}
-        </CardContent>
-      </Card>
+              <span>
+                {elapsedTime}s of {chatSession.duration}s
+              </span>
+            </div>
+            {!disablePhone && (
+              <motion.button
+                className="rounded px-5 py-2.5 text-white transition-colors"
+                whileHover={{ scale: 1.2 }}
+                onClick={toggleListening}
+                disabled={isLoadingBot}
+              >
+                {isLoadingBot ? (
+                  <LoadingSpinner size={75} className="text-primary" />
+                ) : isListening ? (
+                  <PhonePause
+                    size={75}
+                    className="rounded-full bg-primary p-2"
+                  />
+                ) : (
+                  <PhoneCall
+                    size={75}
+                    className="rounded-full bg-primary p-2 text-primary-foreground"
+                  />
+                )}
+              </motion.button>
+            )}
+          </CardContent>
+        </Card>
+      </BackgroundGradient>
     </div>
   )
 }

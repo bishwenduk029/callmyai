@@ -2,16 +2,13 @@
 
 import { RtviConfig, updateAssistant } from "@/actions/assistant"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Check } from "@phosphor-icons/react/dist/ssr"
 import { AvatarFallback } from "@radix-ui/react-avatar"
-import { ChevronDownIcon } from "@radix-ui/react-icons"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { useToast } from "@/hooks/use-toast"
 import { falClient } from "@/lib/fal"
-import { cn } from "@/lib/utils"
 
 import {
   Card,
@@ -22,24 +19,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import { useState } from "react"
 import { Assistant } from "../../db/schema/index"
+import { Icons } from "../icons"
 import { Avatar, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../ui/command"
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form"
 import { Input } from "../ui/input"
 import {
   Select,
@@ -49,8 +33,6 @@ import {
   SelectValue,
 } from "../ui/select"
 import { SubmitButton } from "../ui/submit-button"
-import { Icons } from "../icons"
-import { useState } from "react"
 
 interface UpdateAssistantNameFormProps {
   assistant: Assistant

@@ -90,7 +90,7 @@ export default function CallHandleForm({ user }: CallHandleFormProps) {
         <CardHeader>
           <CardTitle>Your Call Handle</CardTitle>
           <CardDescription>
-            Used to identify your handle in the CallMyAI service.
+            Used to identify your handle in CallMyAI service.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-1">

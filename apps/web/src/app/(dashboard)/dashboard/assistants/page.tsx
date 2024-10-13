@@ -8,6 +8,7 @@ import {
   Gear,
   Headset,
   PhoneIncoming,
+  PlugsConnected,
   Plus,
   PlusCircle,
 } from "@phosphor-icons/react/dist/ssr"
@@ -78,6 +79,13 @@ export default async function AssistantsPage() {
         >
           <Headset className="mr-2 h-5 w-5" weight="bold" />
           Assistants
+        </Link>
+        <Link
+          href="/dashboard/integrations"
+          className="flex items-center text-primary hover:underline"
+        >
+          <PlugsConnected className="mr-2 h-5 w-5" />
+          Integrations
         </Link>
       </nav>
       <div className="flex w-full flex-col flex-wrap">

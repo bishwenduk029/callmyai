@@ -108,7 +108,6 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
           fontHeading.variable
         )}
       >
-        <SmoothScrollProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -118,7 +117,6 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
             <Toaster />
             <Analytics />
           </ThemeProvider>
-        </SmoothScrollProvider>
       </body>
       <noscript>
         <iframe

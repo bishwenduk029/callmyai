@@ -112,6 +112,17 @@ export function NavigationMobile({ navItems }: NavigationMobileProps) {
               <span>Assistants</span>
             </span>
           </MobileLink>
+          <MobileLink
+            key={"integrations"}
+            href="/dashboard/integrations"
+            segment={String(segment)}
+            setIsOpen={setIsOpen}
+          >
+            <span className="flex flex-row items-center gap-2">
+              <Headset className="size-5" />
+              <span>Integrations</span>
+            </span>
+          </MobileLink>
           <Separator />
           {navItems.map((item) => (
             <MobileLink

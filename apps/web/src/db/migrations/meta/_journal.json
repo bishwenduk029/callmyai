@@ -120,6 +120,34 @@
       "when": 1725175375837,
       "tag": "0016_legal_ghost_rider",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1728606581357,
+      "tag": "0017_brave_gabe_jones",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1728612643223,
+      "tag": "0018_striped_lightspeed",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1728614265067,
+      "tag": "0019_spotty_tana_nile",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1728709252566,
+      "tag": "0020_mushy_daredevil",
+      "breakpoints": true
     }
   ]
 }

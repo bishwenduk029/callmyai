@@ -75,7 +75,7 @@ export default function UserNameForm({ user }: UserNameFormProps) {
           <CardTitle>Your Name</CardTitle>
           <CardDescription>
             Enter the name you want your AI call assistant to use when referring
-            to you.
+            to you in calls.
           </CardDescription>
         </CardHeader>
         <CardContent>

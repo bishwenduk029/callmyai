@@ -1,7 +1,7 @@
 import { and, desc, eq, isNotNull, ne, sql } from "drizzle-orm"
 
 import { db } from "@/config/db"
-import { assistants, chats, newsletterSubscribers, users } from "@/db/schema"
+import { assistants, chats, integrations, newsletterSubscribers, users } from "@/db/schema"
 
 export const psGetUserById = db
   .select()
@@ -183,3 +183,19 @@ export const psGetAssistantById = db
   .from(assistants)
   .where(eq(assistants.id, sql.placeholder("assistantId")))
   .prepare("psGetAssistantById")
+
+// export const psCreateIntegration = db
+//   .insert(integrations)
+//   .values({
+//     userId: sql.placeholder('userId'),
+//     connectedAccountName: sql.placeholder('connectedAccountName'),
+//     availableActions: sql.placeholder('availableActions') as unknown as string[],
+//   })
+//   .returning()
+//   .prepare('psCreateIntegration')
+
+export const psGetIntegrationsByUserId = db
+  .select()
+  .from(integrations)
+  .where(eq(integrations.userId, sql.placeholder('userId')))
+  .prepare('psGetIntegrationsByUserId')
