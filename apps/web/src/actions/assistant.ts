@@ -69,6 +69,7 @@ const rtviConfigSchema = z
     gender: z.string().optional(),
     ethnicity: z.string().optional(),
     avatar: z.string().optional(),
+    tools: z.array(z.string()).optional(),
     llm: z.object({
       model: z.object({
         provider: z.string(),

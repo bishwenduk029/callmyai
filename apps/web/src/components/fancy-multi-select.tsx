@@ -1,8 +1,9 @@
 "use client"
 
+import * as React from "react"
+import Image from "next/image"
 import { X } from "@phosphor-icons/react/dist/ssr"
 import { Command as CommandPrimitive } from "cmdk"
-import * as React from "react"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -11,9 +12,10 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+
 import { Skeleton } from "./ui/skeleton"
 
-type SelectOption = Record<"value" | "label", string>
+type SelectOption = Record<"value" | "label" | "logo", string>
 
 export function FancyMultiSelect({
   options,
@@ -63,9 +65,7 @@ export function FancyMultiSelect({
     []
   )
 
-  const selectables = options.filter(
-    (option) => !selected.includes(option)
-  )
+  const selectables = options.filter((option) => !selected.includes(option))
 
   console.log(selectables, selected, inputValue)
 
@@ -79,6 +79,14 @@ export function FancyMultiSelect({
           {selected.map((framework) => {
             return (
               <Badge key={framework.value} variant="secondary">
+                {framework.logo && (
+                  <Image
+                    src={framework.logo}
+                    alt={framework.label}
+                    width={20}
+                    height={20}
+                  />
+                )}
                 {framework.label}
                 <button
                   className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -139,6 +147,14 @@ export function FancyMultiSelect({
                       }}
                       className="cursor-pointer"
                     >
+                      {option.logo && (
+                        <Image
+                          src={option.logo}
+                          alt={option.label}
+                          width={20}
+                          height={20}
+                        />
+                      )}
                       {option.label}
                     </CommandItem>
                   ))}

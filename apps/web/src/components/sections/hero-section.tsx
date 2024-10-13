@@ -80,7 +80,9 @@ export function HeroSection() {
             <Tabs defaultValue="aisha" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="aisha">AI Sales Agent</TabsTrigger>
-                <TabsTrigger value="receptionist">AI Receptionist</TabsTrigger>
+                <TabsTrigger value="receptionist">
+                  AI Receptionist (NOVA)
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="aisha">
                 <div className="flex flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">

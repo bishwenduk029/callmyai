@@ -190,12 +190,13 @@ export const updateIntegration = actionClient
   })
 
 export const getIntegrationsByUserId = actionClient
-  .schema(z.object({ userId: z.string() }))
+  .schema(z.object({ userId: z.string().optional() }))
   .action(async ({ parsedInput }): Promise<ActionResponse> => {
     try {
       const userIntegrations = await psGetIntegrationsByUserId.execute({
         userId: parsedInput.userId,
       })
+      console.log(parsedInput.userId, userIntegrations)
       return { success: true, data: userIntegrations }
     } catch (error) {
       console.error("Error fetching integrations:", error)

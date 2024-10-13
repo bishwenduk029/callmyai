@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getAssistantById } from "@/actions/assistant"
+import { getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   Browser,
@@ -29,6 +30,10 @@ export default async function SettingsPage({
   const session = await auth()
 
   if (!session) redirect("/signin")
+
+  const user = await getUserByEmail({
+    email: session.user.email || "",
+  })
 
   const result = await getAssistantById({ assistantId: params.assistantId })
 
@@ -79,10 +84,11 @@ export default async function SettingsPage({
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex flex-col py-4">
-          <div className="w-full md:w-3/4">
+          <div className="mb-2 w-full md:w-3/4">
             <Settings
               assistant={result.data.assistant!}
               config={result.data.config!}
+              userId={user.data?.id}
             />
           </div>
           <CallMyAiMobilePreview assistantId={params.assistantId} />

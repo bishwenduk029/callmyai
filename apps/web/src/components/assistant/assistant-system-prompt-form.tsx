@@ -20,6 +20,9 @@ import {
 import { Assistant } from "../../db/schema/index"
 import { SubmitButton } from "../ui/submit-button"
 import { Textarea } from "../ui/textarea"
+import auth from "@/lib/auth"
+import { getUserByEmail } from "@/actions/user"
+import { redirect } from "next/navigation"
 
 interface AssistantSystemPromptFormProps {
   assistant: Assistant

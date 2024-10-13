@@ -14,7 +14,7 @@ import { fontNunito } from "@/config/fonts"
 
 import { useToast } from "@/hooks/use-toast"
 
-import { Avatar } from "../ui/avatar"
+import { Avatar, AvatarImage } from "../ui/avatar"
 import { BackgroundGradient } from "../ui/background-gradient"
 import { Card, CardContent } from "../ui/card"
 import { LoadingSpinner } from "./chat-room-provider"
@@ -128,14 +128,15 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
   }, [isLoadingBot])
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B7F8DB] to-[#50A7C2] p-4 sm:p-0">
-      <BackgroundGradient className="dark:bg-zinc-900 rounded-[22px] bg-white p-1">
-        <Card className="w-full border-none p-4 shadow-none">
+    <div className="fixed w-full inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B7F8DB] to-[#50A7C2] p-4 sm:p-0">
+      <BackgroundGradient className="dark:bg-zinc-900 w-full rounded-[22px] bg-white p-1">
+        <Card className="w-full border-none py-4 shadow-xl">
           <CardContent className="flex flex-col items-center">
             {chatSession.avatar ? (
-              <Avatar className="mb-4 h-24 w-24 rounded-full border-4 border-green-500 shadow-xl shadow-green-300">
+              <Avatar className="mb-4 size-24 rounded-full border-4 border-green-500 shadow-lg shadow-green-300">
                 (
                 <Image
+                  className="h-full w-full object-cove p-0"
                   src={chatSession.avatar!}
                   width={96}
                   height={96}
