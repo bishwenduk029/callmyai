@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import Image from "next/image"
 
 import { useMediaQuery } from "@/hooks/use-media"
@@ -9,23 +8,24 @@ import { Button } from "@/components/ui/button"
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
+  DrawerTrigger
 } from "@/components/ui/drawer"
 
-import { Avatar, AvatarImage } from "../ui/avatar"
+import { Avatar } from "../ui/avatar"
 import { AssistantIframe } from "./assistant-iframe"
 
 interface CallMyAiMobilePreviewProps {
-  assistantId: string
+  assistantId?: string
   title?: string
+  callMyAiHandle?: string
 }
 
 export function CallMyAiMobilePreview({
   assistantId,
   title = "CallMyAI Voice Assistant Preview",
+  callMyAiHandle
 }: CallMyAiMobilePreviewProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
@@ -57,7 +57,11 @@ export function CallMyAiMobilePreview({
           <DrawerHeader className="text-center">
             <DrawerTitle>{title}</DrawerTitle>
           </DrawerHeader>
-          <AssistantIframe assistantId={assistantId} />
+          {callMyAiHandle ? (
+            <AssistantIframe callMyAiHandle={callMyAiHandle} />
+          ) : (
+            <AssistantIframe assistantId={assistantId} />
+          )}
         </div>
       </DrawerContent>
     </Drawer>

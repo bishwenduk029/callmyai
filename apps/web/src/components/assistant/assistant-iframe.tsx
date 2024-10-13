@@ -6,12 +6,15 @@ import { env } from "@/env.mjs"
 
 import { IframeWrapper } from "@/components/assistant/iframe-wrapper"
 
-
 interface AssistantIframeProps {
-  assistantId: string
+  assistantId?: string
+  callMyAiHandle?: string
 }
 
-export function AssistantIframe({ assistantId }: AssistantIframeProps) {
+export function AssistantIframe({
+  assistantId,
+  callMyAiHandle,
+}: AssistantIframeProps) {
   const [key, setKey] = useState(0)
 
   useEffect(() => {
@@ -27,17 +30,21 @@ export function AssistantIframe({ assistantId }: AssistantIframeProps) {
   }, [])
 
   return (
-      <IframeWrapper
-        key={key}
-        src={`${env.NEXT_PUBLIC_APP_URL}/assistants/${assistantId}`}
-        className="h-3/4 w-full rounded-2xl border-2 border-black"
-        style={{
-          boxShadow: "0 0 15px 2px rgba(0, 0, 0, 0.5)",
-          overflow: "hidden",
-        }}
-        allow="autoplay; encrypted-media"
-        allowFullScreen
-        scrolling="no"
-      />
+    <IframeWrapper
+      key={key}
+      src={
+        callMyAiHandle
+          ? `${env.NEXT_PUBLIC_APP_URL}/${callMyAiHandle}`
+          : `${env.NEXT_PUBLIC_APP_URL}/assistants/${assistantId}`
+      }
+      className="h-3/4 w-full rounded-2xl border-2 border-black"
+      style={{
+        boxShadow: "0 0 15px 2px rgba(0, 0, 0, 0.5)",
+        overflow: "hidden",
+      }}
+      allow="autoplay; encrypted-media"
+      allowFullScreen
+      scrolling="no"
+    />
   )
 }

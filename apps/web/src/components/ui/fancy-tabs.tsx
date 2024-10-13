@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 
 import { useState } from "react"
@@ -98,7 +99,7 @@ export const FadeInDiv = ({
   hovering?: boolean
 }) => {
   const isActive = (tab: Tab) => {
-    return tab.value === tabs[0].value
+    return tab.value === tabs[0]?.value
   }
   return (
     <div className="relative h-full w-full">

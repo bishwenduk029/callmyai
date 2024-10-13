@@ -5,7 +5,7 @@ import { auth } from "@/auth"
 
 import { Integration } from "@/db/schema"
 
-import IntegrationsClient from "./client"
+import IntegrationsClient from "@/components/integrations/client"
 
 export default async function IntegrationsPage() {
   const session = await auth()

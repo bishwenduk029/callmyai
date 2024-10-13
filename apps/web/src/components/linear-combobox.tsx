@@ -29,7 +29,7 @@ import { Icons } from "./icons"
 
 interface LinearComboboxProps {
   userEmail: string
-  onLinkGenerated: (app: ExternalApp) => void
+  onLinkGenerated: (app: ExternalApp | null) => void
 }
 
 export function LinearCombobox({ userEmail, onLinkGenerated }: LinearComboboxProps) {
