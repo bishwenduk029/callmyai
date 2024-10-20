@@ -88,7 +88,7 @@ export default async function SettingsPage({
             <Settings
               assistant={result.data.assistant!}
               config={result.data.config!}
-              userId={user.data?.id}
+              userId={user?.data?.id}
             />
           </div>
           <CallMyAiMobilePreview assistantId={params.assistantId} />

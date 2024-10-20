@@ -148,6 +148,7 @@ export default function UpdateIntegrationForm({
                   defaultSelected={currentActions?.map((action) => ({
                     value: action,
                     label: action,
+                    logo: logo || "",
                   }))}
                   options={actionsInUse.map((action: AppAction) => ({
                     value: action.name,

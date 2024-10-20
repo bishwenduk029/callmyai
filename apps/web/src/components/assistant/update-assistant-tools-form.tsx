@@ -100,7 +100,7 @@ export function UpdateAssistantToolsForm({
       name: assistant.name,
       duration: assistant.duration,
       config: {
-        ...config,
+        ...config!,
         tools: values.tools,
       },
     })
