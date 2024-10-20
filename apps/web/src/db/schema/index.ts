@@ -120,6 +120,7 @@ export const users = pgTable(
     id: text("id").notNull().primaryKey(),
     role: userRoleEnum("role").notNull().default("USER"),
     name: text("name"),
+    phone: text("phone"),
     surname: text("surname"),
     username: text("username").unique(),
     email: text("email").unique().notNull(),

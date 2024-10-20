@@ -31,6 +31,7 @@ export interface ChatRoomSession {
   header?: string
   description?: string
   avatar?: string
+  actionsOwnerEmail?: string
 }
 
 interface ChatRoomUIProps {

@@ -36,6 +36,7 @@ export interface ChatRoomSession {
   header?: string
   description?: string
   avatar?: string
+  actionsOwnerEmail?: string
 }
 
 interface CallMyAIRoomProps {
@@ -153,7 +154,7 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
               {chatSession.botName || "AI Receptionist"}
             </div>
             <div
-              className={`mb-8 text-lg font-semibold text-gray-600 ${fontNunito.variable}`}
+              className={`mb-8 text-lg font-semibold text-muted-foreground ${fontNunito.variable}`}
             >
               {chatSession.description || "AI powered Call Assistant"}
             </div>

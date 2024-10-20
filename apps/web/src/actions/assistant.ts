@@ -52,6 +52,7 @@ export const initiateNewSessionforAssistant = actionClient
           header: config?.header || "",
           description: config?.description || "",
           avatar: config?.avatar || "",
+          actionsOwnerEmail: result.user.email,
         }
 
         return chatRoomSession
@@ -70,6 +71,7 @@ const rtviConfigSchema = z
     ethnicity: z.string().optional(),
     avatar: z.string().optional(),
     tools: z.array(z.string()).optional(),
+    actionsOwnerEmail: z.string().optional(),
     llm: z.object({
       model: z.object({
         provider: z.string(),

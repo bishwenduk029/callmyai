@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for callmyai-pipecat-phone-blue-river-3795 on 2024-10-18T00:33:33+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'callmyai-pipecat-phone-blue-river-3795'
+primary_region = 'sjc'
+
+[build]
+
+[env]
+  FLY_APP_NAME = 'callmyai-pipecat-phone'
+
+[http_service]
+  internal_port = 7860
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1

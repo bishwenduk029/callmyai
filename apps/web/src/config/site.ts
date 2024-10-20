@@ -16,7 +16,7 @@ const links = {
 
 export const siteConfig = {
   name: "callmyai.app (beta)",
-  description: "Open Call Assistant Infrasrtucture",
+  description: "AI Voice Assistant Platform",
   links,
   url: "https://callmyai.app",
   ogImage: links.openGraphImage,

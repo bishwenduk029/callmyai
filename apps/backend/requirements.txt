@@ -1,4 +1,4 @@
-pipecat-ai[daily,openai,cartesia,silero]==0.0.39
+pipecat-ai[daily,openai,cartesia,silero]==0.0.46
 fastapi
 uvicorn
 python-dotenv
@@ -9,3 +9,5 @@ torch
 torchaudio
 aiohttp
 silero-vad
+composio_core
+composio_openai

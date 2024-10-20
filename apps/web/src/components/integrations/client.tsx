@@ -41,6 +41,7 @@ const integrationCreateSchema = z.object({
   key: z.string(),
   description: z.string().optional(),
   logo: z.string().optional(),
+  email: z.string().optional(),
 })
 
 interface IntegrationsClientProps {

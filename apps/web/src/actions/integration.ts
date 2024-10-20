@@ -196,7 +196,6 @@ export const getIntegrationsByUserId = actionClient
       const userIntegrations = await psGetIntegrationsByUserId.execute({
         userId: parsedInput.userId,
       })
-      console.log(parsedInput.userId, userIntegrations)
       return { success: true, data: userIntegrations }
     } catch (error) {
       console.error("Error fetching integrations:", error)

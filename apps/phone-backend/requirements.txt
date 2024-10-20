@@ -1,0 +1,15 @@
+pipecat-ai[daily,openai,silero]==0.0.45
+fastapi
+uvicorn
+python-dotenv
+loguru
+requests
+websockets
+torch
+torchaudio
+aiohttp
+silero-vad
+supabase>=1.0.0
+twilio
+openai>=1.0.0,<2.0.0
+httpx>=0.23.0,<1.0.0

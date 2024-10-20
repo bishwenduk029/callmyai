@@ -12,16 +12,15 @@ from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
 from pipecat.processors.aggregators.llm_response import LLMAssistantResponseAggregator, LLMUserResponseAggregator
 from pipecat.frames.frames import EndFrame
-from pipecat.services.openai import OpenAILLMService, OpenAITTSService, OpenAILLMContext
+from pipecat.services.openai import OpenAILLMService, OpenAITTSService
 from pipecat.transports.services.daily import DailyParams, DailyTransport
 from pipecat.processors.frameworks.rtvi import RTVIProcessor, RTVIConfig
 from pipecat.frames.frames import (
     LLMMessagesFrame,
     EndFrame
 )
-from pipecat.audio.vad.silero import SileroVADAnalyzer
-from composio import Action
-from composio_openai import ComposioToolSet, Action
+from pipecat.vad.silero import SileroVADAnalyzer
+from twilio.rest import Client
 
 from loguru import logger
 
@@ -31,41 +30,12 @@ load_dotenv(override=True)
 logger.remove(0)
 logger.add(sys.stderr, level="INFO")
 
+twilio_account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+twilioclient = Client(twilio_account_sid, twilio_auth_token)
+
 daily_api_key = os.getenv("DAILY_API_KEY", "")
 daily_api_url = os.getenv("DAILY_API_URL", "https://api.daily.co/v1")
-
-def create_composio_toolset(entity_id: str) -> ComposioToolSet:
-    return ComposioToolSet(entity_id=entity_id)
-
-class CallMyAIActionsProcessor:
-    def __init__(self, entity_id, context: OpenAILLMContext, tools: list[str]):
-        self.entity_id = entity_id
-        composio_toolset = create_composio_toolset(entity_id)
-        all_actions: list[Action] = []
-        
-        for tool_json in tools:
-            tool_data: dict = json.loads(tool_json)
-            available_actions: list[str] = tool_data.get("availableActions", [])
-            
-            for action_string in available_actions:
-                try:
-                    action_enum = getattr(Action, action_string)
-                    all_actions.append(action_enum)
-                except AttributeError:
-                    logger.warning(f"Invalid action string: {action_string}")
-        
-        if all_actions:
-            tool = composio_toolset.get_tools(actions=all_actions)
-            context.set_tools(tool)
-        else:
-            logger.warning("No valid actions found in the provided tools.")
-        
-
-    async def some_handler(self, function_name, tool_call_id, args, llm, context, result_callback):
-        toolset = create_composio_toolset("bishwenduk029@gmail.com")
-        return toolset.execute_action(action=Action(value=function_name),
-                params=args,
-                entity_id=self.entity_id,)
 
 def load_config(config_arg):
     if config_arg.startswith('@'):
@@ -77,6 +47,8 @@ def load_config(config_arg):
 
 async def main(room_url: str, token: str, client_config: dict):
     logger.info(f"Client Config: {client_config}")
+    callId = client_config["callId"]
+    sipUri = client_config["sipUri"]
     async with aiohttp.ClientSession() as session:
         transport = DailyTransport(
             room_url,
@@ -104,24 +76,24 @@ async def main(room_url: str, token: str, client_config: dict):
         llm = OpenAILLMService(
             api_key=os.getenv("OPENAI_API_KEY"),
             model="gpt-4o-mini")
-        
-        
 
-        messages = client_config["config"]["llm"]["messages"]
-        
-        context = OpenAILLMContext(messages)
-        context_aggregator = llm.create_context_aggregator(context)
-        logger.info(f"Actions Owner Email: {client_config['config']['actionsOwnerEmail']}")
-        call_handle = CallMyAIActionsProcessor(client_config["config"]["actionsOwnerEmail"], context, client_config["config"]["tools"])
-        llm.register_function(None, call_handle.some_handler)
+        messages = [
+            {
+                "role": "system",
+                "content": client_config["config"]["llm"]["messages"][0]["content"],
+            },
+        ]
+
+        tma_in = LLMUserResponseAggregator(messages)
+        tma_out = LLMAssistantResponseAggregator(messages)
 
         pipeline = Pipeline([
             transport.input(),
-            context_aggregator.user(),
+            tma_in,
             llm,
             tts,
             transport.output(),
-            context_aggregator.assistant(),
+            tma_out
         ])
 
         task = PipelineTask(pipeline, PipelineParams(allow_interruptions=True))
@@ -172,6 +144,20 @@ async def main(room_url: str, token: str, client_config: dict):
         async def on_call_state_updated(transport, state):
             if state == "left":
                 await task.queue_frame(EndFrame())
+        
+        @transport.event_handler("on_dialin_ready")
+        async def on_dialin_ready(transport, cdata):
+            # For Twilio, Telnyx, etc. You need to update the state of the call
+            # and forward it to the sip_uri..
+            print(f"Forwarding call: {callId} {sipUri}")
+
+            try:
+                # The TwiML is updated using Twilio's client library
+                call = twilioclient.calls(callId).update(
+                    twiml=f"<Response><Dial><Sip>{sipUri}</Sip></Dial></Response>"
+                )
+            except Exception as e:
+                raise Exception(f"Failed to forward call: {str(e)}")
 
         runner = PipelineRunner()
 

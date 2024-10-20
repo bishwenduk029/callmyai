@@ -12,7 +12,7 @@ import { User } from "@/db/schema"
 
 import { cn } from "@/lib/utils"
 
-import { ChatRoomSession, ChatRoomUI } from "./chat-room"
+import { ChatRoomSession } from "./chat-room"
 import { CallMyAIRoom } from "./callmyai-room"
 
 interface ChatRoomProps {
@@ -40,6 +40,7 @@ export const DailyChatRoomProvider = ({
             ...configuration,
             assistantId: session.assistantId,
             userName: session.userName,
+            actionsOwnerEmail: session.actionsOwnerEmail,
           },
         })
         setVoiceClient(client)
