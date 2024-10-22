@@ -45,6 +45,7 @@ export function HeroSection() {
               <span className="flex flex-row">
                 <span>AI&nbsp;</span>
                 <FlipWords
+                  className="text-primary"
                   words={[
                     "Receptionists",
                     "Customer Support Rep",
