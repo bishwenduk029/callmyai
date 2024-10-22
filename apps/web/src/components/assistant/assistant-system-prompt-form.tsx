@@ -1,10 +1,20 @@
 "use client"
 
+import { useCallback, useEffect, useState } from "react"
+import { redirect } from "next/navigation"
 import { RtviConfig, updateAssistantConfig } from "@/actions/assistant"
+import {
+  AppAction,
+  fetchAppActions,
+  fetchExternalAppsAction,
+  getIntegrationsByUserId,
+  updateIntegration,
+} from "@/actions/integration"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAction } from "next-safe-action/hooks"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { z } from "zod"
+import { Control } from "react-hook-form"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -18,34 +28,43 @@ import {
 } from "@/components/ui/card"
 
 import { Assistant } from "../../db/schema/index"
+import { FancyArea } from "../fancy-area"
 import { SubmitButton } from "../ui/submit-button"
 import { Textarea } from "../ui/textarea"
-import auth from "@/lib/auth"
-import { getUserByEmail } from "@/actions/user"
-import { redirect } from "next/navigation"
 
 interface AssistantSystemPromptFormProps {
   assistant: Assistant
-  config: RtviConfig | {}
+  config: RtviConfig
+  userId: string
 }
 
 const systemPromptSchema = z.object({
   systemPrompt: z
     .string()
     .min(10, { message: "System prompt must be at least 10 characters long." }),
+  tools: z.array(z.string().optional()),
 })
+
+interface FormValues {
+  systemPrompt: string
+  tools: (string | undefined)[]
+}
 
 export function AssistantSystemPromptForm({
   assistant,
   config,
+  userId,
 }: AssistantSystemPromptFormProps) {
   const { toast } = useToast()
+  const [hasFetchedIntegrations, setHasFetchedIntegrations] = useState(false)
+  const [newActions, setNewActions] = useState<string[]>([])
+  console.log(config)
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(systemPromptSchema),
     defaultValues: {
-      // @ts-ignore
       systemPrompt: config?.llm?.messages[0]?.content || "",
+      tools: config?.tools || [],
     },
   })
 
@@ -76,6 +95,7 @@ export function AssistantSystemPromptForm({
 
   const onSubmit = async (values: z.infer<typeof systemPromptSchema>) => {
     const updatedConfig = {
+      ...config,
       llm: {
         // @ts-ignore
         ...config!.llm,
@@ -93,13 +113,45 @@ export function AssistantSystemPromptForm({
         voice: "default",
         metadata: { voice: "default" },
       },
+      tools: [...new Set([...values.tools, ...newActions])],
     }
+
+    console.log('Submitting config with tools:', updatedConfig.tools)
 
     updateConfigAction.execute({
       assistantId: assistant.id,
       config: updatedConfig,
     })
   }
+
+  const {
+    execute: fetchIntegrations,
+    isExecuting: isFetchingIntegrations,
+    result: availableIntegrations,
+  } = useAction(getIntegrationsByUserId)
+
+  const handleFetchIntegrations = () => {
+    if (!hasFetchedIntegrations) {
+      fetchIntegrations({ userId })
+      setHasFetchedIntegrations(true)
+    }
+  }
+
+  const handleNewActionSelected = useCallback((action: string) => {
+    setNewActions(prevActions => {
+      if (!prevActions.includes(action)) {
+        console.log('Adding new action:', action)
+        return [...prevActions, action]
+      }
+      return prevActions
+    })
+  }, [])
+
+  useEffect(() => {
+    handleFetchIntegrations()
+  }, [userId])
+
+  const integrations = availableIntegrations?.data?.data ?? []
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
@@ -110,17 +162,24 @@ export function AssistantSystemPromptForm({
             Enter the system prompt for your assistant
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <Textarea
-            id="systemPrompt"
-            {...form.register("systemPrompt")}
-            placeholder="Enter the system prompt"
-            className="mb-4 w-full px-2 py-3"
+        <CardContent className="flex flex-col gap-4">
+          <Controller
+            control={form.control}
+            name="systemPrompt"
+            render={({ field }) => (
+              <FancyArea
+                {...field}
+                placeholder="Enter the system prompt"
+                className="mb-4 w-full px-2 py-3"
+                integrations={integrations}
+                onNewActionSelected={handleNewActionSelected}
+                id="systemPrompt"
+              />
+            )}
           />
-          {form.formState.errors && (
+          {form.formState.errors.systemPrompt && (
             <p className="text-sm text-destructive">
-              {/* @ts-ignore */}
-              {form.formState.errors.systemPrompt?.message}
+              {form.formState.errors.systemPrompt.message}
             </p>
           )}
         </CardContent>

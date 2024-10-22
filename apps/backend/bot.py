@@ -43,16 +43,17 @@ class CallMyAIActionsProcessor:
         composio_toolset = create_composio_toolset(entity_id)
         all_actions: list[Action] = []
         
-        for tool_json in tools:
-            tool_data: dict = json.loads(tool_json)
-            available_actions: list[str] = tool_data.get("availableActions", [])
-            
-            for action_string in available_actions:
+        for tool_string in tools:
+            parts = tool_string.split(" - ")
+            if len(parts) == 2:
+                action_string = parts[1].strip()
                 try:
                     action_enum = getattr(Action, action_string)
                     all_actions.append(action_enum)
                 except AttributeError:
                     logger.warning(f"Invalid action string: {action_string}")
+            else:
+                logger.warning(f"Invalid tool string format: {tool_string}")
         
         if all_actions:
             tool = composio_toolset.get_tools(actions=all_actions)
@@ -63,9 +64,15 @@ class CallMyAIActionsProcessor:
 
     async def some_handler(self, function_name, tool_call_id, args, llm, context, result_callback):
         toolset = create_composio_toolset("bishwenduk029@gmail.com")
-        return toolset.execute_action(action=Action(value=function_name),
+        result =  toolset.execute_action(action=Action(value=function_name),
                 params=args,
                 entity_id=self.entity_id,)
+        await result_callback([
+            {
+                "role": "system",
+                "content": "Action execution was a success, continue the conversation and if needed update the user on the conversation context so far."
+            }
+        ])
 
 def load_config(config_arg):
     if config_arg.startswith('@'):

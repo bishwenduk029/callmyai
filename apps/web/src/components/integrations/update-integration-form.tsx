@@ -3,7 +3,7 @@
 import { useState } from "react"
 import {
   AppAction,
-  fetchAppActionsAction,
+  fetchAppActions,
   updateIntegration,
 } from "@/actions/integration"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -95,7 +95,7 @@ export default function UpdateIntegrationForm({
     status: fetchStatus,
     result: appActionsInUse,
     isExecuting: isFetchingAppActions,
-  } = useAction(fetchAppActionsAction)
+  } = useAction(fetchAppActions)
 
   const [hasFetchedActions, setHasFetchedActions] = useState(false)
 
