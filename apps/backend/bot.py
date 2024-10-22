@@ -118,9 +118,13 @@ async def main(room_url: str, token: str, client_config: dict):
         
         context = OpenAILLMContext(messages)
         context_aggregator = llm.create_context_aggregator(context)
-        logger.info(f"Actions Owner Email: {client_config['config']['actionsOwnerEmail']}")
-        call_handle = CallMyAIActionsProcessor(client_config["config"]["actionsOwnerEmail"], context, client_config["config"]["tools"])
-        llm.register_function(None, call_handle.some_handler)
+        actions_owner_email = client_config["config"].get("actionsOwnerEmail")
+        tools = client_config["config"].get("tools")
+        
+        if actions_owner_email and tools:
+            logger.info(f"Actions Owner Email: {actions_owner_email}")
+            call_handle = CallMyAIActionsProcessor(actions_owner_email, context, tools)
+            llm.register_function(None, call_handle.some_handler)
 
         pipeline = Pipeline([
             transport.input(),

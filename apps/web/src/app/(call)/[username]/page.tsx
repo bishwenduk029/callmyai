@@ -21,7 +21,7 @@ export default async function ChatRoomPage({
       },
       messages: [
         {
-          role: "systemt",
+          role: "system",
           content: newSession.userPrompt || "",
         },
       ],
