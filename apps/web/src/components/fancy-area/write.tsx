@@ -102,9 +102,7 @@ export function Write({
             setCommandValue("")
             dropdown.classList.add("hidden")
           }
-          if (props.value) {
-            props.onChange(text)
-          }
+          props.onChange(text)
         }
       }
     },
