@@ -58,7 +58,6 @@ export function AssistantSystemPromptForm({
   const { toast } = useToast()
   const [hasFetchedIntegrations, setHasFetchedIntegrations] = useState(false)
   const [newActions, setNewActions] = useState<string[]>([])
-  console.log(config)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(systemPromptSchema),
@@ -116,8 +115,6 @@ export function AssistantSystemPromptForm({
       tools: [...new Set([...values.tools, ...newActions])],
     }
 
-    console.log('Submitting config with tools:', updatedConfig.tools)
-
     updateConfigAction.execute({
       assistantId: assistant.id,
       config: updatedConfig,
@@ -140,7 +137,6 @@ export function AssistantSystemPromptForm({
   const handleNewActionSelected = useCallback((action: string) => {
     setNewActions(prevActions => {
       if (!prevActions.includes(action)) {
-        console.log('Adding new action:', action)
         return [...prevActions, action]
       }
       return prevActions

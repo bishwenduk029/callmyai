@@ -121,11 +121,8 @@ async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
                 text = await r.text()
                 raise Exception(f"Bot was unable to enter started state: {text}")
 
-    print(f"Machine joined room: {room_url}")
-
 @app.post("/twilio_start_bot", response_class=PlainTextResponse)
 async def twilio_start_bot(request: Request):
-    print(f"POST /twilio_voice_bot")
 
     # Log form data for debugging
     form_data = await request.form()

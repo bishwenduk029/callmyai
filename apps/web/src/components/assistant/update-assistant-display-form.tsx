@@ -290,7 +290,7 @@ export function UpdateAssistantDisplayDetails({
                             pollInterval: 5000,
                             logs: false,
                             onQueueUpdate(update) {
-                              console.log("Queue update", update)
+                              // console.log("Queue update", update)
                             },
                           }
                         )

@@ -76,7 +76,6 @@ interface AppActionsResponse {
 const fetchAppActions = actionClient
   .schema(z.object({ appName: z.string() }))
   .action(async ({ parsedInput }): Promise<ActionResponse> => {
-    console.log("wha is happening")
     try {
       const response = await axios.get<AppActionsResponse>(
         `https://backend.composio.dev/api/v2/actions/list/all?apps=${parsedInput.appName}`,
@@ -88,8 +87,6 @@ const fetchAppActions = actionClient
           },
         }
       )
-      console.log("wha is happening", response)
-      console.log(response.data)
 
       const { items, page, totalPages } = response.data
 

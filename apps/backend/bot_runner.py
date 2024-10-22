@@ -120,8 +120,6 @@ async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
                 text = await r.text()
                 raise Exception(f"Bot was unable to enter started state: {text}")
 
-    print(f"Machine joined room: {room_url}")
-
 
 @app.post("/start_bot")
 async def start_bot(request: Request) -> JSONResponse:

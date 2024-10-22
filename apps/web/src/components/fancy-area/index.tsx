@@ -27,7 +27,6 @@ export function FancyArea({
   onNewActionSelected,
   ...props
 }: Props = {}) {
-  console.log(props)
   const [textValue, setTextValue] = React.useState(props.value || placeholder)
 
   return (

@@ -67,8 +67,6 @@ export function FancyMultiSelect({
 
   const selectables = options.filter((option) => !selected.includes(option))
 
-  console.log(selectables, selected, inputValue)
-
   return (
     <Command
       onKeyDown={handleKeyDown}

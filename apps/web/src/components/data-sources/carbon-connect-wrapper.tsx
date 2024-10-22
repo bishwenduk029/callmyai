@@ -26,7 +26,6 @@ export function CarbonConnectWrapper({
       const result = await getCarbonAccessToken({
         customerId: userEmail,
       })
-      console.log(result)
   
       if (!result) {
         throw new Error("Failed to get Carbon access token: No result returned")
