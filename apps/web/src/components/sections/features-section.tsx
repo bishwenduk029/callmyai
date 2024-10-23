@@ -22,14 +22,14 @@ export function FeaturesSection() {
         "No phone integration required. Callers simply use a unique web link to reach your AI assistant.",
     },
     {
-      title: "Customizable Filtering",
+      title: "AI Call Screening",
       description:
-        "Set your preferences and let the AI filter out irrelevant calls, focusing only on what matters to you.",
+        "Customize screening criteria and let AI intelligently filter calls, ensuring you only receive relevant communications.",
     },
     {
       title: "Enterprise-Ready Solution",
       description:
-        "Powerful tools for businesses to reach multiple users efficiently, with scalable access options.",
+        "Connect external apps for business workflows to reach multiple users efficiently, with scalable access options.",
     },
     {
       title: "Privacy-First Approach",
@@ -44,7 +44,7 @@ export function FeaturesSection() {
     {
       title: "24/7 Availability",
       description:
-        "Your AI assistant is always on duty, ensuring you never miss an important call, day or night.",
+        "Your AI call assistant is always on duty, ensuring you never miss an important call, day or night.",
     },
   ]
   return (

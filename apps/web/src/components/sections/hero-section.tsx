@@ -35,24 +35,25 @@ export function HeroSection() {
           viewport={{ once: true }}
         >
           <h1 className="mb-4 font-heading text-3xl font-bold sm:text-6xl">
-            AI Powered Voice Assistant{" "}
+            AI Powered Call Assistants{" "}
             <span className="bg-clip-text underline">in seconds</span>
           </h1>
 
           <motion.h3 className="mb-6 max-w-2xl font-urbanist text-2xl text-foreground sm:text-4xl">
             <Balancer>
-              Create AI-Powered voice assistants for multiple roles: <br />
+              Create AI-Powered call assistants for multiple roles: <br />
               <span className="flex flex-row">
-                <span>AI&nbsp;</span>
+                <span>AI</span>
                 <FlipWords
                   className="text-primary"
                   words={[
                     "Receptionists",
+                    "Co-pilot for Call Center Agents",
                     "Customer Support Rep",
                     "Personal Assistant",
                     "Knowledge Bot",
-                    "Call Center Rep",
-                    "Sales Rep",
+                    "Call Center Representative",
+                    "Sales Representative",
                     "Call Assistant",
                   ]}
                 />{" "}
@@ -80,9 +81,9 @@ export function HeroSection() {
           {isDesktop ? (
             <Tabs defaultValue="aisha" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="aisha">AI Sales Agent</TabsTrigger>
+                <TabsTrigger value="aisha">AI Voice Chat</TabsTrigger>
                 <TabsTrigger value="receptionist">
-                  AI Receptionist (NOVA)
+                  AI Call Screener
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="aisha">
