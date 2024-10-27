@@ -32,6 +32,7 @@ import { SubmitButton } from "@/components/ui/submit-button"
 import { AnimatedIconButton } from "@/components/animated/plus-icon"
 import UpdateIntegrationForm from "@/components/integrations/update-integration-form"
 import { LinearCombobox } from "@/components/linear-combobox"
+import { Folders } from "@phosphor-icons/react/dist/ssr"
 
 const integrationCreateSchema = z.object({
   userId: z.string(),
@@ -116,36 +117,6 @@ export default function IntegrationsClient({
 
   return (
     <>
-      <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid">
-        <Link
-          href="/dashboard/settings"
-          className="flex items-center text-primary hover:underline"
-        >
-          <Gear className="mr-2 h-5 w-5" />
-          Settings
-        </Link>
-        <Link
-          href="/dashboard/calls"
-          className="flex items-center text-primary hover:underline"
-        >
-          <PhoneIncoming className="mr-2 h-5 w-5" />
-          Calls
-        </Link>
-        <Link
-          href="/dashboard/assistants"
-          className="flex items-center text-primary hover:underline"
-        >
-          <Headset className="mr-2 h-5 w-5" />
-          Assistants
-        </Link>
-        <Link
-          href="/dashboard/integrations"
-          className="flex items-center font-semibold text-primary hover:underline"
-        >
-          <PlugsConnected className="mr-2 h-5 w-5" weight="bold" />
-          Integrations
-        </Link>
-      </nav>
       <div className="flex w-full flex-col flex-wrap">
         <Dialog>
           <DialogTrigger asChild>

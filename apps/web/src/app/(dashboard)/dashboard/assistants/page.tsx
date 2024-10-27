@@ -5,6 +5,7 @@ import { getAssistantsByUserId } from "@/actions/assistant"
 import { getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
 import {
+  Folders,
   Gear,
   Headset,
   PhoneIncoming,
@@ -58,7 +59,7 @@ export default async function AssistantsPage() {
 
   return (
     <>
-      <nav className="mx-3 mt-3 hidden max-h-5 gap-4 text-md text-muted-foreground sm:grid">
+      <nav className="mx-3 mt-3 hidden max-h-5 gap-4 text-md text-muted-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
           className="flex items-center text-primary hover:underline"
@@ -86,6 +87,13 @@ export default async function AssistantsPage() {
         >
           <PlugsConnected className="mr-2 h-5 w-5" />
           Integrations
+        </Link>
+        <Link
+          href="/dashboard/data-sources"
+          className="flex items-center text-primary hover:underline"
+        >
+          <Folders className="mr-2 h-5 w-5" />
+          Data Sources
         </Link>
       </nav>
       <div className="flex w-full flex-col flex-wrap">

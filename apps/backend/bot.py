@@ -31,7 +31,7 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 logger.remove(0)
-logger.add(sys.stderr, level="DEBUG")
+logger.add(sys.stderr, level="INFO")
 
 daily_api_key = os.getenv("DAILY_API_KEY", "")
 daily_api_url = os.getenv("DAILY_API_URL", "https://api.daily.co/v1")
@@ -40,7 +40,7 @@ def create_composio_toolset(entity_id: str) -> ComposioToolSet:
     return ComposioToolSet(entity_id=entity_id)
 
 class CallMyAIActionsProcessor:
-    def __init__(self, entity_id, context: OpenAILLMContext, tools: list[str], file_ids: list[str]):
+    def __init__(self, entity_id, context: OpenAILLMContext, tools: list[str], data_sources: list[str]):
         self.entity_id = entity_id
         composio_toolset = create_composio_toolset(entity_id)
         all_actions: list[Action] = []
@@ -48,7 +48,10 @@ class CallMyAIActionsProcessor:
         user_carbon_access_wrapper = Carbon(api_key=os.getenv("CARBON_API_KEY"), customer_id=entity_id)
         carbon_access_token_result = user_carbon_access_wrapper.auth.get_access_token()
         self.carbon_access_token = carbon_access_token_result.access_token
-        self.file_ids = file_ids
+        self.data_sources = [
+            int(source["fileId"]) 
+            for source in data_sources if isinstance(source, dict)
+        ]
         
         for tool_string in tools:
             parts = tool_string.split(" - ")
@@ -68,8 +71,8 @@ class CallMyAIActionsProcessor:
             logger.warning("No valid actions found in the provided tools.")
         
         # Register file handler if file_ids are present
-        logger.info(f"File IDs: {self.file_ids}")
-        if self.file_ids:
+        logger.info(f"Data Sources: {self.data_sources}")
+        if self.data_sources:
             rag_query_tool: ChatCompletionToolParam = {
                 "type": "function",
                 "function": {
@@ -110,7 +113,7 @@ class CallMyAIActionsProcessor:
         # This is the empty handler method for file operations
         # You can fill this in with the actual implementation
         carbon_api = Carbon(access_token=self.carbon_access_token)
-        document_response_list = carbon_api.embeddings.get_documents(query=args["query"], k=1, file_ids=self.file_ids, include_all_children=False, include_file_level_metadata=False, include_vectors=False, hybrid_search=False, high_accuracy=False, rerank=None, validate=True, include_tags=True)
+        document_response_list = carbon_api.embeddings.get_documents(query=args["query"], k=1, file_ids=self.data_sources, include_all_children=False, include_file_level_metadata=False, include_vectors=False, hybrid_search=False, high_accuracy=False, rerank=None, validate=True, include_tags=True)
         if document_response_list and len(document_response_list.documents) > 0:
             retrieved_content = document_response_list.documents[0].content
             # Log the retrieved content for debugging
@@ -185,13 +188,13 @@ async def main(room_url: str, token: str, client_config: dict):
         context_aggregator = llm.create_context_aggregator(context)
         actions_owner_email = client_config["config"].get("actionsOwnerEmail")
         tools = client_config["config"].get("tools")
-        file_ids = client_config["config"].get("fileIds", [])  # Get fileIDs from config
+        data_sources = client_config["config"].get("dataSources", [])  # Get fileIDs from config
         
-        if actions_owner_email and (tools or file_ids):
+        if actions_owner_email and (tools or data_sources):
             logger.info(f"Actions Owner Email: {actions_owner_email}")
-            call_handle = CallMyAIActionsProcessor(actions_owner_email, context, tools, file_ids)
+            call_handle = CallMyAIActionsProcessor(actions_owner_email, context, tools, data_sources)
             llm.register_function(None, call_handle.generic_handler)
-            if file_ids:
+            if data_sources:
                 llm.register_function("query_knowledge_base", call_handle.query_knowledge_base)
 
         pipeline = Pipeline([

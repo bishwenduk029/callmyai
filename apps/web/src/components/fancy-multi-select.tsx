@@ -15,7 +15,7 @@ import {
 
 import { Skeleton } from "./ui/skeleton"
 
-type SelectOption = Record<"value" | "label" | "logo", string>
+type SelectOption = Record<"value" | "label" | "logo", string | null>
 
 export function FancyMultiSelect({
   options,
@@ -80,7 +80,7 @@ export function FancyMultiSelect({
                 {framework.logo && (
                   <Image
                     src={framework.logo}
-                    alt={framework.label}
+                    alt={framework.label || ""}
                     width={20}
                     height={20}
                   />
@@ -148,7 +148,7 @@ export function FancyMultiSelect({
                       {option.logo && (
                         <Image
                           src={option.logo}
-                          alt={option.label}
+                          alt={option.label || ""}
                           width={20}
                           height={20}
                         />

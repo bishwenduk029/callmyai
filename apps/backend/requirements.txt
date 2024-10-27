@@ -11,3 +11,4 @@ aiohttp
 silero-vad
 composio_core
 composio_openai
+carbon-python-sdk==0.2.47

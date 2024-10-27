@@ -4,6 +4,9 @@ import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
+import { AnimatedBeamActions } from "../fancy/animated-beams-actions"
+import { AnimatedBeamMultipleDataSources } from "../fancy/animated-beams-data"
+
 export function FeaturesSection() {
   const features = [
     {
@@ -48,10 +51,75 @@ export function FeaturesSection() {
     },
   ]
   return (
-    <div className="relative z-10 mx-auto grid  max-w-7xl grid-cols-1 py-10 md:grid-cols-2 lg:grid-cols-4 mt-100">
+    <div className="mt-100 relative z-10 mx-auto  grid max-w-7xl grid-cols-1 py-10 md:grid-cols-2 lg:grid-cols-4">
+      <div className="col-span-4 grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="group relative overflow-hidden rounded-3xl bg-white p-6 sm:shadow-xl"
+        >
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
+            <h4 className="font-semibold text-muted-foreground">
+              External Data Sources
+            </h4>
+            <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
+              Connected
+            </span>
+          </div>
+          <div className="flex max-w-sm flex-col gap-6 pt-16 sm:max-w-lg">
+            <AnimatedBeamMultipleDataSources className="w-full" />
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold">Connect your data sources</h3>
+              <ul className="text-md list-disc space-y-2 text-muted-foreground sm:pl-4 sm:text-lg">
+                <li>
+                  Seamlessly integrate with Google Drive, Notion, WhatsApp and
+                  more
+                </li>
+                <li>
+                  AI Voice assistant learns from your documents and chat history
+                </li>
+                <li>Context-aware responses based on your connected data</li>
+              </ul>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="group relative overflow-hidden rounded-3xl bg-white p-2 sm:p-6 sm:shadow-xl"
+        >
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
+            <h4 className="font-semibold text-muted-foreground">
+              Workflow Automation
+            </h4>
+            <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
+              Active
+            </span>
+          </div>
+          <div className="flex max-w-sm flex-col gap-6 pt-16 sm:max-w-lg">
+            <AnimatedBeamActions className="w-full" />
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold">
+                Configure Workflows on your connected apps
+              </h3>
+              <ul className="my-4 list-disc space-y-2 pl-4 text-lg text-muted-foreground">
+                <li>Execute actions across your connected apps</li>
+                <li>Natural language commands for task automation</li>
+                <li>Intelligent workflow orchestration</li>
+                <li>Real-time action tracking and notifications</li>
+              </ul>
+            </div>
+          </div>
+        </motion.div>
+      </div>
       {features.map((feature, index) => (
-        <Feature key={feature.title} {...feature} index={index} />
-      ))}
+          <Feature key={feature.title} {...feature} index={index} />
+        ))}
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   Browser,
+  Folders,
   Gear,
   Headset,
   PhoneIncoming,

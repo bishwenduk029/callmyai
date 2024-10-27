@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { RtviConfig, updateAssistantConfig } from "@/actions/assistant"
 import { fetchDataSources } from "@/actions/data-sources"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -25,7 +24,11 @@ import { SubmitButton } from "@/components/ui/submit-button"
 import { FancyMultiSelect } from "@/components/fancy-multi-select"
 
 const formSchema = z.object({
-  fileIds: z.array(z.number()),
+  dataSources: z.array(z.object({
+    fileId: z.number(),
+    sourceType: z.string(),
+    fileName: z.string(),
+  })),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -51,14 +54,13 @@ export function UpdateAssistantDataSourcesForm({
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fileIds: config?.fileIds || [],
+      dataSources: config?.dataSources || [],
     },
   })
 
   const { execute: executeUpdate, isExecuting: isUpdatingDataSources } =
     useAction(updateAssistantConfig, {
       onSuccess: (result) => {
-        console.log("Update success:", result)
         if (result?.data?.error) {
           toast({
             title: "Error updating data sources",
@@ -76,7 +78,8 @@ export function UpdateAssistantDataSourcesForm({
         console.error("Update error:", error)
         toast({
           title: "Error updating data sources",
-          description: "An unexpected error occurred while updating the data sources.",
+          description:
+            "An unexpected error occurred while updating the data sources.",
           variant: "destructive",
         })
       },
@@ -109,33 +112,30 @@ export function UpdateAssistantDataSourcesForm({
       (source: { fileId: string; fileName: string; sourceType: string }) => ({
         value: source.fileId,
         label: `${source.sourceType} - ${source.fileName}`,
-        logo: null, // Replace with actual logo path
+        logo: null,
       })
     ) || []
 
   async function onSubmit(data: FormValues) {
     const updatedConfig: RtviConfig = {
       ...config,
-      fileIds: data.fileIds,
+      dataSources: data.dataSources,
       llm: config?.llm || { model: { provider: "", name: "" }, messages: [] },
       tts: config?.tts || { provider: "", voice: "" },
     }
 
-    console.log("Updating with config:", updatedConfig)
     try {
-      const result = await executeUpdate({
+      const result = executeUpdate({
         assistantId: assistant.id,
         config: updatedConfig,
       })
-      console.log("executeUpdate result:", result)
     } catch (error) {
       console.error("executeUpdate error:", error)
     }
   }
-  console.log(errors)
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
       <Card>
         <CardHeader className="flex flex-row items-center space-x-4">
           <div>
@@ -149,23 +149,32 @@ export function UpdateAssistantDataSourcesForm({
           <div className="space-y-2">
             <h4 className="text-sm font-medium">Available Data Sources:</h4>
             <Controller
-              name="fileIds"
+              name="dataSources"
               control={control}
               render={({ field }) => (
                 <FancyMultiSelect
                   options={dataSourceOptions}
-                  defaultSelected={dataSourceOptions.filter(
-                    (ds: { value: number }) => field.value.includes(ds.value)
-                  )}
+                  defaultSelected={field.value.map(val => ({
+                    value: val.fileId.toString(),
+                    label: `${val.sourceType} - ${val.fileName}`,
+                    logo: null,
+                  }))}
                   placeholder="Select data sources..."
                   handleOnClick={handleFetchDataSources}
                   fetchingOptions={isFetchingDataSources}
                   onSelect={(option) => {
-                    console.log(option)
-                    console.log(field)
-                    const newValue = field.value.includes(Number(option.value))
-                      ? field.value.filter((id: number) => id !== Number(option.value))
-                      : [...field.value, Number(option.value)]
+                    const isSelected = dataSourceOptions.some(
+                      (ds: { value: number }) => ds.value === Number(option.value)
+                    )
+                    
+                    const newValue = isSelected
+                      ? field.value.filter(val => val.fileId !== Number(option.value))
+                      : [...field.value, {
+                          fileId: Number(option.value),
+                          sourceType: option.label?.split(" - ")[0] || "",
+                          fileName: option.label?.split(" - ")[1] || "",
+                        }]
+                    
                     field.onChange(newValue)
                   }}
                 />
