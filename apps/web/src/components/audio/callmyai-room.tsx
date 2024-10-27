@@ -151,7 +151,7 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
               </div>
             )}
             <div className={`mb-2 text-2xl font-bold ${fontNunito.variable}`}>
-              {chatSession.botName || "AI Receptionist"}
+              {chatSession.botName || "AI Call Screener"}
             </div>
             <div
               className={`mb-8 text-lg font-semibold text-muted-foreground ${fontNunito.variable}`}

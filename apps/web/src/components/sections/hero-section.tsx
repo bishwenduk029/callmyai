@@ -81,10 +81,8 @@ export function HeroSection() {
           {isDesktop ? (
             <Tabs defaultValue="aisha" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="aisha">AI Voice Chat</TabsTrigger>
-                <TabsTrigger value="receptionist">
-                  AI Call Screener
-                </TabsTrigger>
+                <TabsTrigger value="aisha">For Businesses</TabsTrigger>
+                <TabsTrigger value="receptionist">For Individuals</TabsTrigger>
               </TabsList>
               <TabsContent value="aisha">
                 <div className="flex flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
