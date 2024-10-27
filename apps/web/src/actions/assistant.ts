@@ -72,6 +72,7 @@ const rtviConfigSchema = z
     avatar: z.string().optional(),
     tools: z.array(z.string().optional()).optional(),
     actionsOwnerEmail: z.string().optional(),
+    fileIds: z.array(z.number()).optional(), // Add this line for RAG fileIds
     llm: z.object({
       model: z.object({
         provider: z.string(),

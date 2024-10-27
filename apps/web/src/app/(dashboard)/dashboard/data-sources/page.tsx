@@ -1,6 +1,14 @@
+import Link from "next/link"
+import { redirect } from "next/navigation"
 import { getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
-import { redirect } from "next/navigation"
+import { Gear } from "@phosphor-icons/react"
+import {
+  GearFine,
+  Headset,
+  PhoneIncoming,
+  PlugsConnected,
+} from "@phosphor-icons/react/dist/ssr"
 
 import { DataSources } from "@/components/data-sources"
 
@@ -19,12 +27,39 @@ export default async function DataSourcesPage() {
     redirect("/signin")
   }
 
-
-
   return (
-    <DataSources
-      userEmail={user.data.email}
-      userId={user.data.id}
-    />
+    <>
+      <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid">
+        <Link
+          href="/dashboard/settings"
+          className="flex items-center text-primary hover:underline"
+        >
+          <GearFine className="mr-2 h-5 w-5" />
+          Settings
+        </Link>
+        <Link
+          href="/dashboard/calls"
+          className="flex items-center text-primary hover:underline"
+        >
+          <PhoneIncoming className="mr-2 h-5 w-5" />
+          Calls
+        </Link>
+        <Link
+          href="/dashboard/assistants"
+          className="flex items-center font-semibold text-primary hover:underline"
+        >
+          <Headset className="mr-2 h-5 w-5" weight="bold" />
+          Assistants
+        </Link>
+        <Link
+          href="/dashboard/integrations"
+          className="flex items-center text-primary hover:underline"
+        >
+          <PlugsConnected className="mr-2 h-5 w-5" />
+          Integrations
+        </Link>
+      </nav>
+      <DataSources userEmail={user.data.email} userId={user.data.id} />
+    </>
   )
 }

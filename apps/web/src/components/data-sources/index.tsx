@@ -1,25 +1,46 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { CarbonConnectWrapper } from './carbon-connect-wrapper'
+import { useState } from "react"
 
-export function DataSources({userEmail, userId}: {userEmail: string, userId: string}) {
+import { Button } from "@/components/ui/button"
+
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { CarbonConnectWrapper } from "./carbon-connect-wrapper"
+
+export function DataSources({
+  userEmail,
+  userId,
+}: {
+  userEmail: string
+  userId: string
+}) {
   const [isCarbonConnectOpen, setIsCarbonConnectOpen] = useState(false)
 
   function handleOpenCarbonConnect() {
     setIsCarbonConnectOpen(true)
   }
 
-  function handleCloseCarbonConnect() {
-    setIsCarbonConnectOpen(false)
-  }
-
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Data Sources</h2>
-      <Button onClick={handleOpenCarbonConnect}>Connect Data Source</Button>
-      <CarbonConnectWrapper isOpen={isCarbonConnectOpen} onClose={handleCloseCarbonConnect} userEmail={userEmail} />
+    <div className="space-y-4 w-full">
+      <Card className="flex flex-col w-full items-center justify-center p-6">
+        <CardHeader>
+          <CardTitle className="text-center">Add New Data Sources</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>
+            Connect and Manage your data sources.
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={handleOpenCarbonConnect}>Manage Data Sources</Button>
+        </CardFooter>
+      </Card>
+     
+      <CarbonConnectWrapper
+        isOpen={isCarbonConnectOpen}
+        setOpen={setIsCarbonConnectOpen}
+        userEmail={userEmail}
+      />
     </div>
   )
 }

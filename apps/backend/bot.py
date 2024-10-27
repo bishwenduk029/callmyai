@@ -14,7 +14,9 @@ from pipecat.processors.aggregators.llm_response import LLMAssistantResponseAggr
 from pipecat.frames.frames import EndFrame
 from pipecat.services.openai import OpenAILLMService, OpenAITTSService, OpenAILLMContext
 from pipecat.transports.services.daily import DailyParams, DailyTransport
+from openai.types.chat.chat_completion_tool_param import ChatCompletionToolParam
 from pipecat.processors.frameworks.rtvi import RTVIProcessor, RTVIConfig
+from carbon import Carbon
 from pipecat.frames.frames import (
     LLMMessagesFrame,
     EndFrame
@@ -29,7 +31,7 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 logger.remove(0)
-logger.add(sys.stderr, level="INFO")
+logger.add(sys.stderr, level="DEBUG")
 
 daily_api_key = os.getenv("DAILY_API_KEY", "")
 daily_api_url = os.getenv("DAILY_API_URL", "https://api.daily.co/v1")
@@ -38,10 +40,15 @@ def create_composio_toolset(entity_id: str) -> ComposioToolSet:
     return ComposioToolSet(entity_id=entity_id)
 
 class CallMyAIActionsProcessor:
-    def __init__(self, entity_id, context: OpenAILLMContext, tools: list[str]):
+    def __init__(self, entity_id, context: OpenAILLMContext, tools: list[str], file_ids: list[str]):
         self.entity_id = entity_id
         composio_toolset = create_composio_toolset(entity_id)
         all_actions: list[Action] = []
+        abilities: list[ChatCompletionToolParam] = []
+        user_carbon_access_wrapper = Carbon(api_key=os.getenv("CARBON_API_KEY"), customer_id=entity_id)
+        carbon_access_token_result = user_carbon_access_wrapper.auth.get_access_token()
+        self.carbon_access_token = carbon_access_token_result.access_token
+        self.file_ids = file_ids
         
         for tool_string in tools:
             parts = tool_string.split(" - ")
@@ -56,23 +63,81 @@ class CallMyAIActionsProcessor:
                 logger.warning(f"Invalid tool string format: {tool_string}")
         
         if all_actions:
-            tool = composio_toolset.get_tools(actions=all_actions)
-            context.set_tools(tool)
+            abilities = composio_toolset.get_tools(actions=all_actions)
         else:
             logger.warning("No valid actions found in the provided tools.")
         
+        # Register file handler if file_ids are present
+        logger.info(f"File IDs: {self.file_ids}")
+        if self.file_ids:
+            rag_query_tool: ChatCompletionToolParam = {
+                "type": "function",
+                "function": {
+                    "name": "query_knowledge_base",
+                    "description": "Query the knowledge base using RAG (Retrieval-Augmented Generation)",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "The query to search in the knowledge base"
+                            },
+                        },
+                        "required": ["query"]
+                    }
+                }
+            }
+            abilities.append(rag_query_tool)
+            logger.info(f"RAG Query Tool: {rag_query_tool}")
+        
+        context.set_tools(abilities)
 
-    async def some_handler(self, function_name, tool_call_id, args, llm, context, result_callback):
-        toolset = create_composio_toolset("bishwenduk029@gmail.com")
-        result =  toolset.execute_action(action=Action(value=function_name),
-                params=args,
-                entity_id=self.entity_id,)
+    async def generic_handler(self, function_name, tool_call_id, args, llm, context, result_callback):
+        result = self.composio_toolset.execute_action(
+            action=Action(value=function_name),
+            params=args,
+            entity_id=self.entity_id,
+        )
+        result_json = json.dumps(result)
         await result_callback([
             {
-                "role": "system",
-                "content": "Action execution was a success, continue the conversation and if needed update the user on the conversation context so far."
+                "role": "tool",
+                "content": f"Action execution was successful. Here's the result: {result_json}. Please interpret this result and continue the conversation, updating the user on the context as needed. Remeber not all tool calls response need to be updated to users, make the best judgement call on what to show to the user."
             }
         ])
+
+    async def query_knowledge_base(self, function_name, tool_call_id, args, llm, context, result_callback):
+        # This is the empty handler method for file operations
+        # You can fill this in with the actual implementation
+        carbon_api = Carbon(access_token=self.carbon_access_token)
+        document_response_list = carbon_api.embeddings.get_documents(query=args["query"], k=1, file_ids=self.file_ids, include_all_children=False, include_file_level_metadata=False, include_vectors=False, hybrid_search=False, high_accuracy=False, rerank=None, validate=True, include_tags=True)
+        if document_response_list and len(document_response_list.documents) > 0:
+            retrieved_content = document_response_list.documents[0].content
+            # Log the retrieved content for debugging
+            logger.info(f"Retrieved content: {retrieved_content}")
+            rag_prompt = f"""Based on the following retrieved information and the user's query, please provide a relevant and concise answer. Consider the conversation history for context.
+
+Retrieved Information:
+{retrieved_content}
+
+User Query:
+{args["query"]}
+
+Please use this information to formulate a response that addresses the user's query while maintaining context from the conversation history. If the retrieved information is not directly relevant, use your general knowledge to provide the best possible answer."""
+
+            await result_callback([
+                {
+                    "role": "tool",
+                    "content": rag_prompt
+                }
+            ])
+        else:
+            await result_callback([
+                {
+                    "role": "tool",
+                    "content": "No relevant information found in the knowledge base. Please provide a response based on your general knowledge and the conversation history."
+                }
+            ])
 
 def load_config(config_arg):
     if config_arg.startswith('@'):
@@ -120,11 +185,14 @@ async def main(room_url: str, token: str, client_config: dict):
         context_aggregator = llm.create_context_aggregator(context)
         actions_owner_email = client_config["config"].get("actionsOwnerEmail")
         tools = client_config["config"].get("tools")
+        file_ids = client_config["config"].get("fileIds", [])  # Get fileIDs from config
         
-        if actions_owner_email and tools:
+        if actions_owner_email and (tools or file_ids):
             logger.info(f"Actions Owner Email: {actions_owner_email}")
-            call_handle = CallMyAIActionsProcessor(actions_owner_email, context, tools)
-            llm.register_function(None, call_handle.some_handler)
+            call_handle = CallMyAIActionsProcessor(actions_owner_email, context, tools, file_ids)
+            llm.register_function(None, call_handle.generic_handler)
+            if file_ids:
+                llm.register_function("query_knowledge_base", call_handle.query_knowledge_base)
 
         pipeline = Pipeline([
             transport.input(),
