@@ -51,14 +51,14 @@ export function FeaturesSection() {
     },
   ]
   return (
-    <div className="mt-100 relative z-10 mx-auto  grid max-w-7xl grid-cols-1 py-10 md:grid-cols-2 lg:grid-cols-4">
-      <div className="col-span-4 grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
+    <div className="mt-100 relative z-10 mx-auto max-w-7xl py-10">
+      <div className="grid grid-cols-1 gap-6 px-4 sm:px-6 md:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="group relative overflow-hidden rounded-3xl bg-white p-6 sm:shadow-xl"
+          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl bg-white p-6 sm:max-w-none sm:shadow-xl"
         >
           <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
             <h4 className="font-semibold text-muted-foreground">
@@ -91,7 +91,7 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="group relative overflow-hidden rounded-3xl bg-white p-2 sm:p-6 sm:shadow-xl"
+          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl bg-white p-2 sm:max-w-none sm:p-6 sm:shadow-xl"
         >
           <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
             <h4 className="font-semibold text-muted-foreground">
@@ -117,9 +117,12 @@ export function FeaturesSection() {
           </div>
         </motion.div>
       </div>
-      {features.map((feature, index) => (
+
+      <div className="mt-12 grid grid-cols-1 gap-y-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:gap-y-0">
+        {features.map((feature, index) => (
           <Feature key={feature.title} {...feature} index={index} />
         ))}
+      </div>
     </div>
   )
 }
@@ -140,7 +143,7 @@ const Feature = ({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={cn(
-        "group/feature dark:border-neutral-800 relative z-0  flex flex-col py-10 font-urbanist lg:border-r",
+        "group/feature dark:border-neutral-800 relative z-0 flex flex-col py-10 text-center font-urbanist sm:text-left lg:border-r",
         (index === 0 || index === 4) && "dark:border-neutral-800 lg:border-l",
         index < 4 && "dark:border-neutral-800 lg:border-b"
       )}
@@ -151,13 +154,13 @@ const Feature = ({
       {index >= 4 && (
         <div className="dark:from-primary-800 from-primary-100 pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b to-transparent opacity-0 transition duration-200 group-hover/feature:opacity-100" />
       )}
-      <div className="relative z-10 mb-2 px-10 text-lg font-bold">
-        <div className="dark:bg-neutral-700 absolute inset-y-0 left-0 h-6 w-1 origin-center rounded-br-full rounded-tr-full bg-neutral-300 transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-green-500" />
+      <div className="relative z-10 mb-2 px-4 text-lg font-bold sm:px-10">
+        <div className="dark:bg-neutral-700 absolute inset-y-0 left-0 hidden h-6 w-1 origin-center rounded-br-full rounded-tr-full bg-neutral-300 transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-green-500 sm:block" />
         <span className="dark:text-primary inline-block text-primary transition duration-200 group-hover/feature:translate-x-2">
           {title}
         </span>
       </div>
-      <p className="text-md relative z-10 max-w-xs px-10 text-muted-foreground">
+      <p className="text-md relative z-10 mx-auto max-w-xs px-4 text-muted-foreground sm:mx-0 sm:px-10">
         {description}
       </p>
     </motion.div>
