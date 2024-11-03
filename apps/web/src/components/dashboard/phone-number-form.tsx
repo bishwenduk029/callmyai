@@ -9,6 +9,8 @@ import { z } from "zod"
 
 import type { User } from "@/db/schema/index"
 
+import { useToast } from "@/hooks/use-toast"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -39,8 +41,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
 import { Icons } from "../icons"
-import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z.object({
   region: z.string().min(2).max(2),
@@ -61,7 +63,7 @@ const regions = [
 ]
 
 export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
-    console.log(user)
+  console.log(user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [availableNumbers, setAvailableNumbers] = useState<
     Array<{ number: string }>
@@ -97,23 +99,27 @@ export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
     },
   })
 
-  const { execute: executeRelease, status: releaseStatus } = useAction(releasePhoneNumber, {
-    onSuccess: (data) => {
-      if (data.data?.success) {
-        toast({
-          title: "Success",
-          description: data.data.message,
-        })
-        form.reset()
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: data?.data?.error?.toString() || "An error occurred",
-        })
-      }
-    },
-  })
+  const { execute: executeRelease, status: releaseStatus } = useAction(
+    releasePhoneNumber,
+    {
+      onSuccess: (data) => {
+        if (data.data?.success) {
+          toast({
+            title: "Success",
+            description: data.data.message,
+          })
+          form.reset()
+        } else {
+          console.log(data?.data?.error)
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: data?.data?.error?.message,
+          })
+        }
+      },
+    }
+  )
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (!selectedNumber) return
@@ -146,7 +152,8 @@ export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
       <CardHeader>
         <CardTitle>Purchase Phone Number</CardTitle>
         <CardDescription>
-          Purchase a phone number for your AI Call Handle to receive incoming calls.
+          Purchase a phone number for your AI Call Handle to receive incoming
+          calls.
         </CardDescription>
       </CardHeader>
       <Form {...form}>
@@ -196,7 +203,8 @@ export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
                         <SelectTrigger>
                           <SelectValue placeholder="Select region">
                             {field.value &&
-                              regions.find((r) => r.value === field.value)?.label}
+                              regions.find((r) => r.value === field.value)
+                                ?.label}
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>

@@ -26,7 +26,9 @@ export async function POST(request: Request) {
       )
     }
 
-    const { From, To, callId, callDomain } = await request.json()
+    const body = await request.json()
+    console.log(body)
+    const { From, To, callId, callDomain } = body
     const user = await getUserByPhone({ phone: To })
 
     if (!user) throw new Error("User not found")
