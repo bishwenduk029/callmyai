@@ -1,9 +1,10 @@
+import { headers } from "next/headers"
 import { getUserByUsername } from "@/actions/user"
+import { redis } from "@callmyai/kv"
+import { Ratelimit } from "@upstash/ratelimit"
+
 import { env } from "@/env.mjs"
 import { psCreateChat } from "@/db/prepared/statements"
-import { Ratelimit } from "@upstash/ratelimit"
-import { headers } from "next/headers"
-import { redis } from "@callmyai/kv"
 
 // Initialize rate limiter
 const ratelimit = new Ratelimit({
@@ -19,7 +20,10 @@ export async function POST(request: Request) {
     const { success } = await ratelimit.limit(`${ip}-start-bot`)
 
     if (!success) {
-      return Response.json({ error: "Too many requests, Pls don't DDoS me" }, { status: 429 })
+      return Response.json(
+        { error: "Too many requests, Pls don't DDoS me" },
+        { status: 429 }
+      )
     }
 
     const body = await request.json()
@@ -39,7 +43,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        config: { ...rest, chatId: results[0]?.id },
+        config: { ...rest, chatId: results[0]?.id, sip: { enabled: false } },
       }),
     })
 

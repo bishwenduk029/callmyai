@@ -135,7 +135,7 @@ async def start_bot(request: Request) -> JSONResponse:
     room_url = os.getenv("DAILY_SAMPLE_ROOM_URL", "")
 
     if not room_url:
-        if(client_config["config"]["sip"]["enabled"] == "true"):
+        if(client_config["config"]["sip"]["enabled"]):
             params = DailyRoomParams(
                 properties=DailyRoomProperties(sip=DailyRoomSipParams( display_name="dialin-user", video=False, sip_mode="dial-in", num_endpoints=1))
             )

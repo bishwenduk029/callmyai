@@ -63,6 +63,9 @@ importers:
       '@phosphor-icons/react':
         specifier: ^2.1.7
         version: 2.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@polar-sh/sdk':
+        specifier: ^0.13.5
+        version: 0.13.5(zod@3.23.8)
       '@radix-ui/react-accordion':
         specifier: ^1.1.2
         version: 1.2.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2320,6 +2323,11 @@ packages:
   '@pkgr/utils@2.3.1':
     resolution: {integrity: sha512-wfzX8kc1PMyUILA+1Z/EqoE4UCXGy0iRGMhPwdfae1+f0OXlLqCk+By+aMzgJBzR9AzS4CDizioG6Ss1gvAFJw==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+
+  '@polar-sh/sdk@0.13.5':
+    resolution: {integrity: sha512-mHKFCprJnEw60b8nd/sNzxUDpXc7xJldsAWeweNsoiK30F2wPqygEMlxw4jVruguiiEL2I7xeRQarknho4kxmQ==}
+    peerDependencies:
+      zod: '>= 3'
 
   '@protobufjs/aspromise@1.1.2':
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
@@ -11851,6 +11859,10 @@ snapshots:
       picocolors: 1.1.0
       tiny-glob: 0.2.9
       tslib: 2.6.2
+
+  '@polar-sh/sdk@0.13.5(zod@3.23.8)':
+    dependencies:
+      zod: 3.23.8
 
   '@protobufjs/aspromise@1.1.2': {}
 

@@ -151,13 +151,15 @@ def load_config(config_arg):
 
 
 async def main(room_url: str, token: str, client_config: dict):
-    logger.debug(f"Client Config: {client_config}")
+    logger.info(f"Client Config: {client_config}")
     async with aiohttp.ClientSession() as session:
-        if(client_config["config"]["sip"]["enabled"] == "true"):
+        if(client_config["config"]["sip"]["enabled"]):
             dialin_settings = DailyDialinSettings(
                 call_id=client_config["config"]["sip"]["call_id"],
                 call_domain=client_config["config"]["sip"]["call_domain"]
             )
+            logger.info(f"Call ID: {client_config['config']['sip']['call_id']}")
+            logger.info(f"Call Domain: {client_config['config']['sip']['call_domain']}")
             transport = DailyTransport(
                 room_url,
                 token,

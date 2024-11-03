@@ -44,7 +44,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        config: { ...rest, chatId: results[0]?.id },
+        config: { ...rest, chatId: results[0]?.id, sip: { enabled: false } },
       }),
     })
 
