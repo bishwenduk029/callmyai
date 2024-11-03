@@ -84,7 +84,6 @@ export function CarbonConnectWrapper({
   }
 
   const handleSuccess = (data: any) => {
-    console.log("Data on Success: ", data)
   }
 
   const handleError = (error: any) => {

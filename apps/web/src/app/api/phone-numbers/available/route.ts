@@ -45,7 +45,6 @@ export const GET = auth(async function GET(request) {
     )
 
     const data = await response.json()
-    console.log(data)
     return NextResponse.json(data)
   } catch (error) {
     console.error("Error fetching available numbers:", error)

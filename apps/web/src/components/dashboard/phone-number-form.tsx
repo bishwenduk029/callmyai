@@ -63,7 +63,6 @@ const regions = [
 ]
 
 export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
-  console.log(user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [availableNumbers, setAvailableNumbers] = useState<
     Array<{ number: string }>

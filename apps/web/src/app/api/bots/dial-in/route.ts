@@ -27,7 +27,6 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    console.log(body)
     const { From, To, callId, callDomain } = body
     const user = await getUserByPhone({ phone: To })
 

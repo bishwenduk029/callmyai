@@ -155,8 +155,8 @@ async def main(room_url: str, token: str, client_config: dict):
     async with aiohttp.ClientSession() as session:
         if(client_config["sip"]["enabled"] == "true"):
             dialin_settings = DailyDialinSettings(
-                call_id=client_config["sip"]["call_id"],
-                call_domain=client_config["sip"]["call_domain"]
+                call_id=client_config["config"]["sip"]["call_id"],
+                call_domain=client_config["config"]["sip"]["call_domain"]
             )
             transport = DailyTransport(
                 room_url,

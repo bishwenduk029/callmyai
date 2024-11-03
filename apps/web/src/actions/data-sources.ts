@@ -18,7 +18,6 @@ export const getCarbonAccessToken = actionClient
       const accessTokenData = await fetchCarbonAccessToken(
         parsedInput.customerId
       )
-      console.log(accessTokenData)
       return { success: true, data: accessTokenData.access_token }
     } catch (error) {
       console.error("Error fetching Carbon access token:", error)
