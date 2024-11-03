@@ -14,6 +14,7 @@ import {
   psGetUserByEmail,
   psGetUserByEmailVerificationToken,
   psGetUserById,
+  psGetUserByPhone,
   psGetUserByResetPasswordToken,
   psGetUserByUsername,
   psUpdateChatSummary,
@@ -26,6 +27,8 @@ import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
   getUserByIdSchema,
+  GetUserByPhoneInput,
+  getUserByPhoneSchema,
   getUserByResetPasswordTokenSchema,
   GetUserByUsernameInput,
   getUserByUsernameSchema,
@@ -42,6 +45,7 @@ import { ChatRoomSession } from "@/components/audio/chat-room"
 
 import { User } from "../db/schema/index"
 import { getUserSubscriptions } from "./payments"
+import { GetUserByPhoneInput } from '../validations/user';
 
 const systemPrompt = `
   You are an expert conversation analyst and summarizer. Your task is to create a brief, engaging summary of a conversation between an AI assistant and a caller. This summary should be easily digestible and help the user quickly determine the call's relevance and importance.
@@ -175,6 +179,23 @@ export async function getUserByUsername(
   } catch (error) {
     console.error(error)
     throw new Error("Error getting user by username")
+  }
+}
+
+export async function getUserByPhone(
+  rawInput: GetUserByPhoneInput
+): Promise<User | null> {
+  try {
+    const validatedInput = getUserByPhoneSchema.safeParse(rawInput)
+    if (!validatedInput.success) return null
+
+    const [user] = await psGetUserByPhone.execute({
+      phone: validatedInput.data.phone,
+    })
+    return user || null
+  } catch (error) {
+    console.error(error)
+    throw new Error("Error getting user by phone")
   }
 }
 

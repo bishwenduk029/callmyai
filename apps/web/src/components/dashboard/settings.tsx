@@ -6,6 +6,7 @@ import { User } from "@/db/schema"
 
 import CallHandleForm from "./call-handle-form"
 import UserNameForm from "./username-form"
+import { PhoneNumberForm } from "./phone-number-form"
 
 interface SettingsProps {
   user: User
@@ -19,6 +20,7 @@ export default function Settings({ user }: SettingsProps) {
       <CallHandleForm user={user} />
 
       <UserNameForm user={user} />
+      <PhoneNumberForm user={user} />
       <Link
         className=" mx-auto text-sm font-normal text-primary underline-offset-4 transition-colors hover:underline"
         aria-label="Test/Preview Your AI Call Assistant"

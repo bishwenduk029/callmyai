@@ -28,6 +28,7 @@ export const accounts = pgTable(
     providerAccountId: text("providerAccountId").notNull(),
     refresh_token: text("refresh_token"),
     handle: text("handle").unique(),
+    phoneNumber: text("phoneNumber"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
     token_type: text("token_type"),

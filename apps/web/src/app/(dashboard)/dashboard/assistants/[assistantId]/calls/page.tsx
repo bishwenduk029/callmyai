@@ -79,6 +79,7 @@ export default async function CallsPage({
               </BreadcrumbItem>
               <BreadcrumbItem>
                 <BreadcrumbLink
+                  className="font-bold"
                   href={`/dashboard/assistants/${result.data.assistant.id}/settings`}
                   aria-current="page"
                 >

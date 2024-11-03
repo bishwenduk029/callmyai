@@ -87,6 +87,14 @@ export const psGetUserByUsername = db
   .limit(1)
   .prepare("psGetUserByUsername")
 
+
+export const psGetUserByPhone = db
+  .select()
+  .from(users)
+  .where(eq(users.phone, sql.placeholder("phone")))
+  .limit(1)
+  .prepare("psGetUserByPhone")
+
 export const psUpdateChatSummary = db
   .update(chats)
   .set({

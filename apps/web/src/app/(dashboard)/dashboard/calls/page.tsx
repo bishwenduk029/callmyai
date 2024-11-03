@@ -1,16 +1,16 @@
 // page.tsx
-import { Suspense } from "react"
-import Link from "next/link"
-import { redirect } from "next/navigation"
 import { getCallSummariesForUser, getUserByEmail } from "@/actions/user"
 import { auth } from "@/auth"
 import {
+  Folders,
   Gear,
   Headset,
-  Phone,
   PhoneIncoming,
-  Robot,
+  PlugsConnected
 } from "@phosphor-icons/react/dist/ssr"
+import Link from "next/link"
+import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
 import { PAGE_SIZE } from "@/lib/utils"
 
@@ -38,8 +38,8 @@ export default async function CallsPage() {
   )
 
   return (
-    <>
-      <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid">
+    <div className="h-full w-full">
+      <nav className="mx-3 mt-3 hidden max-h-5 gap-4 text-md text-muted-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
           className="flex items-center text-primary hover:underline"
@@ -61,6 +61,20 @@ export default async function CallsPage() {
           <Headset className="mr-2 h-5 w-5" />
           Assistants
         </Link>
+        <Link
+          href="/dashboard/integrations"
+          className="flex items-center hover:underline"
+        >
+          <PlugsConnected className="mr-2 h-5 w-5" />
+          Connect Apps
+        </Link>
+        <Link
+          href="/dashboard/data-sources"
+          className="flex items-center hover:underline"
+        >
+          <Folders className="mr-2 h-5 w-5" />
+          Data Sources
+        </Link>
       </nav>
       <Suspense fallback={<CallSummaryLoadingState />}>
         <CallSummaries
@@ -68,6 +82,6 @@ export default async function CallsPage() {
           initialSummaries={initialSummaries}
         />
       </Suspense>
-    </>
+    </div>
   )
 }

@@ -67,7 +67,7 @@ export default async function SettingsPage({
             <BreadcrumbItem>
               <BreadcrumbLink
                 href="/dashboard/assistants"
-                className="flex flex-row"
+                className="flex flex-row font-medium"
               >
                 <Headset className="mr-2 h-5 w-5" weight="duotone" />
                 Assistants
@@ -76,6 +76,7 @@ export default async function SettingsPage({
             </BreadcrumbItem>
             <BreadcrumbItem>
               <BreadcrumbLink
+                className="font-bold"
                 href={`/dashboard/assistants/${result.data.assistant.id}/settings`}
                 aria-current="page"
               >

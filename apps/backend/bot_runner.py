@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from pipecat.transports.services.helpers.daily_rest import (
-    DailyRESTHelper, DailyRoomObject, DailyRoomProperties, DailyRoomParams)
+    DailyRESTHelper, DailyRoomObject, DailyRoomProperties, DailyRoomParams, DailyRoomSipParams)
 
 from dotenv import load_dotenv
 load_dotenv(override=True)
@@ -135,8 +135,13 @@ async def start_bot(request: Request) -> JSONResponse:
     room_url = os.getenv("DAILY_SAMPLE_ROOM_URL", "")
 
     if not room_url:
-        params = DailyRoomParams(
-            properties=DailyRoomProperties()
+        if(client_config["sip"]["enabled"] == "true"):
+            params = DailyRoomParams(
+                properties=DailyRoomProperties(sip=DailyRoomSipParams( display_name="dialin-user", video=False, sip_mode="dial-in", num_endpoints=1))
+            )
+        else:
+            params = DailyRoomParams(
+                properties=DailyRoomProperties()
         )
         try:
             room: DailyRoomObject = await daily_helpers["rest"].create_room(params=params)

@@ -13,7 +13,7 @@ from pipecat.pipeline.task import PipelineParams, PipelineTask
 from pipecat.processors.aggregators.llm_response import LLMAssistantResponseAggregator, LLMUserResponseAggregator
 from pipecat.frames.frames import EndFrame
 from pipecat.services.openai import OpenAILLMService, OpenAITTSService, OpenAILLMContext
-from pipecat.transports.services.daily import DailyParams, DailyTransport
+from pipecat.transports.services.daily import DailyParams, DailyTransport, DailyDialinSettings
 from openai.types.chat.chat_completion_tool_param import ChatCompletionToolParam
 from pipecat.processors.frameworks.rtvi import RTVIProcessor, RTVIConfig
 from carbon import Carbon
@@ -151,10 +151,34 @@ def load_config(config_arg):
 
 
 async def main(room_url: str, token: str, client_config: dict):
-    logger.info(f"Client Config: {client_config}")
+    logger.debug(f"Client Config: {client_config}")
     async with aiohttp.ClientSession() as session:
-        transport = DailyTransport(
-            room_url,
+        if(client_config["sip"]["enabled"] == "true"):
+            dialin_settings = DailyDialinSettings(
+                call_id=client_config["sip"]["call_id"],
+                call_domain=client_config["sip"]["call_domain"]
+            )
+            transport = DailyTransport(
+                room_url,
+                token,
+                "Chatbot",
+                DailyParams(
+                    api_url=daily_api_url,
+                    api_key=daily_api_key,
+                    dialin_settings=dialin_settings,
+                    audio_in_enabled=True,
+                    audio_out_enabled=True,
+                    camera_out_enabled=False,
+                    vad_enabled=True,
+                    vad_analyzer=SileroVADAnalyzer(),
+                    transcription_enabled=True,
+                    audio_in_sample_rate=24000,
+                    audio_out_sample_rate=24000,
+                )
+            )
+        else:
+            transport = DailyTransport(
+                room_url,
             token,
             "Chatbot",
             DailyParams(

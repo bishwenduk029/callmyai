@@ -65,7 +65,7 @@ export default async function IntegrationsPage() {
           className="flex items-center font-semibold text-primary hover:underline"
         >
           <Plugs className="mr-2 h-5 w-5" weight="bold" />
-          Integrations
+          Connect Apps
         </Link>
         <Link
           href="/dashboard/data-sources"

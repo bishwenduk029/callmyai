@@ -26,7 +26,7 @@ export function Navigation({ navItems }: NavigationProps): JSX.Element {
           <NavigationMenuItem key={item.title} asChild>
             <Link href={item.href} legacyBehavior passHref>
               <NavigationMenuLink
-                className={cn(navigationMenuTriggerStyle(), "bg-transparent")}
+                className={cn(navigationMenuTriggerStyle(), "bg-transparent text-lg")}
               >
                 {item.title}
               </NavigationMenuLink>

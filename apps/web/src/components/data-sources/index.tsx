@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { CarbonConnectWrapper } from "./carbon-connect-wrapper"
+import Link from "next/link"
 
 export function DataSources({
   userEmail,
@@ -24,11 +25,11 @@ export function DataSources({
     <div className="space-y-4 w-full">
       <Card className="flex flex-col w-full items-center justify-center p-6">
         <CardHeader>
-          <CardTitle className="text-center">Add New Data Sources</CardTitle>
+          <CardTitle className="text-center">Connect and Manage your data sources.</CardTitle>
         </CardHeader>
         <CardContent>
           <p>
-            Connect and Manage your data sources.
+            Your data sources are managed by <Link className="underline" href="https://carbon.ai/">CarbonAI</Link>.
           </p>
         </CardContent>
         <CardFooter>

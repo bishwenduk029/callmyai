@@ -18,8 +18,15 @@ import { motion } from "framer-motion"
 import { env } from "@/env.mjs"
 import { Assistant } from "@/db/schema"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -28,17 +35,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { AnimatedIconButton } from "@/components/animated/plus-icon"
 import { CreateAssistantNameForm } from "@/components/assistant/create-assistant-name-form"
-import { CopyButton } from "@/components/copy-button"
+import { ShareButton } from "@/components/share-button"
 
 export default async function AssistantsPage() {
   const session = await auth()
@@ -59,38 +58,38 @@ export default async function AssistantsPage() {
 
   return (
     <>
-      <nav className="mx-3 mt-3 hidden max-h-5 gap-4 text-md text-muted-foreground sm:grid sm:w-1/6">
+      <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <Gear className="mr-2 h-5 w-5" />
           Settings
         </Link>
         <Link
           href="/dashboard/calls"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <PhoneIncoming className="mr-2 h-5 w-5" />
           Calls
         </Link>
         <Link
           href="/dashboard/assistants"
-          className="flex items-center font-semibold text-primary hover:underline"
+          className="flex items-center text-primary font-semibold hover:underline"
         >
           <Headset className="mr-2 h-5 w-5" weight="bold" />
           Assistants
         </Link>
         <Link
           href="/dashboard/integrations"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <PlugsConnected className="mr-2 h-5 w-5" />
-          Integrations
+          Connect Apps
         </Link>
         <Link
           href="/dashboard/data-sources"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <Folders className="mr-2 h-5 w-5" />
           Data Sources
@@ -117,52 +116,50 @@ export default async function AssistantsPage() {
             <CreateAssistantNameForm />
           </DialogContent>
         </Dialog>
-        <Card>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Web Link</TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Phone Number
-                  </TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Cost per Minute
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {assistantsResponse?.data?.map((assistant: Assistant) => (
-                  <TableRow key={assistant.id}>
-                    <TableCell>
-                      <Link
-                        href={`/dashboard/assistants/${assistant.id}/settings`}
-                        className="font-bold hover:underline"
-                      >
-                        {assistant.id}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{assistant.name}</TableCell>
-                    <TableCell>
-                      <CopyButton
-                        className="w-full"
-                        value={`${env.NEXT_PUBLIC_APP_URL}/assistants/${assistant.id}`}
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      coming soon
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      coming soon
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {assistantsResponse?.data?.map((assistant: Assistant) => (
+            <Card key={assistant.id} className="flex flex-col">
+              <CardHeader>
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage
+                      src={assistant.config?.imageUrl}
+                      alt={assistant.name}
+                    />
+                    <AvatarFallback>{assistant.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <Link
+                      href={`/dashboard/assistants/${assistant.id}/settings`}
+                      className="font-bold hover:underline"
+                    >
+                      {assistant.name}
+                    </Link>
+                    {assistant.config?.description && (
+                      <p className="text-sm text-muted-foreground">
+                        {assistant.config.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <div className="text-sm text-muted-foreground">
+                  <span className="font-medium">ID: </span> {assistant.id}
+                  <span className="ml-2 font-medium">Duration: </span>{" "}
+                  {assistant.duration}ms
+                </div>
+              </CardContent>
+              <CardFooter>
+                <ShareButton
+                  className="w-full"
+                  value={`${env.NEXT_PUBLIC_APP_URL}/assistants/${assistant.id}`}
+                />
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </div>
     </>
   )

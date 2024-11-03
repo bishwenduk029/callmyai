@@ -60,7 +60,7 @@ export default async function DataSourcesPage() {
           className="flex items-center text-primary hover:underline"
         >
           <Plugs className="mr-2 h-5 w-5" />
-          Integrations
+          Connect Apps
         </Link>
         <Link
           href="/dashboard/data-sources"

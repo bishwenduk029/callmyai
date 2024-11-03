@@ -27,6 +27,10 @@ export const getUserByIdSchema = z.object({
   id: userIdSchema,
 })
 
+export const getUserByPhoneSchema = z.object({
+  phone: z.string(),
+})
+
 export const getUserByResetPasswordTokenSchema = z.object({
   token: z.string(),
 })
@@ -72,6 +76,7 @@ export const checkIfUserExistsSchema = z.object({
 export type GetUserByEmailInput = z.infer<typeof getUserByEmailSchema>
 export type GetUserByUsernameInput = z.infer<typeof getUserByUsernameSchema>
 export type GetUserByIdInput = z.infer<typeof getUserByIdSchema>
+export type GetUserByPhoneInput = z.infer<typeof getUserByPhoneSchema>
 
 export type GetUserByResetPasswordTokenInput = z.infer<
   typeof getUserByResetPasswordTokenSchema
