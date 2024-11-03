@@ -43,7 +43,22 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         config: {
-          ...results,
+          llm: {
+            model: {
+              name: "gpt-4o-mini",
+              provider: "openai",
+            },
+            messages: [
+              {
+                role: "system",
+                content: env.SYSTEM_PROMPT?.replace(/\${name}/g, user.name || ""),
+              },
+            ],
+          },
+          tts: {
+            provider: "openai",
+            voice: "nova",
+          },
           chatId: results[0]?.id,
           sip: {
             enabled: true,
