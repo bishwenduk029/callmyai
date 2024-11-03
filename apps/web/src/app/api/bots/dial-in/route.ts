@@ -63,8 +63,8 @@ export async function POST(request: Request) {
           chatId: results[0]?.id,
           sip: {
             enabled: true,
-            callId,
-            callDomain,
+            call_domain: callDomain,
+            call_id: callId,
           },
         },
       }),
