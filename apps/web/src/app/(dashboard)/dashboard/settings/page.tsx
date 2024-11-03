@@ -1,7 +1,7 @@
 // page.tsx
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { getUserByEmail } from "@/actions/user"
+import { getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   Folders,
@@ -30,9 +30,13 @@ export default async function SettingsPage() {
     redirect("/signin")
   }
 
+  const subscription = await getUserSubscriptionsByUserId({
+    userId: user.data.id,
+  })
+
   return (
     <>
-      <nav className="mx-3 mt-3 hidden max-h-5 gap-4 text-md text-muted-foreground sm:grid sm:w-1/6">
+      <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
           className="flex items-center font-semibold text-primary hover:underline"
@@ -48,25 +52,46 @@ export default async function SettingsPage() {
           Calls
         </Link>
         <Link
-          href="/dashboard/assistants"
+          href={
+            !subscription
+              ? "/pricing?feature=createAssistant"
+              : "/dashboard/assistants"
+          }
           className="flex items-center hover:underline"
         >
           <Headset className="mr-2 h-5 w-5" />
-          Assistants
+          <div className="flex items-center">
+            Assistants
+            {!subscription && (
+              <span className="font-bolder -mt-8 ml-1 rounded bg-primary px-1.5 text-sm text-primary-foreground">
+                $
+              </span>
+            )}
+          </div>
         </Link>
         <Link
-          href="/dashboard/integrations"
+          href={!subscription ? "/pricing?feature=externalApps" : "/dashboard/integrations"}
           className="flex items-center hover:underline"
         >
           <PlugsConnected className="mr-2 h-5 w-5" />
           Connect Apps
+          {!subscription && (
+            <span className="font-bolder -mt-8 ml-1 rounded bg-primary px-1.5 text-sm text-primary-foreground">
+              $
+            </span>
+          )}
         </Link>
         <Link
-          href="/dashboard/data-sources"
+          href={!subscription ? "/pricing?feature=externalFiles" : "/dashboard/data-sources"}
           className="flex items-center hover:underline"
         >
           <Folders className="mr-2 h-5 w-5" />
           Data Sources
+          {!subscription && (
+            <span className="font-bolder -mt-8 ml-1 rounded bg-primary px-1.5 text-sm text-primary-foreground">
+              $
+            </span>
+          )}
         </Link>
       </nav>
       <Settings user={user.data} />

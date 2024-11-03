@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getIntegrationsByUserId } from "@/actions/integration"
-import { getUserByEmail } from "@/actions/user"
+import { getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   AppWindow,
@@ -31,6 +31,12 @@ export default async function IntegrationsPage() {
   if (!user || !user.data) {
     redirect("/signin")
   }
+
+  const subscription = await getUserSubscriptionsByUserId({
+    userId: user.data.id,
+  })
+
+  if (!subscription) redirect("/pricing?feature=externalApps")
 
   const integrationsResult = await getIntegrationsByUserId({
     userId: user.data.id,

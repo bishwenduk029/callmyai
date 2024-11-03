@@ -236,7 +236,7 @@ async def main(room_url: str, token: str, client_config: dict):
 
         @transport.event_handler("on_first_participant_joined")
         async def on_first_participant_joined(transport, participant):
-            transport.capture_participant_transcription(participant["id"])
+            await transport.capture_participant_transcription(participant["id"])
             await task.queue_frames([LLMMessagesFrame(messages)])
 
         @transport.event_handler("on_participant_left")

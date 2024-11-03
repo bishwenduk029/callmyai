@@ -30,6 +30,14 @@ export const siteConfig = {
     "ai",
     "chatbot",
     "call-assistant",
+    "AI voice",
+    "AI voice assistant",
+    "AI voice assistant platform",
+    "daily.co",
+    "twilio",
+    "callmyai",
+    "callmyai.app",
+    "callmyai.app (beta)",
   ],
   navItems: [
     // {

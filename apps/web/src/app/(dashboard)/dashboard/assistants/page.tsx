@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getAssistantsByUserId } from "@/actions/assistant"
-import { getUserByEmail } from "@/actions/user"
+import { getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   Folders,
@@ -45,6 +45,12 @@ export default async function AssistantsPage() {
   const user = await getUserByEmail({ email: session.user.email || "" })
 
   if (!user || !user.data) redirect("/signin")
+
+  const subscription = await getUserSubscriptionsByUserId({
+    userId: user.data.id,
+  })
+
+  if (!subscription) redirect("/pricing?feature=createAssistant")
 
   const assistantsResponse = await getAssistantsByUserId({
     userId: user.data.id,

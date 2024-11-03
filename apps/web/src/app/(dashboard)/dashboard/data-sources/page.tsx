@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { getUserByEmail } from "@/actions/user"
+import { getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import { Gear } from "@phosphor-icons/react"
 import {
@@ -30,6 +30,12 @@ export default async function DataSourcesPage() {
   if (!user || !user.data) {
     redirect("/signin")
   }
+
+  const subscription = await getUserSubscriptionsByUserId({
+    userId: user.data.id,
+  })
+
+  if (!subscription) redirect("/pricing?feature=externalFiles")
 
   return (
     <>

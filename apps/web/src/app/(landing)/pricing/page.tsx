@@ -1,8 +1,22 @@
 import { PricingSection } from "@/components/sections/pricing-section"
+import { PaidFeatureNotice } from "@/components/paid-feature-notice"
 
-export default function PricingPage(): JSX.Element {
+interface PricingPageProps {
+  searchParams: {
+    feature?: string
+  }
+}
+
+export default function PricingPage({ searchParams }: PricingPageProps): JSX.Element {
+  const { feature } = searchParams
+
   return (
-    <div className="flex min-h-screen w-full items-center justify-center">
+    <div className="flex min-h-screen w-full flex-col items-center sm:my-10 justify-start gap-8">
+      {feature && (
+        <PaidFeatureNotice 
+          feature={feature as "createAssistant" | "externalApps" | "externalFiles"}
+        />
+      )}
       <PricingSection />
     </div>
   )

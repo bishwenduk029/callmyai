@@ -216,7 +216,7 @@ export const plans = pgTable("plan", {
   id: serial("id").primaryKey(),
   productId: integer("productId").notNull(),
   productName: text("productName"),
-  variantId: integer("variantId").notNull().unique(),
+  variantId: integer("variantId"),
   name: text("name").notNull(),
   description: text("description"),
   price: text("price").notNull(),
@@ -226,15 +226,19 @@ export const plans = pgTable("plan", {
   trialInterval: text("trialInterval"),
   trialIntervalCount: integer("trialIntervalCount"),
   sort: integer("sort"),
+  allowedDuration: integer("duration"),
+  allowedApps: integer("allowedApps").default(0),
+  allowedFiles: integer("allowedFiles").default(0),
+  allowedCalls: integer("allowedCalls").default(0),
 })
 
 export const subscriptions = pgTable("subscription", {
   id: serial("id").primaryKey(),
-  lemonSqueezyId: text("lemonSqueezyId").unique().notNull(),
+  lemonSqueezyId: text("lemonSqueezyId"),
   orderId: integer("orderId").notNull(),
   name: text("name").notNull(),
   email: text("email").notNull(),
-  status: text("status").notNull(),
+  status: text("status", { enum: ["ACTIVE", "CANCELLED"] }).notNull().default("ACTIVE"),
   statusFormatted: text("statusFormatted").notNull(),
   renewsAt: text("renewsAt"),
   endsAt: text("endsAt"),
@@ -287,6 +291,17 @@ export const integrationsRelations = relations(integrations, ({ one }) => ({
   user: one(users, {
     fields: [integrations.userId],
     references: [users.id],
+  }),
+}))
+
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  user: one(users, {
+    fields: [subscriptions.userId],
+    references: [users.id],
+  }),
+  plan: one(plans, {
+    fields: [subscriptions.planId],
+    references: [plans.id],
   }),
 }))
 

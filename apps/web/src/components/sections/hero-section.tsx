@@ -35,8 +35,10 @@ export function HeroSection() {
           viewport={{ once: true }}
         >
           <h1 className="mb-4 font-heading text-3xl font-bold sm:text-6xl">
-            AI Powered Call Assistants{" "}
-            <span className="bg-clip-text underline">in seconds</span>
+            <span className="bg-gradient-to-b from-foreground to-foreground/60 bg-clip-text text-transparent dark:from-white dark:to-white/60">
+              AI Voice Experiences{" "}
+              <span className="underline decoration-primary">in seconds</span>
+            </span>
           </h1>
 
           <motion.h3 className="mb-6 max-w-2xl font-urbanist text-2xl text-foreground sm:text-4xl">

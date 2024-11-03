@@ -45,6 +45,9 @@ import { ChatRoomSession } from "@/components/audio/chat-room"
 import { User } from "../db/schema/index"
 import { getUserSubscriptions } from "./payments"
 import { GetUserByPhoneInput } from '../validations/user';
+import { subscriptions } from "@/db/schema"
+import { and, eq } from "drizzle-orm"
+import { db } from '../config/db';
 
 const systemPrompt = `
   You are an expert conversation analyst and summarizer. Your task is to create a brief, engaging summary of a conversation between an AI assistant and a caller. This summary should be easily digestible and help the user quickly determine the call's relevance and importance.
@@ -417,5 +420,22 @@ export async function getUserByAssistantId(
   } catch (error) {
     console.error(error)
     throw new Error("Error getting user by assistant ID")
+  }
+}
+
+export async function getUserSubscriptionsByUserId({userId}: {userId: string}) {
+  try {
+    noStore()
+    const userSubscription = await db.query.subscriptions.findFirst({
+      where: and(eq(subscriptions.userId, userId), eq(subscriptions.status, "ACTIVE")),
+      with: {
+        plan: true
+      }
+    })
+    
+    return userSubscription
+  } catch (error) {
+    console.error("Error fetching user subscriptions:", error)
+    throw new Error("Failed to fetch user subscriptions")
   }
 }
