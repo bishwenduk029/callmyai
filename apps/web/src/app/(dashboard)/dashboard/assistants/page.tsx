@@ -13,13 +13,11 @@ import {
   Plus,
   PlusCircle,
 } from "@phosphor-icons/react/dist/ssr"
-import { motion } from "framer-motion"
 
 import { env } from "@/env.mjs"
 import { Assistant } from "@/db/schema"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -124,7 +122,8 @@ export default async function AssistantsPage() {
                 <div className="flex items-center gap-4">
                   <Avatar className="h-12 w-12">
                     <AvatarImage
-                      src={assistant.config?.imageUrl}
+                    // @ts-ignore
+                      src={assistant.config?.imageUrl || ""}
                       alt={assistant.name}
                     />
                     <AvatarFallback>{assistant.name[0]}</AvatarFallback>
@@ -136,8 +135,10 @@ export default async function AssistantsPage() {
                     >
                       {assistant.name}
                     </Link>
+                    {/* @ts-ignore */}
                     {assistant.config?.description && (
                       <p className="text-sm text-muted-foreground">
+                        {/* @ts-ignore */}
                         {assistant.config.description}
                       </p>
                     )}

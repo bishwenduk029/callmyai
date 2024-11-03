@@ -27,7 +27,6 @@ import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
   getUserByIdSchema,
-  GetUserByPhoneInput,
   getUserByPhoneSchema,
   getUserByResetPasswordTokenSchema,
   GetUserByUsernameInput,
