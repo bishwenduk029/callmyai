@@ -283,7 +283,7 @@ export async function processWebhookEvent(webhookEvent: NewWebhookEvent) {
           orderId: attributes.order_id as number,
           name: attributes.user_name as string,
           email: attributes.user_email as string,
-          status: attributes.status as string,
+          status: "ACTIVE",
           statusFormatted: attributes.status_formatted as string,
           renewsAt: attributes.renews_at as string,
           endsAt: attributes.ends_at as string,
