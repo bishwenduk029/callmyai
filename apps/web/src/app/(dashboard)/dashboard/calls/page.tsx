@@ -1,5 +1,5 @@
 // page.tsx
-import { getCallSummariesForUser, getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
+import { getCallSummariesForUser, getUserByEmail, getUserSubscriptionByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   Folders,
@@ -32,7 +32,7 @@ export default async function CallsPage() {
     redirect("/signin")
   }
 
-  const subscription = await getUserSubscriptionsByUserId({
+  const subscription = await getUserSubscriptionByUserId({
     userId: user.data.id,
   })
 

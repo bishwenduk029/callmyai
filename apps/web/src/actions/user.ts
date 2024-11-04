@@ -423,7 +423,7 @@ export async function getUserByAssistantId(
   }
 }
 
-export async function getUserSubscriptionsByUserId({userId}: {userId: string}) {
+export async function getUserSubscriptionByUserId({userId}: {userId: string}) {
   try {
     noStore()
     const userSubscription = await db.query.subscriptions.findFirst({

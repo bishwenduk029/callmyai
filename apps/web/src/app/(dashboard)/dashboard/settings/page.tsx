@@ -1,7 +1,7 @@
 // page.tsx
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
+import { getUserByEmail, getUserSubscriptionByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   Folders,
@@ -30,7 +30,7 @@ export default async function SettingsPage() {
     redirect("/signin")
   }
 
-  const subscription = await getUserSubscriptionsByUserId({
+  const subscription = await getUserSubscriptionByUserId({
     userId: user.data.id,
   })
 

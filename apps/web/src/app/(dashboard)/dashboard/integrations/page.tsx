@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getIntegrationsByUserId } from "@/actions/integration"
-import { getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
+import { getUserByEmail, getUserSubscriptionByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import {
   AppWindow,
@@ -32,7 +32,7 @@ export default async function IntegrationsPage() {
     redirect("/signin")
   }
 
-  const subscription = await getUserSubscriptionsByUserId({
+  const subscription = await getUserSubscriptionByUserId({
     userId: user.data.id,
   })
 

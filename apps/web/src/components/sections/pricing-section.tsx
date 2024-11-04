@@ -2,13 +2,20 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { getUserByEmail, updateUserCalls } from "@/actions/user"
+import { redirect } from "next/navigation"
+import {
+  getUserByEmail,
+  getUserSubscriptionByUserId,
+  updateUserCalls,
+} from "@/actions/user"
 import Balancer from "react-wrap-balancer"
 
+import { env } from "@/env.mjs"
 import { siteConfig } from "@/config/site"
 import { pricingPlans } from "@/data/pricing-plans"
 
 import auth from "@/lib/auth"
+import { api } from "@/lib/polar"
 import { cn } from "@/lib/utils"
 
 import {
@@ -21,7 +28,6 @@ import {
 import { Icons } from "@/components/icons"
 
 import { buttonVariants } from "../ui/button"
-import { redirect } from "next/navigation"
 
 export async function PricingSection(): Promise<JSX.Element> {
   const session = await auth()
@@ -30,7 +36,11 @@ export async function PricingSection(): Promise<JSX.Element> {
     // User is not logged in, we'll show a simplified version of the pricing
     return <NonLoggedInPricingSection />
   }
-  const hasActiveSubscription = false
+
+  const subscription = await getUserSubscriptionByUserId({
+    userId: session.user.id!,
+  })
+  const hasActiveSubscription = !!subscription
   // const userSubscriptions = await getUserSubscriptions()
   // const hasActiveSubscription = userSubscriptions.some(
   //   (sub) => sub.status === "active"
@@ -120,23 +130,25 @@ export async function PricingSection(): Promise<JSX.Element> {
                             email: session.user.email || "",
                           })
                           if (!user?.data?.calls) {
-                            await updateUserCalls(user?.data?.id || "", 10)
+                            await updateUserCalls(
+                              user?.data?.id || "",
+                              user?.data?.calls || 50
+                            )
                           }
                           redirect("/dashboard/settings")
                           return
                         }
-                        const { getCheckoutURL } = await import(
-                          "@/actions/payments"
-                        )
-                        const checkoutLink = await getCheckoutURL(
-                          parseInt(plan.lemonSqueezyVariantId)
-                        )
-                        return checkoutLink
+                        const confirmationUrl = `${env.NEXT_PUBLIC_APP_URL}/confirmation?checkout_id={CHECKOUT_ID}`
+                        const checkoutLink = await api.checkouts.custom.create({
+                          productPriceId: plan.polarPriceId!,
+                          successUrl: confirmationUrl,
+                        })
+                        redirect(checkoutLink.url)
                       }}
                     >
                       <button
                         type="submit"
-                        disabled={plan.id !== "free"}
+                        disabled={plan.disable}
                         className={cn(
                           buttonVariants({
                             variant: "default",
@@ -160,7 +172,7 @@ export async function PricingSection(): Promise<JSX.Element> {
               className={cn(
                 buttonVariants({
                   variant: "default",
-                  className: "w-full md:w-1/2 items-center self-center",
+                  className: "w-full items-center self-center md:w-1/2",
                 })
               )}
             >
@@ -208,7 +220,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
 
-                  <CardDescription className="text-sm text-neutral-3000 dark:text-muted-foreground">
+                  <CardDescription className="text-neutral-3000 dark:text-muted-foreground text-sm">
                     <Balancer>{plan.description}</Balancer>
                   </CardDescription>
 
