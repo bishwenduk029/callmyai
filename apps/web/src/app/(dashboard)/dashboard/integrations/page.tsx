@@ -47,25 +47,25 @@ export default async function IntegrationsPage() {
       <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <Gear className="mr-2 h-5 w-5" />
           Settings
         </Link>
         <Link
           href="/dashboard/calls"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <PhoneIncoming className="mr-2 h-5 w-5" />
           Calls
         </Link>
         <Link
           href="/dashboard/assistants"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <Headset className="mr-2 h-5 w-5" />
           Assistants
-        </Link>
+      </Link>
         <Link
           href="/dashboard/integrations"
           className="flex items-center font-semibold text-primary hover:underline"
@@ -75,7 +75,7 @@ export default async function IntegrationsPage() {
         </Link>
         <Link
           href="/dashboard/data-sources"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <Folders className="mr-2 h-5 w-5" />
           Data Sources

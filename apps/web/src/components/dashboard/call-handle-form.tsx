@@ -95,7 +95,7 @@ export default function CallHandleForm({ user }: CallHandleFormProps) {
         </CardHeader>
         <CardContent className="space-y-1">
           <div className="flex w-full items-center rounded-md border-2 border-slate-900">
-            <span className="bg-primary px-2 py-3 text-primary-foreground">
+            <span className="bg-primary px-2 py-2 text-primary-foreground font-semibold rounded-lg">
               callmyai.app/
             </span>
             <Input

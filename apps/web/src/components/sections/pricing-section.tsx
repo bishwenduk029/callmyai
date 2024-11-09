@@ -56,7 +56,7 @@ export async function PricingSection(): Promise<JSX.Element> {
         <div className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
-              <span className="bg-clip-text text-primary">Pricing!</span>
+              <span className="bg-clip-text text-foreground">Pricing!</span>
             </Balancer>
           </h2>
           <h3 className="max-w-2xl text-muted-foreground sm:text-xl sm:leading-8">
@@ -196,7 +196,7 @@ function NonLoggedInPricingSection(): JSX.Element {
         <div className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
-              <span className="bg-clip-text text-primary">Pricing!</span>
+              <span className="bg-clip-text text-foreground">Pricing!</span>
             </Balancer>
           </h2>
           <h3 className="max-w-2xl text-muted-foreground sm:text-xl sm:leading-8">

@@ -15,7 +15,7 @@ export function FeaturesSection() {
         "Our advanced AI voice bot takes calls on your behalf, saving you time and reducing interruptions.",
     },
     {
-      title: "Smart Call Summarization",
+      title: "Call Summarization",
       description:
         "Receive concise, tweet-like summaries of all your calls, making it easy to review and prioritize follow-ups.",
     },
@@ -58,7 +58,7 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl p-6 sm:max-w-none sm:shadow-xl"
+          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl p-6 sm:max-w-none sm:shadow-xl border"
         >
           <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
             <h4 className="font-semibold text-primary">
@@ -93,9 +93,9 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl p-2 sm:max-w-none sm:p-6 sm:shadow-xl"
+          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl p-2 sm:max-w-none sm:p-6 sm:shadow-xl border"
         >
-          <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 border-b">
             <h4 className="font-semibold text-primary">Workflow Automation</h4>
             <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
               Active
@@ -105,7 +105,7 @@ export function FeaturesSection() {
             <AnimatedBeamActions className="w-full" />
             <div className="space-y-4">
               <h3 className="text-2xl font-bold text-primary">
-                Configure Workflows on your connected apps
+                Workflows on your connected apps
               </h3>
               <ul className="my-4 list-disc space-y-2 pl-4 text-lg text-muted-foreground">
                 <li>Execute actions across your connected apps</li>

@@ -5,12 +5,12 @@ export const fontInter = Inter({
   variable: "--font-inter",
 })
 
-export const fontUrbanist = Inter({
+export const fontUrbanist = Lora({
   subsets: ["latin"],
   variable: "--font-urbanist",
 })
 
-export const fontHeading = Inter({
+export const fontHeading = Nunito({
   subsets: ["latin"],
   variable: "--font-heading",
 })
