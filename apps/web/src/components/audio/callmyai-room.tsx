@@ -129,7 +129,7 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
   }, [isLoadingBot])
 
   return (
-    <div className="fixed w-full inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B7F8DB] to-[#50A7C2] p-4 sm:p-0">
+    <div className="fixed w-full inset-0 flex flex-col items-center justify-center bg-gradient-to-r from-[#fbed96] to-[#abecd6] p-4 sm:p-0">
       <BackgroundGradient className="dark:bg-zinc-900 w-full rounded-[22px] bg-white p-1">
         <Card className="border-none py-4 shadow-xl">
           <CardContent className="flex flex-col items-center">

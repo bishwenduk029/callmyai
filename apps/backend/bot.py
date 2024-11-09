@@ -42,7 +42,7 @@ def create_composio_toolset(entity_id: str) -> ComposioToolSet:
 class CallMyAIActionsProcessor:
     def __init__(self, entity_id, context: OpenAILLMContext, tools: list[str], data_sources: list[str]):
         self.entity_id = entity_id
-        composio_toolset = create_composio_toolset(entity_id)
+        self.composio_toolset = create_composio_toolset(entity_id)
         all_actions: list[Action] = []
         abilities: list[ChatCompletionToolParam] = []
         user_carbon_access_wrapper = Carbon(api_key=os.getenv("CARBON_API_KEY"), customer_id=entity_id)
@@ -66,7 +66,7 @@ class CallMyAIActionsProcessor:
                 logger.warning(f"Invalid tool string format: {tool_string}")
         
         if all_actions:
-            abilities = composio_toolset.get_tools(actions=all_actions)
+            abilities = self.composio_toolset.get_tools(actions=all_actions)
         else:
             logger.warning("No valid actions found in the provided tools.")
         

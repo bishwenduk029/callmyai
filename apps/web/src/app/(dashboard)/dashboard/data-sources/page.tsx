@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { getUserByEmail, getUserSubscriptionsByUserId } from "@/actions/user"
+import { getUserByEmail, getUserSubscriptionByUserId } from "@/actions/user"
 import { auth } from "@/auth"
 import { Gear } from "@phosphor-icons/react"
 import {
@@ -31,7 +31,7 @@ export default async function DataSourcesPage() {
     redirect("/signin")
   }
 
-  const subscription = await getUserSubscriptionsByUserId({
+  const subscription = await getUserSubscriptionByUserId({
     userId: user.data.id,
   })
 
@@ -42,28 +42,28 @@ export default async function DataSourcesPage() {
       <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <GearFine className="mr-2 h-5 w-5" />
           Settings
         </Link>
         <Link
           href="/dashboard/calls"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <PhoneIncoming className="mr-2 h-5 w-5" />
           Calls
         </Link>
         <Link
           href="/dashboard/assistants"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <Headset className="mr-2 h-5 w-5" />
           Assistants
         </Link>
         <Link
           href="/dashboard/integrations"
-          className="flex items-center text-primary hover:underline"
+          className="flex items-center hover:underline"
         >
           <Plugs className="mr-2 h-5 w-5" />
           Connect Apps

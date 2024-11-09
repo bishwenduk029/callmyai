@@ -116,6 +116,7 @@
     "react-wrap-balancer": "^1.1.0",
     "resend": "^4.0.0",
     "sonner": "^1.4.41",
+    "standardwebhooks": "^1.0.0",
     "stream": "^0.0.3",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

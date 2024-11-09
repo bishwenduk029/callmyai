@@ -1,5 +1,5 @@
 import type { AdapterAccount } from "@auth/core/adapters"
-import { InferModel, relations } from "drizzle-orm"
+import { InferModel, relations, sql } from "drizzle-orm"
 import {
   boolean,
   index,
@@ -204,7 +204,7 @@ export const newsletterSubscribers = pgTable("newsletterSubscriber", {
 })
 
 export const webhookEvents = pgTable("webhookEvent", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
   eventName: text("eventName").notNull(),
   processed: boolean("processed").default(false),
@@ -238,7 +238,9 @@ export const subscriptions = pgTable("subscription", {
   orderId: integer("orderId").notNull(),
   name: text("name").notNull(),
   email: text("email").notNull(),
-  status: text("status", { enum: ["ACTIVE", "CANCELLED"] }).notNull().default("ACTIVE"),
+  status: text("status", { enum: ["ACTIVE", "CANCELLED"] })
+    .notNull()
+    .default("ACTIVE"),
   statusFormatted: text("statusFormatted").notNull(),
   renewsAt: text("renewsAt"),
   endsAt: text("endsAt"),

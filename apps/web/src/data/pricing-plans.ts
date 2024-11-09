@@ -6,7 +6,7 @@ export const pricingPlans: PricingPlan[] = [
   {
     id: "free",
     name: "Free Forever",
-    description: "Perfect for individuals expecting lower call volumes",
+    description: "Perfect for trying out web based AI phone screener",
     features: [
       "50 calls per month",
       "Filtered Call Summaries",
@@ -34,42 +34,52 @@ export const pricingPlans: PricingPlan[] = [
       "Handle 200 calls per month",
       "Filtered Call Summaries",
       "Each call of duration 100 seconds",
+      "Create upto 3 AI voice assistants",
+      "Connect upto 5 external apps",
+      "Connect upto 5 files",
+      "Purchase AI phone numbers",
     ],
+    polarPriceId: "547ae9f1-635c-4885-9376-3db3f5be74cd",
     lemonSqueezyVariantId: env.LEMONSQUEEZY_VARIANT_ID,
     limitations: [],
     stripePriceId: "",
     prices: {
-      monthly: 9.99,
+      monthly: 9,
       yearly: 240,
     },
     stripeIds: {
       monthly: undefined,
       yearly: undefined,
     },
-    buttonText: "Coming Soon",
-    disable: true
+    buttonText: "Get Started",
+    disable: false
   },
   {
     id: "premium",
-    name: "Business Lite",
-    description: "Perfect for businesses looking for AI receptionist",
+    name: "Premium",
+    description: "Perfect for AI Voice Experience Designers",
     features: [
-      "Handle Unlimited calls per month",
+      "Handle 500 calls per month",
       "Filtered Call Summaries",
-      "Each call of duration 100 seconds",
+      "Each call of duration 200 seconds",
+      "Create upto 5 AI voice assistants",
+      "Connect upto 10 external apps",
+      "Connect upto 10 files",
+      "Purchase AI phone numbers",
     ],
     lemonSqueezyVariantId: env.LEMONSQUEEZY_VARIANT_ID,
+    polarPriceId: "b169b804-ce8e-4997-bcce-274ed729e4c9",
     limitations: [],
     stripePriceId: "",
     prices: {
-      monthly: 39.99,
+      monthly: 25,
       yearly: 240,
     },
     stripeIds: {
       monthly: undefined,
       yearly: undefined,
     },
-    buttonText: "Coming Soon",
-    disable: true
+    buttonText: "Get Started",
+    disable: false
   },
 ]
