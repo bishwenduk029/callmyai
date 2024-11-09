@@ -39,7 +39,7 @@ export const pricingPlans: PricingPlan[] = [
       "Connect upto 5 files",
       "Purchase AI phone numbers",
     ],
-    polarPriceId: "547ae9f1-635c-4885-9376-3db3f5be74cd",
+    polarPriceId: "62d50784-084f-4dbf-bef8-1392eee03062",
     lemonSqueezyVariantId: env.LEMONSQUEEZY_VARIANT_ID,
     limitations: [],
     stripePriceId: "",
