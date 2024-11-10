@@ -3,7 +3,7 @@
 import posthog from 'posthog-js'
 import { PostHogProvider as OriginalPostHogProvider } from 'posthog-js/react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 
 import { env } from '@/env.mjs'
 
@@ -14,11 +14,7 @@ if (typeof window !== 'undefined') {
   })
 }
 
-interface PostHogProviderProps {
-  children: React.ReactNode
-}
-
-export function PostHogProvider({ children }: PostHogProviderProps) {
+function PostHogMetrics() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -34,5 +30,20 @@ export function PostHogProvider({ children }: PostHogProviderProps) {
     }
   }, [pathname, searchParams])
 
-  return <OriginalPostHogProvider client={posthog}>{children}</OriginalPostHogProvider>
+  return null
+}
+
+interface PostHogProviderProps {
+  children: React.ReactNode
+}
+
+export function PostHogProvider({ children }: PostHogProviderProps) {
+  return (
+    <OriginalPostHogProvider client={posthog}>
+      <Suspense fallback={null}>
+        <PostHogMetrics />
+      </Suspense>
+      {children}
+    </OriginalPostHogProvider>
+  )
 } 
