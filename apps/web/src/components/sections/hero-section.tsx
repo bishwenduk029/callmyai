@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Check } from "@phosphor-icons/react/dist/ssr"
 import { motion } from "framer-motion"
+import Balancer from "react-wrap-balancer"
 
 import { env } from "@/env.mjs"
 
@@ -53,7 +54,7 @@ export function HeroSection() {
       aria-label="hero section"
       className="md:mt-38 container mt-16 w-full"
     >
-      <div className="container flex w-full flex-col items-center gap-6">
+      <div className="sm:container flex w-full flex-col items-center gap-6">
         <motion.div
           className="my-auto w-full text-center sm:w-[80%]"
           initial={{ opacity: 0.5, filter: "blur(10px)" }}
@@ -61,32 +62,34 @@ export function HeroSection() {
           transition={{ duration: 1 }}
           viewport={{ once: true }}
         >
-          <h1 className="mb-4 mt-20 font-heading text-3xl font-bold sm:text-7xl">
+          <h1 className="mb-4 mt-20 font-urbanist text-4xl font-extrabold sm:text-6xl">
             <span className="">
               AI Voice Experiences{" "}
               <span className="underline decoration-primary">in minutes</span>
             </span>
           </h1>
 
-          <motion.h3 className="mb-6 w-full text-nowrap font-urbanist text-xl text-muted-foreground sm:text-4xl">
-            <span>
-              Create AI-Powered voice assistants for multiple roles: <br />
-              <span className="flex flex-row justify-center">
-                <span>AI</span>
-                <FlipWords
-                  className="text-primary"
-                  words={[
-                    "Receptionists",
-                    "Customer Support",
-                    "Personal Assistant",
-                    "Knowledge Bot",
-                    "Call Center Rep",
-                    "Sales Rep",
-                    "Call Assistant",
-                  ]}
-                />{" "}
+          <motion.h3 className="mb-6 text-nowrap font-urbanist text-xl text-muted-foreground sm:w-full sm:text-4xl">
+            <Balancer>
+              <span>
+                Create AI-Powered voice assistants for multiple roles: <br />
+                <span className="flex flex-row justify-center">
+                  <span>AI</span>
+                  <FlipWords
+                    className="text-primary"
+                    words={[
+                      "Receptionists",
+                      "Customer Support",
+                      "Personal Assistant",
+                      "Knowledge Bot",
+                      "Call Center Rep",
+                      "Sales Rep",
+                      "Call Assistant",
+                    ]}
+                  />{" "}
+                </span>
               </span>
-            </span>
+            </Balancer>
           </motion.h3>
 
           <motion.div className="z-10 mx-auto flex w-full max-w-md flex-col items-center gap-4">
@@ -108,7 +111,7 @@ export function HeroSection() {
           </motion.div>
         </motion.div>
 
-        <div className="relative z-10 mt-14 grid w-full grid-cols-1 gap-8 border-t-primary bg-background p-2 lg:grid-cols-2">
+        <div className="relative z-10 mt-14 md:grid w-full grid-cols-1 gap-8 border-t-primary bg-background p-2 md:grid-cols-2">
           <div className="absolute bottom-0 left-0 h-20 w-full rounded-lg bg-gradient-to-b from-background/0 via-background/50 to-background md:h-28"></div>
           <div className="absolute left-1/2 top-2 mx-auto h-5 w-[90%] -translate-x-1/2 transform rounded-full bg-primary/50 blur-3xl lg:-top-8 lg:h-20"></div>
           {/* Left column - Demo */}
@@ -160,7 +163,7 @@ export function HeroSection() {
                 </Tabs>
               </div>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col">
                 <CallMyAiMobilePreview
                   assistantId={salesAgentId}
                   title="Try our AI Sales Agent Free"
@@ -170,7 +173,7 @@ export function HeroSection() {
           </div>
 
           {/* Right column - Feature points */}
-          <div className="order-1 flex flex-col justify-center gap-6 rounded-md bg-primary/95 text-xl text-primary-foreground lg:order-2">
+          <div className="order-1 flex flex-col justify-center gap-6 rounded-md bg-primary/95 text-xl text-white lg:order-2">
             <div className="rounded-xl border border-primary/20 p-6">
               <div className="grid gap-6">
                 {FEATURE_POINTS.map((point, index) => (
@@ -179,10 +182,10 @@ export function HeroSection() {
                       <Check className="h-4 w-4 text-white" weight="bold" />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h3 className="font-semibold leading-none text-primary-foreground">
+                      <h3 className="font-extrabold leading-none">
                         {point.title}
                       </h3>
-                      <p className="text-lg text-primary-foreground/80">
+                      <p className="text-lg">
                         {point.description}
                       </p>
                     </div>

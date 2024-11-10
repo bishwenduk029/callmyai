@@ -1,12 +1,17 @@
 "use client";
 
-import { VoiceClient as DailyVoiceClient, VoiceEvent as DailyVoiceEvent } from "realtime-ai";
 import {
-  VoiceClientAudio as DailyVoiceClientAudio,
-  VoiceClientProvider as DailyVoiceClientProvider,
-  useVoiceClient as useDailyVoiceClient,
-  useVoiceClientEvent as useDailyVoiceClientEvent,
+  RTVIClient as DailyVoiceClient,
+  RTVIEvent as DailyVoiceEvent,
+} from "realtime-ai";
+import {
+  RTVIClientAudio as DailyVoiceClientAudio,
+  RTVIClientProvider as DailyVoiceClientProvider,
+  useRTVIClient as useDailyVoiceClient,
+  useRTVIClientEvent as useDailyVoiceClientEvent,
+  VoiceVisualizer as DailyVoiceVisualizer,
 } from "realtime-ai-react";
+import { DailyTransport } from "@daily-co/realtime-ai-daily";
 
 export {
   DailyVoiceClient,
@@ -15,4 +20,6 @@ export {
   DailyVoiceClientProvider,
   useDailyVoiceClient,
   useDailyVoiceClientEvent,
+  DailyVoiceVisualizer,
+  DailyTransport,
 };

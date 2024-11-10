@@ -6,6 +6,7 @@ import {
   DailyVoiceClient,
   DailyVoiceClientAudio,
   DailyVoiceClientProvider,
+  DailyTransport
 } from "@callmyai/ai/ui"
 
 import { User } from "@/db/schema"
@@ -29,13 +30,17 @@ export const DailyChatRoomProvider = ({
   const [voiceClient, setVoiceClient] = useState<DailyVoiceClient | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
+  const dailyTransport = new DailyTransport();
 
   useEffect(() => {
     const initializeVoiceClient = async () => {
       try {
         const client = new DailyVoiceClient({
-          baseUrl: session.baseUrl,
-          enableMic: true,
+          transport: dailyTransport,
+          params: {
+            baseUrl: session.baseUrl,
+            enableMic: true,
+          },
           config: {
             ...configuration,
             assistantId: session.assistantId,
@@ -60,7 +65,7 @@ export const DailyChatRoomProvider = ({
   }
 
   return (
-    <DailyVoiceClientProvider voiceClient={voiceClient}>
+    <DailyVoiceClientProvider client={voiceClient!}>
       <div>
         <CallMyAIRoom chatSession={session} />
         <DailyVoiceClientAudio />

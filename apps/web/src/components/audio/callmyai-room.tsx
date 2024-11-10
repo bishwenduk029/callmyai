@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import {
   DailyVoiceEvent,
+  DailyVoiceVisualizer,
   useDailyVoiceClient,
   useDailyVoiceClientEvent,
 } from "@callmyai/ai/ui"
@@ -86,7 +87,7 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
       setIsListening(false)
     } else {
       try {
-        await voiceClient?.start()
+        await voiceClient?.connect()
         setIsListening(true)
       } catch (error) {
         console.error("Failed to start voice client:", error)
@@ -166,6 +167,13 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
                 {elapsedTime}s of {chatSession.duration}s
               </span>
             </div>
+            <DailyVoiceVisualizer
+              participantType="bot"
+              barColor="#0ea5e9"
+              barGap={4}
+              barWidth={8}
+              barMaxHeight={48}
+            />
             {!disablePhone && (
               <motion.button
                 className="rounded px-5 py-2.5 text-white transition-colors"

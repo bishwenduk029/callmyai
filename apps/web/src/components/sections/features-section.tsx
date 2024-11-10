@@ -10,7 +10,7 @@ import { AnimatedBeamMultipleDataSources } from "../fancy/animated-beams-data"
 export function FeaturesSection() {
   const features = [
     {
-      title: "AI-Powered Call Handling",
+      title: "Inbound Calls",
       description:
         "Our advanced AI voice bot takes calls on your behalf, saving you time and reducing interruptions.",
     },
@@ -20,7 +20,7 @@ export function FeaturesSection() {
         "Receive concise, tweet-like summaries of all your calls, making it easy to review and prioritize follow-ups.",
     },
     {
-      title: "Web-Based Accessibility",
+      title: "Web Links",
       description:
         "No phone integration required. Callers simply use a unique web link to reach your AI assistant.",
     },
@@ -30,7 +30,7 @@ export function FeaturesSection() {
         "Customize screening criteria and let AI intelligently filter calls, ensuring you only receive relevant communications.",
     },
     {
-      title: "Enterprise-Ready Solution",
+      title: "Enterprise-Ready",
       description:
         "Connect external apps for business workflows to reach multiple users efficiently, with scalable access options.",
     },
@@ -40,7 +40,7 @@ export function FeaturesSection() {
         "Your data security is our priority. All conversations are handled with strict privacy measures.",
     },
     {
-      title: "Flexible Pricing Options",
+      title: "Simple Pricing",
       description:
         "Choose from our range of plans, from individual users to large enterprises, with no hidden fees.",
     },
@@ -76,7 +76,7 @@ export function FeaturesSection() {
               </h3>
               <ul className="text-md list-disc space-y-2 text-muted-foreground sm:pl-4 sm:text-lg">
                 <li>
-                  Seamlessly integrate with Google Drive, Notion, WhatsApp and
+                  Seamlessly integrate with <span className="text-primary/75">Google Drive</span>, <span className="text-primary/75">Notion</span>, <span className="text-primary/75">Intercom</span> and
                   more
                 </li>
                 <li>
@@ -154,13 +154,13 @@ const Feature = ({
       {index >= 4 && (
         <div className="dark:from-primary-800 from-primary-100 pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b to-transparent opacity-0 transition duration-200 group-hover/feature:opacity-100" />
       )}
-      <div className="relative z-10 mb-2 px-4 text-lg font-bold sm:px-10">
+      <div className="relative z-10 mb-2 px-4 text-xl font-bold sm:px-10">
         <div className="dark:bg-neutral-700 absolute inset-y-0 left-0 hidden h-6 w-1 origin-center rounded-br-full rounded-tr-full bg-neutral-300 transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-green-500 sm:block" />
         <span className="dark:text-primary inline-block text-primary transition duration-200 group-hover/feature:translate-x-2">
           {title}
         </span>
       </div>
-      <p className="text-md relative z-10 mx-auto max-w-xs px-4 text-muted-foreground sm:mx-0 sm:px-10">
+      <p className="text-lg relative z-10 mx-auto max-w-xs px-4 text-muted-foreground sm:mx-0 sm:px-10">
         {description}
       </p>
     </motion.div>
