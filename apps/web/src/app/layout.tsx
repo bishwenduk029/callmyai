@@ -11,8 +11,8 @@ import { siteConfig } from "@/config/site"
 import { env } from "@/env.mjs"
 
 import { cn } from "@/lib/utils"
-import { SmoothScrollProvider } from "@/providers/smooth-scroll-provider"
 import { ThemeProvider } from "@/providers/theme-provider"
+import { PostHogProvider } from "@/providers/posthog-provider"
 
 import { Toaster } from "@/components/ui/toaster"
 
@@ -108,15 +108,17 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
           fontHeading.variable
         )}
       >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            disableTransitionOnChange
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          disableTransitionOnChange
+        >
+          <PostHogProvider>
             {children}
             <Toaster />
             <Analytics />
-          </ThemeProvider>
+          </PostHogProvider>
+        </ThemeProvider>
       </body>
       <noscript>
         <iframe

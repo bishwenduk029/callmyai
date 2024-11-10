@@ -41,6 +41,8 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_VOICE_BACKEND_URL: z.string().url().optional(),
     NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID: z.string(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string(),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().url(),
   },
 
   /**
@@ -74,5 +76,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID: process.env.NEXT_PUBLIC_CALLMYAI_SALES_AGENT_ID,
     CALLMYAI_SALES_AGENT_ID: process.env.CALLMYAI_SALES_AGENT_ID,
     CALLMYAI_AGENT_CALL_DURATION: process.env.CALLMYAI_AGENT_CALL_DURATION,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
   },
 })
