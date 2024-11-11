@@ -33,10 +33,13 @@ export async function POST(request: Request) {
       console.log(`Form Data - ${key}: ${value}`)
     }
     const CallSid = formData.get('CallSid')?.toString()
+    const from = formData.get('From')?.toString()
 
     if (!CallSid) throw new Error("CallSid is required")
 
-    const user = await getUserByPhone({ phone: CallSid })
+    if (!from) throw new Error("From is required")
+
+    const user = await getUserByPhone({ phone: from! })
 
     if (!user) throw new Error("User not found")
 
