@@ -123,6 +123,13 @@ export function UpdateAssistantDisplayDetails({
           provider: selectedVoice?.provider || "openai",
           voice: values.voice!
         },
+        llm: config?.llm || {
+          model: {
+            name: "gpt-4o-mini",
+            provider: "openai",
+          },
+          messages: [],
+        }
       },
     })
   }
