@@ -28,6 +28,10 @@ export async function POST(request: Request) {
 
     // Parse form data instead of JSON
     const formData = await request.formData()
+    // Log all form data entries
+    for (const [key, value] of formData.entries()) {
+      console.log(`Form Data - ${key}: ${value}`)
+    }
     const CallSid = formData.get('CallSid')?.toString()
 
     if (!CallSid) throw new Error("CallSid is required")
