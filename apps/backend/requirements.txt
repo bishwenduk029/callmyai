@@ -1,4 +1,4 @@
-pipecat-ai[daily,openai,silero]==0.0.46
+pipecat-ai[daily,openai,silero,playht]==0.0.46
 fastapi
 uvicorn
 python-dotenv

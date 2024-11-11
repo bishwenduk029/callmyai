@@ -9,6 +9,7 @@ import { z } from "zod"
 
 import { useToast } from "@/hooks/use-toast"
 import { falClient } from "@/lib/fal"
+import { voices } from "@/lib/voices"
 
 import {
   Card,
@@ -48,6 +49,7 @@ const assistantConfigSchema = z.object({
   gender: z.string().optional(),
   ethnicity: z.string().optional(),
   avatar: z.string().optional(),
+  voice: z.string().optional(),
 })
 
 interface FalResult {
@@ -70,6 +72,7 @@ export function UpdateAssistantDisplayDetails({
       gender: config?.gender,
       ethnicity: config?.ethnicity,
       avatar: config?.avatar,
+      voice: config?.tts?.voice,
     },
   })
 
@@ -101,18 +104,25 @@ export function UpdateAssistantDisplayDetails({
   })
 
   const onSubmit = async (values: z.infer<typeof assistantConfigSchema>) => {
+    const selectedVoice = voices.find(v => v.id === values.voice)
+    console.group(values)
+    
     updateAssistantAction.execute({
       id: assistant.id,
       name: values.name,
       duration: assistant.duration,
-      // @ts-ignore
       config: {
         ...config,
         header: values.header,
         description: values.description,
-        gender: values.gender,
+        gender: selectedVoice?.gender!,
         ethnicity: values.ethnicity,
         avatar: values.avatar,
+        tts: {
+          ...config?.tts,
+          provider: selectedVoice?.provider || "openai",
+          voice: values.voice!
+        },
       },
     })
   }
@@ -186,45 +196,16 @@ export function UpdateAssistantDisplayDetails({
                 </p>
               )}
             </div>
-            <div className="flex flex-col justify-between align-baseline sm:flex-row">
-              <Avatar className="h-48 w-48">
+            <div className="flex flex-col gap-6 justify-between align-baseline sm:flex-row">
+              <Avatar className="h-48 w-48 flex-shrink-0">
                 <AvatarImage
                   src={form.getValues("avatar") || config?.avatar}
                   alt="@assistant"
                 />
                 <AvatarFallback>BOT</AvatarFallback>
               </Avatar>
-              <div className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="gender"
-                    className="my-1 block text-sm font-semibold text-gray-700"
-                  >
-                    Gender
-                  </label>
-                  <Select
-                    {...form.register("gender")}
-                    defaultValue={config?.gender}
-                    onValueChange={(value) => {
-                      form.setValue("gender", value)
-                    }}
-                  >
-                    <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {form.formState.errors.gender && (
-                    <p className="text-sm text-destructive">
-                      {form.formState.errors.gender.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
+              <div className="space-y-6 flex-1">
+                <div className="w-full">
                   <label
                     htmlFor="ethnicity"
                     className="my-1 block text-sm font-semibold text-gray-700"
@@ -238,7 +219,7 @@ export function UpdateAssistantDisplayDetails({
                       form.setValue("ethnicity", value)
                     }}
                   >
-                    <SelectTrigger className="w-[200px]">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select ethnicity" />
                     </SelectTrigger>
                     <SelectContent>
@@ -247,18 +228,49 @@ export function UpdateAssistantDisplayDetails({
                       <SelectItem value="African">African</SelectItem>
                       <SelectItem value="Asian">Asian</SelectItem>
                       <SelectItem value="Hispanic">Hispanic</SelectItem>
-                      <SelectItem value="Middle Eastern">
-                        Middle Eastern
-                      </SelectItem>
+                      <SelectItem value="Middle Eastern">Middle Eastern</SelectItem>
                       <SelectItem value="South Asian">South Asian</SelectItem>
-                      <SelectItem value="Pacific Islander">
-                        Pacific Islander
-                      </SelectItem>
+                      <SelectItem value="Pacific Islander">Pacific Islander</SelectItem>
                     </SelectContent>
                   </Select>
                   {form.formState.errors.ethnicity && (
                     <p className="text-sm text-destructive">
                       {form.formState.errors.ethnicity.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="w-full">
+                  <label
+                    htmlFor="voice"
+                    className="my-1 block text-sm font-semibold text-gray-700"
+                  >
+                    Voice
+                  </label>
+                  <Select
+                    {...form.register("voice")}
+                    defaultValue={voices.find(v => v.id === config?.tts?.voice)?.id}
+                    onValueChange={(value) => {
+                      form.setValue("voice", value)
+                      const selectedVoice = voices.find(v => v.id === value)
+                      if (selectedVoice?.gender)
+                        form.setValue("gender", selectedVoice.gender)
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select voice" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {voices.map((voice) => (
+                        <SelectItem key={voice.id} value={voice.id}>
+                          {voice.name} - {voice.description}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.voice && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.voice.message}
                     </p>
                   )}
                 </div>

@@ -24,6 +24,10 @@ from pipecat.frames.frames import (
 from pipecat.audio.vad.silero import SileroVADAnalyzer
 from composio import Action
 from composio_openai import ComposioToolSet, Action
+from typing import Optional, Dict, Any
+from pipecat.services.playht import PlayHTTTSService
+from pipecat.services.ai_services import TTSService
+from pipecat.transcriptions.language import Language
 
 from loguru import logger
 
@@ -35,6 +39,30 @@ logger.add(sys.stderr, level="INFO")
 
 daily_api_key = os.getenv("DAILY_API_KEY", "")
 daily_api_url = os.getenv("DAILY_API_URL", "https://api.daily.co/v1")
+
+class TTSFactory:
+    @staticmethod
+    def create_tts_service(config: Optional[Dict[str, Any]] = None) -> TTSService:
+        if not config:
+            return OpenAITTSService(api_key=os.getenv("OPENAI_API_KEY"))
+        
+        provider = config.get("provider", "openai").lower()
+        
+        if provider == "openai":
+            return OpenAITTSService(
+                api_key=os.getenv("OPENAI_API_KEY"),
+                voice=config.get("voice", "nova")
+            )
+        elif provider == "playht":
+            return PlayHTTTSService(
+                user_id=os.getenv("PLAYHT_USER_ID"),
+                api_key=os.getenv("PLAYHT_API_KEY"),
+                voice_url=config.get("voice", "s3://voice-cloning-zero-shot/801a663f-efd0-4254-98d0-5c175514c3e8/jennifer/manifest.json"),
+                params=PlayHTTTSService.InputParams(language=Language.EN)
+            )
+            
+        # Default to OpenAI if provider is not recognized
+        return OpenAITTSService(api_key=os.getenv("OPENAI_API_KEY"), voice="nova") 
 
 def create_composio_toolset(entity_id: str) -> ComposioToolSet:
     return ComposioToolSet(entity_id=entity_id)
@@ -149,7 +177,6 @@ def load_config(config_arg):
     else:
         return json.loads(config_arg)
 
-
 async def main(room_url: str, token: str, client_config: dict):
     logger.info(f"Client Config: {client_config}")
     async with aiohttp.ClientSession() as session:
@@ -197,10 +224,8 @@ async def main(room_url: str, token: str, client_config: dict):
             )
         )
 
-        tts = OpenAITTSService(
-            api_key=os.getenv("OPENAI_API_KEY"),
-            voice="nova",
-        )
+        tts_config = client_config.get("config", {}).get("tts", {})
+        tts = TTSFactory.create_tts_service(tts_config)
 
         llm = OpenAILLMService(
             api_key=os.getenv("OPENAI_API_KEY"),
