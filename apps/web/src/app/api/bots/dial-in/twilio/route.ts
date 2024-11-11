@@ -26,8 +26,12 @@ export async function POST(request: Request) {
       )
     }
 
-    const body = await request.json()
-    const { CallSid } = body
+    // Parse form data instead of JSON
+    const formData = await request.formData()
+    const CallSid = formData.get('CallSid')?.toString()
+
+    if (!CallSid) throw new Error("CallSid is required")
+
     const user = await getUserByPhone({ phone: CallSid })
 
     if (!user) throw new Error("User not found")
@@ -80,5 +84,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error handling request:", error)
     return Response.json({ error: "Internal Server Error" }, { status: 500 })
+  }
+}
   }
 }
