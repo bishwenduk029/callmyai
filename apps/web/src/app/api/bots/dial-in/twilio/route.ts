@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       visitorId: null,
     })
 
-    const response = await fetch(env.VOICE_BACKEND_URL, {
+    const response = await fetch(env.VOICE_TWILIO_BACKEND_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
