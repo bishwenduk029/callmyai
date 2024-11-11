@@ -29,6 +29,8 @@ from pipecat.services.playht import PlayHTTTSService
 from pipecat.services.ai_services import TTSService
 from pipecat.transcriptions.language import Language
 
+from twilio.rest import Client
+
 from loguru import logger
 
 from dotenv import load_dotenv
@@ -39,6 +41,10 @@ logger.add(sys.stderr, level="INFO")
 
 daily_api_key = os.getenv("DAILY_API_KEY", "")
 daily_api_url = os.getenv("DAILY_API_URL", "https://api.daily.co/v1")
+
+twilio_account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+twilioclient = Client(twilio_account_sid, twilio_auth_token)
 
 class TTSFactory:
     @staticmethod
@@ -180,34 +186,8 @@ def load_config(config_arg):
 async def main(room_url: str, token: str, client_config: dict):
     logger.info(f"Client Config: {client_config}")
     async with aiohttp.ClientSession() as session:
-        if(client_config["config"]["sip"]["enabled"]):
-            dialin_settings = DailyDialinSettings(
-                call_id=client_config["config"]["sip"]["call_id"],
-                call_domain=client_config["config"]["sip"]["call_domain"]
-            )
-            logger.info(f"Call ID: {client_config['config']['sip']['call_id']}")
-            logger.info(f"Call Domain: {client_config['config']['sip']['call_domain']}")
-            transport = DailyTransport(
-                room_url,
-                token,
-                "Chatbot",
-                DailyParams(
-                    api_url=daily_api_url,
-                    api_key=daily_api_key,
-                    dialin_settings=dialin_settings,
-                    audio_in_enabled=True,
-                    audio_out_enabled=True,
-                    camera_out_enabled=False,
-                    vad_enabled=True,
-                    vad_analyzer=SileroVADAnalyzer(),
-                    transcription_enabled=True,
-                    audio_in_sample_rate=24000,
-                    audio_out_sample_rate=24000,
-                )
-            )
-        else:
-            transport = DailyTransport(
-                room_url,
+        transport = DailyTransport(
+            room_url,
             token,
             "Chatbot",
             DailyParams(
@@ -305,6 +285,22 @@ async def main(room_url: str, token: str, client_config: dict):
         async def on_call_state_updated(transport, state):
             if state == "left":
                 await task.queue_frame(EndFrame())
+        
+        @transport.event_handler("on_dialin_ready")
+        async def on_dialin_ready(transport, cdata):
+            # For Twilio, Telnyx, etc. You need to update the state of the call
+            # and forward it to the sip_uri..
+            sip_uri = client_config["config"]["sip"]["endpoint"]
+            call_id = client_config["config"]["sip"]["callId"]
+            print(f"Forwarding call: {sip_uri}")
+
+            try:
+                # The TwiML is updated using Twilio's client library
+                call = twilioclient.calls(call_id).update(
+                    twiml=f"<Response><Dial><Sip>{sip_uri}</Sip></Dial></Response>"
+                )
+            except Exception as e:
+                raise Exception(f"Failed to forward call: {str(e)}")
 
         runner = PipelineRunner()
 

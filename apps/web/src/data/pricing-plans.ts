@@ -8,9 +8,10 @@ export const pricingPlans: PricingPlan[] = [
     name: "Free Forever",
     description: "Perfect for trying out web based AI phone screener",
     features: [
+      "Free Personal AI Call Screener",
       "50 calls per month",
       "Filtered Call Summaries",
-      "Each call of duration 75 seconds",
+      "Each inbound call of duration 75 seconds",
     ],
     limitations: [],
     lemonSqueezyVariantId: "2",
@@ -31,6 +32,7 @@ export const pricingPlans: PricingPlan[] = [
     name: "Standard",
     description: "Perfect for individuals expecting higher call volumes",
     features: [
+      "Free Personal AI Call Screener",
       "Handle 200 calls per month",
       "Filtered Call Summaries",
       "Each call of duration 100 seconds",
@@ -60,6 +62,7 @@ export const pricingPlans: PricingPlan[] = [
     name: "Premium",
     description: "Perfect for AI Voice Experience Designers",
     features: [
+      "Free Personal AI Call Screener",
       "Handle 500 calls per month",
       "Filtered Call Summaries",
       "Each call of duration 200 seconds",

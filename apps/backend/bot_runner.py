@@ -191,6 +191,8 @@ async def start_bot(request: Request) -> JSONResponse:
                 status_code=500, detail=f"Failed to start subprocess: {e}")
     else:
         try:
+            if client_config["config"]["sip"]["enabled"]:
+                client_config["config"]["sip"]["endpoint"] = room.config.sip_endpoint
             await spawn_fly_machine(room.url, token, client_config)
         except Exception as e:
             raise HTTPException(
@@ -204,6 +206,47 @@ async def start_bot(request: Request) -> JSONResponse:
         "token": user_token,
         "room_name": room.name,
     })
+
+@app.post("/twilio_start_bot", response_class=PlainTextResponse)
+async def twilio_start_bot(request: Request):
+    print(f"POST /twilio_voice_bot")
+
+    # twilio_start_bot is invoked directly by Twilio (as a web hook).
+    # On Twilio, under Active Numbers, pick the phone number
+    # Click Configure and under Voice Configuration,
+    # "a call comes in" choose webhook and point the URL to
+    # where this code is hosted.
+    data = {}
+    try:
+        # shouldnt have received json, twilio sends form data
+        form_data = await request.form()
+        data = dict(form_data)
+    except Exception:
+        pass
+
+    room_url = os.getenv("DAILY_SAMPLE_ROOM_URL", None)
+    callId = data.get("CallSid")
+
+    if not callId:
+        raise HTTPException(status_code=500, detail="Missing 'CallSid' in request")
+
+    print("CallId: %s" % callId)
+
+    # create room and tell the bot to join the created room
+    # note: Twilio does not require a callDomain
+    room: DailyRoomObject = await _create_daily_room(room_url, callId, None, "twilio")
+
+    print(f"Put Twilio on hold...")
+    # We have the room and the SIP URI,
+    # but we do not know if the Daily SIP Worker and the Bot have joined the call
+    # put the call on hold until the 'on_dialin_ready' fires.
+    # Then, the bot will update the called sid with the sip uri.
+    # http://com.twilio.music.classical.s3.amazonaws.com/BusyStrings.mp3
+    resp = VoiceResponse()
+    resp.play(
+        url="http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3", loop=10
+    )
+    return str(resp)
 
 if __name__ == "__main__":
     # Check environment variables

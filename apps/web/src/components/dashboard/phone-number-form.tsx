@@ -1,7 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { purchasePhoneNumber, releasePhoneNumber } from "@/actions/phone"
+import {
+  purchasePhoneNumber,
+  releasePhoneNumber,
+  updateUserPhoneNumber,
+} from "@/actions/phone"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
@@ -29,11 +33,13 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -45,8 +51,13 @@ import {
 import { Icons } from "../icons"
 
 const formSchema = z.object({
-  region: z.string().min(2).max(2),
-  phoneNumber: z.string().optional(),
+  phoneNumber: z
+    .string()
+    .min(10, "Phone number must be at least 10 digits")
+    .regex(
+      /^\+?[1-9]\d{1,14}$/,
+      "Please enter a valid phone number in E.164 format (e.g., +1234567890)"
+    ),
 })
 
 interface PhoneNumberFormProps {
@@ -55,94 +66,36 @@ interface PhoneNumberFormProps {
   }
 }
 
-const regions = [
-  { value: "AL", label: "Alabama" },
-  { value: "AK", label: "Alaska" },
-  { value: "AZ", label: "Arizona" },
-  { value: "AR", label: "Arkansas" },
-  { value: "CA", label: "California" },
-  { value: "CO", label: "Colorado" },
-  { value: "CT", label: "Connecticut" },
-  { value: "DE", label: "Delaware" },
-  { value: "FL", label: "Florida" },
-  { value: "GA", label: "Georgia" },
-  { value: "HI", label: "Hawaii" },
-  { value: "ID", label: "Idaho" },
-  { value: "IL", label: "Illinois" },
-  { value: "IN", label: "Indiana" },
-  { value: "IA", label: "Iowa" },
-  { value: "KS", label: "Kansas" },
-  { value: "KY", label: "Kentucky" },
-  { value: "LA", label: "Louisiana" },
-  { value: "ME", label: "Maine" },
-  { value: "MD", label: "Maryland" },
-  { value: "MA", label: "Massachusetts" },
-  { value: "MI", label: "Michigan" },
-  { value: "MN", label: "Minnesota" },
-  { value: "MS", label: "Mississippi" },
-  { value: "MO", label: "Missouri" },
-  { value: "MT", label: "Montana" },
-  { value: "NE", label: "Nebraska" },
-  { value: "NV", label: "Nevada" },
-  { value: "NH", label: "New Hampshire" },
-  { value: "NJ", label: "New Jersey" },
-  { value: "NM", label: "New Mexico" },
-  { value: "NY", label: "New York" },
-  { value: "NC", label: "North Carolina" },
-  { value: "ND", label: "North Dakota" },
-  { value: "OH", label: "Ohio" },
-  { value: "OK", label: "Oklahoma" },
-  { value: "OR", label: "Oregon" },
-  { value: "PA", label: "Pennsylvania" },
-  { value: "RI", label: "Rhode Island" },
-  { value: "SC", label: "South Carolina" },
-  { value: "SD", label: "South Dakota" },
-  { value: "TN", label: "Tennessee" },
-  { value: "TX", label: "Texas" },
-  { value: "UT", label: "Utah" },
-  { value: "VT", label: "Vermont" },
-  { value: "VA", label: "Virginia" },
-  { value: "WA", label: "Washington" },
-  { value: "WV", label: "West Virginia" },
-  { value: "WI", label: "Wisconsin" },
-  { value: "WY", label: "Wyoming" }
-]
-
 export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [availableNumbers, setAvailableNumbers] = useState<
-    Array<{ number: string }>
-  >([])
-  const [selectedNumber, setSelectedNumber] = useState("")
-  const [isSearching, setIsSearching] = useState(false)
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      region: "",
       phoneNumber: user.phone || undefined,
     },
   })
 
-  const { execute: executePurchase, status } = useAction(purchasePhoneNumber, {
-    onSuccess: (data) => {
-      if (data.data?.success) {
-        toast({
-          title: "Success",
-          description: data.data.message,
-        })
-        setIsModalOpen(false)
-        form.reset()
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: data?.data?.error,
-        })
-      }
-    },
-  })
+  const { execute: executeUserPhoneNumberUpdate, status } = useAction(
+    updateUserPhoneNumber,
+    {
+      onSuccess: (data) => {
+        if (data.data?.success) {
+          toast({
+            title: "Success",
+            description: data.data.message,
+          })
+          form.reset()
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: data?.data?.error,
+          })
+        }
+      },
+    }
+  )
 
   const { execute: executeRelease, status: releaseStatus } = useAction(
     releasePhoneNumber,
@@ -153,9 +106,7 @@ export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
             title: "Success",
             description: data.data.message,
           })
-          form.reset()
         } else {
-          console.log(data?.data?.error)
           toast({
             variant: "destructive",
             title: "Error",
@@ -167,38 +118,18 @@ export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
   )
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    if (!selectedNumber) return
-    executePurchase({ phoneNumber: selectedNumber, userId: user.id })
-  }
-
-  const handleSearch = async (region: string) => {
-    try {
-      setIsSearching(true)
-      const response = await fetch(
-        `/api/phone-numbers/available?region=${region}`
-      )
-      const data = await response.json()
-      setAvailableNumbers(data.data)
-      setIsModalOpen(true)
-    } catch (error) {
-      console.error("Error fetching phone numbers:", error)
-    } finally {
-      setIsSearching(false)
-    }
-  }
-
-  const handleNumberSelection = (number: string) => {
-    setSelectedNumber(number)
-    setIsModalOpen(false)
+    executeUserPhoneNumberUpdate({
+      phoneNumber: data.phoneNumber,
+      userId: user.id,
+    })
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Purchase Phone Number</CardTitle>
+        <CardTitle>Connect Twilio Virtual Phone Number</CardTitle>
         <CardDescription>
-          Purchase a phone number for your AI Call Handle to receive incoming
-          calls.
+          Connect your Twilio Virtual Phone Number to receive incoming calls.
         </CardDescription>
       </CardHeader>
       <Form {...form}>
@@ -208,13 +139,16 @@ export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
               <div className="space-y-4">
                 <div className="rounded-lg border bg-muted p-4">
                   <p className="text-sm text-muted-foreground">
-                    Purchased Number:
+                    Connected Number:
                   </p>
                   <p className="text-lg font-medium">{user.phone}</p>
                 </div>
                 <Button
                   variant="destructive"
-                  onClick={() => executeRelease({ userId: user.id })}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    executeRelease({ userId: user.id })
+                  }}
                   disabled={releaseStatus === "executing"}
                 >
                   {releaseStatus === "executing" ? (
@@ -223,110 +157,52 @@ export function PhoneNumberForm({ user }: PhoneNumberFormProps) {
                         className="mr-2 size-4 animate-spin"
                         aria-hidden="true"
                       />
-                      Releasing...
+                      Disconnecting...
                     </>
                   ) : (
-                    "Release Number"
+                    "Disconnect Number"
                   )}
                 </Button>
               </div>
             ) : (
-              <>
-                <FormLabel className="text-md font-medium">Region</FormLabel>
-                <FormField
-                  control={form.control}
-                  name="region"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value)
-                          handleSearch(value)
-                        }}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select region">
-                            {field.value &&
-                              regions.find((r) => r.value === field.value)
-                                ?.label}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                          {regions.map((region) => (
-                            <SelectItem key={region.value} value={region.value}>
-                              {region.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {selectedNumber && (
-                  <div className="mt-4 rounded-lg border bg-muted p-4">
-                    <p className="text-sm text-muted-foreground">
-                      Selected Number:
-                    </p>
-                    <p className="text-lg font-medium">{selectedNumber}</p>
-                  </div>
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Twilio Virtual Phone Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+1234567890" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Enter your Twilio Virtual Phone Number in E.164 format
+                      (e.g., +1234567890)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </>
+              />
             )}
           </CardContent>
           <CardFooter>
             {!user.phone && (
-              <Button
-                type="submit"
-                disabled={
-                  !selectedNumber || status === "executing" || isSearching
-                }
-              >
+              <Button type="submit" disabled={status === "executing"}>
                 {status === "executing" ? (
                   <>
                     <Icons.spinner
                       className="mr-2 size-4 animate-spin"
                       aria-hidden="true"
                     />
-                    Purchasing...
-                  </>
-                ) : isSearching ? (
-                  <>
-                    <Icons.spinner
-                      className="mr-2 size-4 animate-spin"
-                      aria-hidden="true"
-                    />
-                    Loading numbers...
+                    Connecting...
                   </>
                 ) : (
-                  "Purchase Number"
+                  "Connect Number"
                 )}
               </Button>
             )}
           </CardFooter>
         </form>
       </Form>
-
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Available Phone Numbers</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4">
-            {availableNumbers.slice(0, 6).map((num) => (
-              <Button
-                key={num.number}
-                variant={selectedNumber === num.number ? "default" : "outline"}
-                onClick={() => handleNumberSelection(num.number)}
-              >
-                {num.number}
-              </Button>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
     </Card>
   )
 }
