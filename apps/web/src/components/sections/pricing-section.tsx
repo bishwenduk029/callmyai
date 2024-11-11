@@ -28,6 +28,7 @@ import {
 import { Icons } from "@/components/icons"
 
 import { buttonVariants } from "../ui/button"
+import { PricingButton } from "../pricing-button"
 
 export async function PricingSection(): Promise<JSX.Element> {
   const session = await auth()
@@ -75,12 +76,12 @@ export async function PricingSection(): Promise<JSX.Element> {
                   "flex flex-col transition-all duration-1000 ease-out hover:-translate-y-3 hover:opacity-80"
                 )}
               >
-                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-secondary">
+                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-background">
                   <CardTitle className="font-urbanist text-2xl tracking-wide">
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
 
-                  <CardDescription className="text-sm">
+                  <CardDescription className="text-sm text-muted-background">
                     <Balancer>{plan.description}</Balancer>
                   </CardDescription>
 
@@ -122,43 +123,13 @@ export async function PricingSection(): Promise<JSX.Element> {
                     </ul>
                   </div>
                   {!hasActiveSubscription && (
-                    <form
-                      action={async () => {
-                        "use server"
-                        if (plan.id === "free") {
-                          const user = await getUserByEmail({
-                            email: session.user.email || "",
-                          })
-                          if (!user?.data?.calls) {
-                            await updateUserCalls(
-                              user?.data?.id || "",
-                              user?.data?.calls || 50
-                            )
-                          }
-                          redirect("/dashboard/settings")
-                          return
-                        }
-                        const confirmationUrl = `${env.NEXT_PUBLIC_APP_URL}/confirmation?checkout_id={CHECKOUT_ID}`
-                        const checkoutLink = await api.checkouts.custom.create({
-                          productPriceId: plan.polarPriceId!,
-                          successUrl: confirmationUrl,
-                        })
-                        redirect(checkoutLink.url)
-                      }}
-                    >
-                      <button
-                        type="submit"
-                        disabled={plan.disable}
-                        className={cn(
-                          buttonVariants({
-                            variant: "default",
-                            className: "mt-4 w-full",
-                          })
-                        )}
-                      >
-                        {plan.buttonText}
-                      </button>
-                    </form>
+                    <PricingButton
+                      planId={plan.id}
+                      paddlePriceId={plan.paddlePriceId}
+                      buttonText={plan.buttonText}
+                      isDisabled={plan.disable}
+                      userEmail={session.user.email || ""}
+                    />
                   )}
                 </CardContent>
               </Card>
@@ -215,7 +186,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                   "flex flex-col transition-all duration-1000 ease-out hover:-translate-y-3 hover:opacity-80"
                 )}
               >
-                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-secondary">
+                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-background">
                   <CardTitle className="font-urbanist text-2xl tracking-wide">
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>

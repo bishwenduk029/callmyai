@@ -43,6 +43,7 @@ export interface PricingPlan {
   features: string[]
   lemonSqueezyVariantId?: string
   polarPriceId?: string
+  paddlePriceId?: string
   limitations: string[]
   stripePriceId: string
   prices: {
