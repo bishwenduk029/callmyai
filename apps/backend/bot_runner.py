@@ -19,6 +19,8 @@ from fastapi.responses import JSONResponse
 from pipecat.transports.services.helpers.daily_rest import (
     DailyRESTHelper, DailyRoomObject, DailyRoomProperties, DailyRoomParams, DailyRoomSipParams)
 
+from twilio.twiml.voice_response import VoiceResponse
+
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
@@ -216,25 +218,43 @@ async def twilio_start_bot(request: Request):
     # Click Configure and under Voice Configuration,
     # "a call comes in" choose webhook and point the URL to
     # where this code is hosted.
-    data = {}
     try:
-        # shouldnt have received json, twilio sends form data
-        form_data = await request.form()
-        data = dict(form_data)
-    except Exception:
+        client_config = await request.json()
+        # Is this a webhook creation request?
+        if "test" in client_config:
+            return JSONResponse({"test": True})
+    except Exception as e:
         pass
 
     room_url = os.getenv("DAILY_SAMPLE_ROOM_URL", None)
-    callId = data.get("CallSid")
+    params = DailyRoomParams(
+        properties=DailyRoomProperties(sip=DailyRoomSipParams( display_name="dialin-user", video=False, sip_mode="dial-in", num_endpoints=1))
+    )
+    
+    try:
+        room: DailyRoomObject = await daily_helpers["rest"].create_room(params=params)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Unable to provision room {e}")
 
-    if not callId:
-        raise HTTPException(status_code=500, detail="Missing 'CallSid' in request")
+    # Give the agent a token to join the session
+    token = await daily_helpers["rest"].get_token(room.url, MAX_SESSION_TIME)
 
-    print("CallId: %s" % callId)
+    if not room or not token:
+        raise HTTPException(
+            status_code=500, detail=f"Failed to get token for room: {room_url}")
 
     # create room and tell the bot to join the created room
     # note: Twilio does not require a callDomain
-    room: DailyRoomObject = await _create_daily_room(room_url, callId, None, "twilio")
+    try:
+        if client_config["config"]["sip"]["enabled"]:
+            client_config["config"]["sip"]["endpoint"] = room.config.sip_endpoint
+        await spawn_fly_machine(room.url, token, client_config)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+        detail=f"Unable to provision room {e}")
 
     print(f"Put Twilio on hold...")
     # We have the room and the SIP URI,
