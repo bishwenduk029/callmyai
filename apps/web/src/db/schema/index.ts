@@ -148,6 +148,7 @@ export const assistants = pgTable(
     id: text("id").notNull().primaryKey(),
     name: text("name").notNull(),
     duration: integer("duration").notNull(),
+    phoneNumber: text("phoneNumber"),
     userId: text("userId")
       .notNull()
       .references(() => users.id),
@@ -213,7 +214,7 @@ export const webhookEvents = pgTable("webhookEvent", {
 })
 
 export const plans = pgTable("plan", {
-  id: serial("id").primaryKey(),
+  id: text("id").notNull().primaryKey(),
   productId: integer("productId").notNull(),
   productName: text("productName"),
   variantId: integer("variantId"),
@@ -252,7 +253,7 @@ export const subscriptions = pgTable("subscription", {
   userId: text("userId")
     .notNull()
     .references(() => users.id),
-  planId: integer("planId")
+  planId: text("planId")
     .notNull()
     .references(() => plans.id),
 })

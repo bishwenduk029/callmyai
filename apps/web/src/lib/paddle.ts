@@ -109,7 +109,7 @@ import {
         .update(subscriptions)
         .set({
           status: status === 'active' ? 'ACTIVE' : 'CANCELLED',
-          planId: Number(plan.id),
+          planId: plan.id,
           statusFormatted: status,
           renewsAt: currentPeriodEnd ?? null,
           isPaused: false,
@@ -133,7 +133,7 @@ import {
         email,
         status: status === 'active' ? 'ACTIVE' : 'CANCELLED',
         statusFormatted: status,
-        planId: Number(plan.id),
+        planId: plan.id,
         price: price.toString(),
         renewsAt: currentPeriodEnd ?? null,
         isUsageBased: false,

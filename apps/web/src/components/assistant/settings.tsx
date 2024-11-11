@@ -4,35 +4,36 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { RtviConfig } from "@/actions/assistant"
 
-import { Assistant } from "@/db/schema"
+import { Assistant, User } from "@/db/schema"
 
 import auth from "@/lib/auth"
 
 import { UpdateAssistantDataSourcesForm } from "../data-sources/update-assistant-data-sources-form"
 import { AssistantSystemPromptForm } from "./assistant-system-prompt-form"
 import { UpdateAssistantDisplayDetails } from "./update-assistant-display-form"
+import { PhoneNumberForm } from "../dashboard/phone-number-form"
 
 interface SettingsProps {
   assistant: Assistant
   config: RtviConfig
-  userId?: string
-  userEmail?: string
+  user: User
 }
 
-export default function Settings({ assistant, config, userId, userEmail }: SettingsProps) {
+export default function Settings({ assistant, config, user }: SettingsProps) {
   return (
     <div className="grid w-full gap-y-6">
       <UpdateAssistantDisplayDetails assistant={assistant} config={config} />
       <AssistantSystemPromptForm
         assistant={assistant}
         config={config}
-        userId={userId!}
+        userId={user.id}
       />
       <UpdateAssistantDataSourcesForm
         assistant={assistant}
         config={config}
-        userEmail={userEmail!}
+        userEmail={user.email}
       />
+      <PhoneNumberForm user={user} />
     </div>
   )
 }
