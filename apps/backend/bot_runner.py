@@ -14,7 +14,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 
 from pipecat.transports.services.helpers.daily_rest import (
     DailyRESTHelper, DailyRoomObject, DailyRoomProperties, DailyRoomParams, DailyRoomSipParams)
@@ -85,8 +85,8 @@ async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
         # Machine configuration
         import tempfile
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as temp_file:
-                json.dump(client_config, temp_file)
-                temp_file_path = temp_file.name
+            json.dump(client_config, temp_file)
+            temp_file_path = temp_file.name
         cmd = f"python3 bot.py -u {room_url} -t {token} -c @{temp_file_path}"
         cmd = cmd.split()
         worker_props = {
