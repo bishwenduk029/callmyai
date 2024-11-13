@@ -101,8 +101,8 @@ export function HeroSection() {
               href="/dashboard/settings"
               className={cn(buttonVariants({ size: "lg" }), "w-full")}
             >
-              <span className="dark:from-white dark:to-slate-900/10 whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight lg:text-lg">
-                Claim your Free Personal CallMyAI
+              <span className="dark:from-white dark:to-slate-900/10 text-white whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight lg:text-lg">
+                Get CallMyAI Call Screener - Free
               </span>
             </Link>
             <span className="text-center text-sm text-muted-foreground">

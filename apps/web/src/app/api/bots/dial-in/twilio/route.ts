@@ -80,12 +80,10 @@ export async function POST(request: Request) {
       }),
     })
 
-    const data = await response.text()
-
-    return new Response(data, {
-      status: response.status,
+    // Return the response text directly without modifying headers
+    return new Response(await response.text(), {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "text/plain",
       },
     })
   } catch (error) {
