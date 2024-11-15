@@ -6,6 +6,7 @@ import argparse
 import json
 import hmac
 import hashlib
+import base64
 
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
@@ -177,11 +178,21 @@ Please use this information to formulate a response that addresses the user's qu
             ])
 
 def load_config(config_arg):
+    """Load config from file path starting with @, JSON string, or base64 encoded JSON."""
     if config_arg.startswith('@'):
         with open(config_arg[1:], 'r') as f:
             return json.load(f)
-    else:
-        return json.loads(config_arg)
+    
+    try:
+        # First try to decode as base64
+        try:
+            decoded = base64.b64decode(config_arg).decode()
+            return json.loads(decoded)
+        except:
+            # If not base64, try direct JSON parsing
+            return json.loads(config_arg)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Config must be either a valid JSON string, base64 encoded JSON, or a file path starting with @. Error: {e}")
 
 async def main(room_url: str, token: str, client_config: dict):
     logger.info(f"Client Config: {client_config}")
@@ -288,18 +299,34 @@ async def main(room_url: str, token: str, client_config: dict):
         
         @transport.event_handler("on_dialin_ready")
         async def on_dialin_ready(transport, cdata):
-            # For Twilio, Telnyx, etc. You need to update the state of the call
-            # and forward it to the sip_uri..
-            sip_uri = client_config["config"]["sip"]["endpoint"]
-            call_id = client_config["config"]["sip"]["callId"]
-            print(f"Forwarding call: {sip_uri}")
-
             try:
+                # Debug logging
+                logger.info("DEBUG: on_dialin_ready triggered")
+                logger.info(f"client_config: {json.dumps(client_config, indent=2)}")
+                
+                # Safely access nested dictionary values
+                sip_config = client_config.get("config", {}).get("sip", {})
+                sip_uri = sip_config.get("endpoint")
+                call_id = sip_config.get("callId")
+                
+                if not sip_uri or not call_id:
+                    logger.error(f"ERROR: Missing required SIP configuration:")
+                    logger.error(f"sip_uri: {sip_uri}")
+                    logger.error(f"call_id: {call_id}")
+                    return
+                    
+                logger.info(f"Forwarding call to SIP URI: {sip_uri}")
+                logger.info(f"Call ID: {call_id}")
+
                 # The TwiML is updated using Twilio's client library
                 call = twilioclient.calls(call_id).update(
                     twiml=f"<Response><Dial><Sip>{sip_uri}</Sip></Dial></Response>"
                 )
+                
+                logger.info("Successfully updated call with new TwiML")
+                
             except Exception as e:
+                logger.error(f"ERROR in on_dialin_ready: {str(e)}")
                 raise Exception(f"Failed to forward call: {str(e)}")
 
         runner = PipelineRunner()

@@ -72,7 +72,7 @@ export function FeaturesSection() {
             <AnimatedBeamMultipleDataSources className="w-full" />
             <div className="space-y-4">
               <h3 className="text-2xl font-bold text-primary">
-                Connect your data sources
+                CallMyAI agents can learn from your data
               </h3>
               <ul className="text-md list-disc space-y-2 text-muted-foreground sm:pl-4 sm:text-lg">
                 <li>
@@ -80,7 +80,7 @@ export function FeaturesSection() {
                   more
                 </li>
                 <li>
-                  AI Voice assistant learns from your documents and chat history
+                  AI Voice assistant learns from your documents and websites
                 </li>
                 <li>Context-aware responses based on your connected data</li>
               </ul>
@@ -105,7 +105,7 @@ export function FeaturesSection() {
             <AnimatedBeamActions className="w-full" />
             <div className="space-y-4">
               <h3 className="text-2xl font-bold text-primary">
-                Workflows on your connected apps
+                CallMyAI agents can act on your apps
               </h3>
               <ul className="my-4 list-disc space-y-2 pl-4 text-lg text-muted-foreground">
                 <li>Execute actions across your connected apps</li>

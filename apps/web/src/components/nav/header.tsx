@@ -75,9 +75,9 @@ export async function Header({showThemeToggle = true}): Promise<JSX.Element> {
               </DropdownMenu>
             ) : (
               <Link
-                aria-label="Get started"
+                aria-label="Sign Up"
                 href="/dashboard/settings"
-                className={`${cn(buttonVariants({ size: "md" }), "ml-2")} cursor-pointer`}
+                className={`${cn(buttonVariants({ size: "md" }), "ml-2 text-background dark:text-foreground")} cursor-pointer`}
               >
                 Sign Up
                 <span className="sr-only">Sign Up</span>

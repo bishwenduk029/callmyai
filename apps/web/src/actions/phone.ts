@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm"
 import { z } from "zod"
 
 import { db } from "@/config/db"
-import { users } from "@/db/schema/index"
+import { assistants, users } from "@/db/schema/index"
 
 import { createAppError } from "@/lib/error"
 import { actionClient } from "@/lib/safe-action"
@@ -138,6 +138,72 @@ export const releasePhoneNumber = actionClient
         .update(users)
         .set({ phone: null })
         .where(eq(users.id, parsedInput.userId))
+
+      return { success: true, message: "Phone number released successfully" }
+    } catch (error) {
+      console.error("Error releasing phone number:", error)
+      return {
+        success: false,
+        error: appErrors.UNEXPECTED_ERROR,
+      }
+    }
+  })
+
+const assistantPhoneSchema = z.object({
+  phoneNumber: z.string(),
+  assistantId: z.string(),
+})
+
+export const updateAssistantPhoneNumber = actionClient
+  .schema(assistantPhoneSchema)
+  .action(async ({ parsedInput }) => {
+    try {
+      await db
+        .update(assistants)
+        .set({ phoneNumber: parsedInput.phoneNumber })
+        .where(eq(assistants.id, parsedInput.assistantId))
+      return {
+        success: true,
+        message: "Assistant phone number updated successfully",
+      }
+    } catch (error) {
+      console.error("Error updating assistant phone number:", error)
+      return {
+        success: false,
+        error: appErrors.UNEXPECTED_ERROR,
+      }
+    }
+  })
+
+const releaseAssistantSchema = z.object({
+  assistantId: z.string(),
+})
+
+export const releaseAssistantPhoneNumber = actionClient
+  .schema(releaseAssistantSchema)
+  .action(async ({ parsedInput }) => {
+    try {
+      // Get assistant's current phone number
+      const assistant = await db
+        .select({ phoneNumber: assistants.phoneNumber })
+        .from(assistants)
+        .where(eq(assistants.id, parsedInput.assistantId))
+        .limit(1)
+
+      if (!assistant?.[0]?.phoneNumber)
+        return {
+          success: false,
+          error: createAppError({
+            code: "ASSISTANT_NOT_FOUND",
+            message: "Assistant not found or has no phone number",
+          }),
+        }
+
+      // Update assistant record to remove phone number
+      await db
+        .update(assistants)
+        .set({ phoneNumber: null })
+        .where(eq(assistants.id, parsedInput.assistantId))
 
       return { success: true, message: "Phone number released successfully" }
     } catch (error) {

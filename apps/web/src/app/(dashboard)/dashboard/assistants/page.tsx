@@ -50,7 +50,7 @@ export default async function AssistantsPage() {
     userId: user.data.id,
   })
 
-  if (!subscription) redirect("/pricing?feature=createAssistant")
+  // if (!subscription) redirect("/pricing?feature=createAssistant")
 
   const assistantsResponse = await getAssistantsByUserId({
     userId: user.data.id,

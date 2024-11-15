@@ -23,7 +23,7 @@ export function TechSection(): JSX.Element {
             background: `radial-gradient(ellipse at bottom, #fb2ef1, transparent 70%)`,
           }}
         />
-        <div className="relative z-10 flex h-full items-center justify-center text-white">
+        <div className="relative z-10 flex h-full items-center justify-center text-foreground dark:text-background">
         </div>
       </div>
     </section>

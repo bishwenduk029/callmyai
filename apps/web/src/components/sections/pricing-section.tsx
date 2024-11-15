@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 import {
   getUserByEmail,
   getUserSubscriptionByUserId,
@@ -10,12 +9,10 @@ import {
 } from "@/actions/user"
 import Balancer from "react-wrap-balancer"
 
-import { env } from "@/env.mjs"
 import { siteConfig } from "@/config/site"
 import { pricingPlans } from "@/data/pricing-plans"
 
 import auth from "@/lib/auth"
-import { api } from "@/lib/polar"
 import { cn } from "@/lib/utils"
 
 import {
@@ -76,7 +73,7 @@ export async function PricingSection(): Promise<JSX.Element> {
                   "flex flex-col transition-all duration-1000 ease-out hover:-translate-y-3 hover:opacity-80"
                 )}
               >
-                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-background">
+                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-white">
                   <CardTitle className="font-urbanist text-2xl tracking-wide">
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
@@ -186,7 +183,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                   "flex flex-col transition-all duration-1000 ease-out hover:-translate-y-3 hover:opacity-80"
                 )}
               >
-                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-background">
+                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-white">
                   <CardTitle className="font-urbanist text-2xl tracking-wide">
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
@@ -238,7 +235,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                     className={cn(
                       buttonVariants({
                         variant: plan.disable ? "disabledLink" : "default",
-                        className: "mt-4 w-full",
+                        className: "mt-4 w-full text-white",
                       })
                     )}
                   >

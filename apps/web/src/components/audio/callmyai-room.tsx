@@ -176,8 +176,8 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
             />
             {!disablePhone && (
               <motion.button
-                className="rounded px-5 py-2.5 text-white transition-colors"
-                whileHover={{ scale: 1.2 }}
+                className="rounded-full p-0.5 text-white transition-colors border-2 border-primary"
+                whileHover={{ scale: 0.90 }}
                 onClick={toggleListening}
                 disabled={isLoadingBot}
               >
@@ -186,12 +186,12 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
                 ) : isListening ? (
                   <PhonePause
                     size={75}
-                    className="rounded-full bg-primary p-2"
+                    className="rounded-full bg-primary p-2 text-white"
                   />
                 ) : (
                   <PhoneCall
                     size={75}
-                    className="rounded-full bg-primary p-2 text-primary-foreground"
+                    className="rounded-full bg-primary p-2 text-white"
                   />
                 )}
               </motion.button>

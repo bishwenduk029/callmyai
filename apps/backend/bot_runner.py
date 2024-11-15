@@ -9,6 +9,7 @@ import argparse
 import subprocess
 import os
 import json
+import base64
 
 from contextlib import asynccontextmanager
 
@@ -73,7 +74,7 @@ app.add_middleware(
 
 async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
     async with aiohttp.ClientSession() as session:
-        # Use the same image as the bot runner
+        # Get the current image from existing machines
         async with session.get(f"{FLY_API_HOST}/apps/{FLY_APP_NAME}/machines", headers=FLY_HEADERS) as r:
             if r.status != 200:
                 text = await r.text()
@@ -82,13 +83,13 @@ async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
             data = await r.json()
             image = data[0]['config']['image']
 
-        # Machine configuration
-        import tempfile
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as temp_file:
-            json.dump(client_config, temp_file)
-            temp_file_path = temp_file.name
-        cmd = f"python3 bot.py -u {room_url} -t {token} -c @{temp_file_path}"
+        # Convert config to JSON string and escape quotes for shell command
+        config_json = json.dumps(client_config).replace('"', '\\"')
+        
+        # Prepare command with JSON string instead of file
+        cmd = f'python3 bot.py -u {room_url} -t {token} -c "{config_json}"'
         cmd = cmd.split()
+
         worker_props = {
             "config": {
                 "image": image,
@@ -114,9 +115,66 @@ async def spawn_fly_machine(room_url: str, token: str, client_config: dict):
                 raise Exception(f"Problem starting a bot worker: {text}")
 
             data = await r.json()
-            # Wait for the machine to enter the started state
             vm_id = data['id']
 
+        # Wait for the machine to enter the started state
+        async with session.get(f"{FLY_API_HOST}/apps/{FLY_APP_NAME}/machines/{vm_id}/wait?state=started", headers=FLY_HEADERS) as r:
+            if r.status != 200:
+                text = await r.text()
+                raise Exception(f"Bot was unable to enter started state: {text}")
+
+async def spawn_fly_machine_v2(room_url: str, token: str, client_config: dict):
+    """Version 2 of spawn_fly_machine that passes config as JSON string instead of temp file."""
+    async with aiohttp.ClientSession() as session:
+        # Get the current image from existing machines
+        async with session.get(f"{FLY_API_HOST}/apps/{FLY_APP_NAME}/machines", headers=FLY_HEADERS) as r:
+            if r.status != 200:
+                text = await r.text()
+                raise Exception(f"Unable to get machine info from Fly: {text}")
+
+            data = await r.json()
+            image = data[0]['config']['image']
+
+        # Convert config to base64 to avoid shell escaping issues
+        config_b64 = base64.b64encode(json.dumps(client_config).encode()).decode()
+        
+        # Command that will decode base64 and pass as JSON string
+        cmd = [
+            "python3",
+            "bot.py",
+            "-u", room_url,
+            "-t", token,
+            "-c", config_b64
+        ]
+
+        worker_props = {
+            "config": {
+                "image": image,
+                "auto_destroy": True,
+                "init": {
+                    "cmd": cmd
+                },
+                "restart": {
+                    "policy": "no"
+                },
+                "guest": {
+                    "cpu_kind": "shared",
+                    "cpus": 1,
+                    "memory_mb": 2048
+                }
+            },
+        }
+
+        # Spawn a new machine instance
+        async with session.post(f"{FLY_API_HOST}/apps/{FLY_APP_NAME}/machines", headers=FLY_HEADERS, json=worker_props) as r:
+            if r.status != 200:
+                text = await r.text()
+                raise Exception(f"Problem starting a bot worker: {text}")
+
+            data = await r.json()
+            vm_id = data['id']
+
+        # Wait for the machine to enter the started state
         async with session.get(f"{FLY_API_HOST}/apps/{FLY_APP_NAME}/machines/{vm_id}/wait?state=started", headers=FLY_HEADERS) as r:
             if r.status != 200:
                 text = await r.text()
@@ -213,18 +271,14 @@ async def start_bot(request: Request) -> JSONResponse:
 async def twilio_start_bot(request: Request):
     print(f"POST /twilio_voice_bot")
 
-    # twilio_start_bot is invoked directly by Twilio (as a web hook).
-    # On Twilio, under Active Numbers, pick the phone number
-    # Click Configure and under Voice Configuration,
-    # "a call comes in" choose webhook and point the URL to
-    # where this code is hosted.
     try:
         client_config = await request.json()
-        # Is this a webhook creation request?
+        print(f"Received client config: {json.dumps(client_config, indent=2)}")
         if "test" in client_config:
             return JSONResponse({"test": True})
     except Exception as e:
-        pass
+        print(f"Failed to parse client config: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Invalid request body: {str(e)}")
 
     room_url = os.getenv("DAILY_SAMPLE_ROOM_URL", None)
     params = DailyRoomParams(
@@ -244,17 +298,21 @@ async def twilio_start_bot(request: Request):
     if not room or not token:
         raise HTTPException(
             status_code=500, detail=f"Failed to get token for room: {room_url}")
-
+    
     # create room and tell the bot to join the created room
     # note: Twilio does not require a callDomain
     try:
-        if client_config["config"]["sip"]["enabled"]:
-            client_config["config"]["sip"]["endpoint"] = room.config.sip_endpoint
-        await spawn_fly_machine(room.url, token, client_config)
+        # Add debug logging to inspect the room configuration
+        
+        client_config["config"]["sip"]["endpoint"] = room.config.sip_endpoint
+        client_config["config"]["sip"]["enabled"] = True
+        
+        await spawn_fly_machine_v2(room.url, token, client_config)
     except Exception as e:
+        print(f"Error in twilio_start_bot: {str(e)}")
         raise HTTPException(
             status_code=500,
-        detail=f"Unable to provision room {e}")
+            detail=f"Unable to provision room {e}")
 
     print(f"Put Twilio on hold...")
     # We have the room and the SIP URI,

@@ -203,7 +203,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
           />
         </div>
       </div>
-      <div className="absolute bottom-5 rounded px-5 py-2.5 text-white transition-colors">
+      <div className="absolute bottom-5 rounded px-5 py-2.5 text-foreground dark:text-background transition-colors">
         <div className="flex flex-col items-center space-y-4">
           <div className="flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary">
             {isListening && (
@@ -215,7 +215,7 @@ export const ChatRoomUI = ({ chatSession }: ChatRoomUIProps) => {
           </div>
           {!disablePhone && (
             <motion.button
-              className="rounded px-5 py-2.5 text-white transition-colors"
+              className="rounded px-5 py-2.5 text-foreground dark:text-background transition-colors"
               whileHover={{ scale: 1.2 }}
               onClick={toggleListening}
               disabled={isLoadingBot}

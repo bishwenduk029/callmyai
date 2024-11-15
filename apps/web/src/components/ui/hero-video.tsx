@@ -104,7 +104,7 @@ export default function HeroVideoDialog({
               className={`flex items-center justify-center bg-gradient-to-b from-primary/30 to-primary shadow-md rounded-full size-20 transition-all ease-out duration-200 relative group-hover:scale-[1.2] scale-100`}
             >
               <Play
-                className="size-8 text-white fill-primary-foreground group-hover:scale-105 scale-100 transition-transform duration-200 ease-out"
+                className="size-8 text-foreground dark:text-background fill-primary-foreground group-hover:scale-105 scale-100 transition-transform duration-200 ease-out"
                 style={{
                   filter:
                     "drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06))",
@@ -129,7 +129,7 @@ export default function HeroVideoDialog({
             >
               <motion.button
                 onClick={() => setIsVideoOpen(false)}
-                className="absolute -top-16 right-0 text-white text-xl bg-neutral-900/50 ring-1 backdrop-blur-md rounded-full p-2 dark:bg-neutral-100/50 dark:text-black"
+                className="absolute -top-16 right-0 text-foreground dark:text-background text-xl bg-neutral-900/50 ring-1 backdrop-blur-md rounded-full p-2 dark:bg-neutral-100/50 dark:text-black"
               >
                 <XCircle className="size-5" />
               </motion.button>

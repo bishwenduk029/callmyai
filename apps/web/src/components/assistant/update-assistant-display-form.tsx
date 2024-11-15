@@ -146,7 +146,7 @@ export function UpdateAssistantDisplayDetails({
             <div>
               <label
                 htmlFor="name"
-                className="my-1 block text-sm font-semibold text-gray-700"
+                className="my-1 block text-sm font-semibold text-foreground"
               >
                 Name
               </label>
@@ -166,7 +166,7 @@ export function UpdateAssistantDisplayDetails({
             <div>
               <label
                 htmlFor="botDescription"
-                className="my-1 block text-sm font-semibold text-gray-700"
+                className="my-1 block text-sm font-semibold text-foreground"
               >
                 Description
               </label>
@@ -186,7 +186,7 @@ export function UpdateAssistantDisplayDetails({
             <div>
               <label
                 htmlFor="header"
-                className="my-1 block text-sm font-semibold text-gray-700"
+                className="my-1 block text-sm font-semibold text-foreground"
               >
                 Header
               </label>
@@ -215,7 +215,7 @@ export function UpdateAssistantDisplayDetails({
                 <div className="w-full">
                   <label
                     htmlFor="ethnicity"
-                    className="my-1 block text-sm font-semibold text-gray-700"
+                    className="my-1 block text-sm font-semibold text-foreground"
                   >
                     Ethnicity
                   </label>
@@ -250,7 +250,7 @@ export function UpdateAssistantDisplayDetails({
                 <div className="w-full">
                   <label
                     htmlFor="voice"
-                    className="my-1 block text-sm font-semibold text-gray-700"
+                    className="my-1 block text-sm font-semibold text-foreground"
                   >
                     Voice
                   </label>

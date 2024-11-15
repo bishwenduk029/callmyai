@@ -97,7 +97,7 @@ export function PricingButton({
         className={cn(
           buttonVariants({
             variant: "default",
-            className: "mt-4 w-full",
+            className: "mt-4 w-full text-foreground dark:text-background",
           })
         )}
       >

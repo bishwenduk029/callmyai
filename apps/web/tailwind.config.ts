@@ -54,12 +54,6 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
-      borderRadius: {
-        lg: "1rem",
-        md: "0.75rem",
-        sm: "0.5rem",
-        DEFAULT: "0.5rem",
-      },
       keyframes: {
         "accordion-down": {
           from: { height: 0 },

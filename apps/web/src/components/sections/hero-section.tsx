@@ -179,7 +179,7 @@ export function HeroSection() {
                 {FEATURE_POINTS.map((point, index) => (
                   <div key={index} className="flex items-start gap-4">
                     <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-foreground/10">
-                      <Check className="h-4 w-4 text-white" weight="bold" />
+                      <Check className="h-4 w-4 text-foreground dark:text-background" weight="bold" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <h3 className="font-extrabold leading-none">
