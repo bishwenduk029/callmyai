@@ -17,19 +17,19 @@ export const frequentlyAskedQuestions: FrequentlyAskedQuestion[] = [
   },
   {
     question: "Can I use CallMyAI for AI Phone Reception?",
-    answer: "Yes, CallMyAI works great as an AI receptionist. Simply create an AI Voice Assistant customized with your desired reception workflow, assign it a dedicated AI phone number, and share that number with your customers to start handling incoming calls automatically.",
+    answer: "Yes, CallMyAI works great as an AI receptionist. Simply create an AI Voice Assistant customized with your desired reception workflow, assign it your Twilio phone number, and share that number with your customers to start handling incoming calls automatically.",
   },
   {
     question: `Does it support outbound calls?`,
     answer: `No. As of today it only supports Inbound calls`,
   },
   {
-    question: `Which countries do you support for AI phone numbers?`,
-    answer: `At present, we offer phone numbers exclusively from the United States.`,
+    question: `Can I connect Twilio phone number to CallMyAI voice agents?`,
+    answer: `Yes, you can connect your Twilio phone number to CallMyAI voice agents. Bring your Twilio phone number and assign it to your AI Voice Assistant to handle inbound calls.`,
   },
   {
     question: "How do I customize the behavior of AI Voice Assistants?",
-    answer: "You can customize the behavior of AI Voice Assistants by creating a new AI Voice Assistant and providing instructions or a call script in natural language for it to follow.",
+    answer: "You can customize the behavior of AI Voice Assistants by providing instructions or a call script in natural language for it to follow.",
   },
   {
     question: `Can I get help and support?`,
