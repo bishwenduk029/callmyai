@@ -20,12 +20,12 @@ export const frequentlyAskedQuestions: FrequentlyAskedQuestion[] = [
     answer: "Yes, CallMyAI works great as an AI receptionist. Simply create an AI Voice Assistant customized with your desired reception workflow, assign it your Twilio phone number, and share that number with your customers to start handling incoming calls automatically.",
   },
   {
-    question: `Does it support outbound calls?`,
-    answer: `No. As of today it only supports Inbound calls`,
+    question: "Does it support outbound calls?",
+    answer: "No. As of today it only supports Inbound calls",
   },
   {
-    question: `Can I connect Twilio phone number to CallMyAI voice agents?`,
-    answer: `Yes, you can connect your Twilio phone number to CallMyAI voice agents. Bring your Twilio phone number and assign it to your AI Voice Assistant to handle inbound calls.`,
+    question: "Can I connect Twilio phone number to CallMyAI voice agents?",
+    answer: "Yes, you can connect your Twilio phone number to CallMyAI voice agents. Bring your Twilio phone number and assign it to your AI Voice Assistant to handle inbound calls.",
   },
   {
     question: "How do I customize the behavior of AI Voice Assistants?",

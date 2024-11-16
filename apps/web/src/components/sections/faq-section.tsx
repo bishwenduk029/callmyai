@@ -46,7 +46,7 @@ export function FAQSection() {
                   {item.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground sm:text-lg sm:leading-8">
-                  <Balancer>{item.answer}</Balancer>
+                  {item.answer} 
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
