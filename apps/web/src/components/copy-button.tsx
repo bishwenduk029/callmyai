@@ -6,17 +6,23 @@ import { CheckIcon, CopyIcon } from "@radix-ui/react-icons"
 import { cn } from "@/lib/utils"
 
 import { Button, type ButtonProps } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
 
 const CopyButton = React.forwardRef<
   React.ElementRef<typeof Button>,
-  ButtonProps & { value: string }
->(({ value, className, ...props }, ref) => {
+  ButtonProps & { value: string, display: string }
+>(({ value, display, className, ...props }, ref) => {
   const [isCopied, setIsCopied] = React.useState(false)
+  const { toast } = useToast()
 
   const handleCopy = () => {
     if (typeof window === "undefined") return
     setIsCopied(true)
     void window.navigator.clipboard.writeText(value)
+    toast({
+      title: "Link copied!",
+      description: `${display}'s link has been copied to your clipboard.`,
+    })
     setTimeout(() => setIsCopied(false), 2000)
   }
 

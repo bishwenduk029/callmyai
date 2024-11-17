@@ -13,7 +13,7 @@ export const voices: Voice[] = [
     id: "nova",
     gender: "female",
     accent: "American",
-    description: "Professional and clear voice with a natural American accent",
+    description: "Professional female voice with an American accent",
     name: "Nova",
     provider: "openai"
   },
@@ -21,7 +21,7 @@ export const voices: Voice[] = [
     id: "onyx",
     gender: "male", 
     accent: "British",
-    description: "Warm and authoritative voice with a British accent",
+    description: "Male, warm and authoritative voice with a British accent",
     name: "Onyx",
     provider: "openai"
   },
@@ -29,7 +29,7 @@ export const voices: Voice[] = [
     id: "shimmer",
     gender: "female",
     accent: "American",
-    description: "Friendly and energetic voice with an American accent",
+    description: "Female with energetic voice with an American accent",
     name: "Shimmer",
     provider: "openai"
   },
@@ -37,7 +37,7 @@ export const voices: Voice[] = [
     id: "echo",
     gender: "male",
     accent: "American", 
-    description: "Deep and engaging voice with an American accent",
+    description: "Male, deep and engaging voice with an American accent",
     name: "Echo",
     provider: "openai"
   },
@@ -45,7 +45,7 @@ export const voices: Voice[] = [
     id: "alloy",
     gender: "female",
     accent: "American",
-    description: "Youthful and upbeat voice with an American accent",
+    description: "Male, youthful and upbeat voice with an American accent",
     name: "Alloy",
     provider: "openai"
   },
@@ -131,7 +131,7 @@ export const voices: Voice[] = [
     accent: "American",
     gender: "female",
     language: "English (US)",
-    description: "Energetic young female voice with fast-paced delivery",
+    description: "Energetic young female voice",
     provider: "playht"
   }
 ]

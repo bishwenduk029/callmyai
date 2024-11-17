@@ -17,7 +17,10 @@ import {
 import { env } from "@/env.mjs"
 import { Assistant } from "@/db/schema"
 
+import { cn } from "@/lib/utils"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -35,7 +38,9 @@ import {
 } from "@/components/ui/dialog"
 import { AnimatedIconButton } from "@/components/animated/plus-icon"
 import { CreateAssistantNameForm } from "@/components/assistant/create-assistant-name-form"
+import { CopyButton } from "@/components/copy-button"
 import { ShareButton } from "@/components/share-button"
+import * as fal from '@fal-ai/serverless-client';
 
 export default async function AssistantsPage() {
   const session = await auth()
@@ -79,7 +84,7 @@ export default async function AssistantsPage() {
         </Link>
         <Link
           href="/dashboard/assistants"
-          className="flex items-center text-primary font-semibold hover:underline"
+          className="flex items-center font-semibold text-primary hover:underline"
         >
           <Headset className="mr-2 h-5 w-5" weight="bold" />
           Assistants
@@ -110,25 +115,22 @@ export default async function AssistantsPage() {
               <span className="ml-2">Add New Assistant</span>
             </AnimatedIconButton>
           </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Assistant</DialogTitle>
-              <DialogDescription>
-                You can update and configure your assistant later.
-              </DialogDescription>
-            </DialogHeader>
-            <CreateAssistantNameForm />
+          <DialogContent className="shadow-glow-lg">
+            <CreateAssistantNameForm isTrial={false} />
           </DialogContent>
         </Dialog>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {assistantsResponse?.data?.map((assistant: Assistant) => (
-            <Card key={assistant.id} className="flex flex-col">
+            <Card
+              key={assistant.id}
+              className="flex flex-col border border-foreground/20"
+            >
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <Avatar className="h-12 w-12">
                     <AvatarImage
-                    // @ts-ignore
+                      // @ts-ignore
                       src={assistant.config?.imageUrl || ""}
                       alt={assistant.name}
                     />
@@ -149,6 +151,11 @@ export default async function AssistantsPage() {
                       </p>
                     )}
                   </div>
+                  <CopyButton
+                    display={`${assistant.name}`}
+                    value={`${env.NEXT_PUBLIC_APP_URL}/assistants/${assistant.id}`}
+                    className="ml-auto"
+                  />
                 </div>
               </CardHeader>
               <CardContent className="flex-grow">
@@ -159,10 +166,12 @@ export default async function AssistantsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <ShareButton
-                  className="w-full"
-                  value={`${env.NEXT_PUBLIC_APP_URL}/assistants/${assistant.id}`}
-                />
+                <Link
+                  className={`${cn(buttonVariants({ size: "sm", variant: "default" }))}`}
+                  href={`${env.NEXT_PUBLIC_APP_URL}/dashboard/assistants/${assistant.id}`}
+                >
+                  Update Settings
+                </Link>
               </CardFooter>
             </Card>
           ))}

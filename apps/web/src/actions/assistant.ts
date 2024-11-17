@@ -25,6 +25,7 @@ import type { ChatRoomSession } from "@/components/audio/callmyai-room"
 import { CallSummary } from "@/components/calls"
 
 import { getUserByEmail } from "./user"
+import { nanoid } from "ai"
 
 const initiateNewSessionSchema = z.object({
   assistantId: z.string().uuid(),
@@ -53,6 +54,33 @@ export const initiateNewSessionforAssistant = actionClient
           description: config?.description || "",
           avatar: config?.avatar || "",
           actionsOwnerEmail: result.user.email,
+        }
+
+        return chatRoomSession
+      } catch (error) {
+        console.error("Error initiating new session for assistant:", error)
+        return null
+      }
+    }
+  )
+
+  export const initiateTrialSessionforAssistant = actionClient
+  .schema(initiateNewSessionSchema)
+  .action(
+    async ({
+      parsedInput: { assistantId, config },
+    }): Promise<ChatRoomSession | null> => {
+      try {
+
+        const chatRoomSession: ChatRoomSession = {
+          exhausted: false,
+          duration: parseInt(env.CALLMYAI_AGENT_CALL_DURATION),
+          private: false,
+          assistantId,
+          baseUrl: "/api/assistants/start",
+          header: config?.header || "",
+          description: config?.description || "",
+          avatar: config?.avatar || "",
         }
 
         return chatRoomSession
@@ -318,4 +346,46 @@ export async function getChatSummariesByAssistantId(
     console.error("Error getting chat summaries by assistant id:", error)
     throw new Error("Failed to fetch chat summaries")
   }
+}
+
+export interface TrialAssistant {
+  id: string
+  name: string
+  config: any
+}
+
+export const createTrialAssistant = actionClient
+  .schema(
+    z.object({
+      name: z.string(),
+      config: rtviConfigSchema,
+    })
+  )
+  .action(
+    async ({
+      parsedInput: { name, config },
+    }): Promise<ActionResponse> => {
+      try {
+        const id = nanoid()
+        const key = `trial:${id}`
+        
+        const assistantData: TrialAssistant = {
+          id,
+          name,
+          config,
+          createdAt: Date.now(),
+        }
+
+        await redis.set(key, JSON.stringify(assistantData), { ex: 60 * 3 })
+        return { success: true, data: assistantData }
+      } catch (error) {
+        console.error("Error creating trial assistant:", error)
+        return { success: false, error: "Unexpected error occurred" }
+      }
+    }
+  )
+
+export async function getTrialAssistant(id: string): Promise<TrialAssistant | null> {
+  const data = await redis.get(`trial:${id}`)
+  return data ? JSON.parse(data) : null
 }

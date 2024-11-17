@@ -112,8 +112,6 @@ export function HeroSection() {
         </motion.div>
 
         <div className="relative z-10 mt-14 md:grid w-full grid-cols-1 gap-8 border-t-primary bg-background p-2 md:grid-cols-2">
-          <div className="absolute bottom-0 left-0 h-20 w-full rounded-lg bg-gradient-to-b from-background/0 via-background/50 to-background md:h-28"></div>
-          <div className="absolute left-1/2 top-2 mx-auto h-5 w-[90%] -translate-x-1/2 transform rounded-full bg-primary/50 blur-3xl lg:-top-8 lg:h-20"></div>
           {/* Left column - Demo */}
           <div className="relative order-2 lg:order-1">
             {isDesktop ? (

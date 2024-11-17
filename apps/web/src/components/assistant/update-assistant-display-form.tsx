@@ -105,7 +105,6 @@ export function UpdateAssistantDisplayDetails({
 
   const onSubmit = async (values: z.infer<typeof assistantConfigSchema>) => {
     const selectedVoice = voices.find(v => v.id === values.voice)
-    console.group(values)
     
     updateAssistantAction.execute({
       id: assistant.id,

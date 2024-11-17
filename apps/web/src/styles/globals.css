@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -35,11 +29,13 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-  }
 
+    --brand: 120 60% 50%;
+    --brand-foreground: 120 70% 60%;
+  }
   .dark {
     --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 100%;
+    --foreground: 0 0% 95%;
     --card: 24 9.8% 10%;
     --card-foreground: 0 0% 95%;
     --popover: 0 0% 9%;
@@ -62,33 +58,71 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    --brand: 120 60% 50%;
+    --brand-foreground: 120 70% 60%;
   }
 }
-
-
-
-
-
 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
   }
 }
 
-.no-visible-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-}
+@layer utilities {
+  .fade-x {
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 25%,
+      black 75%,
+      transparent 100%
+    );
+  }
 
-.no-visible-scrollbar::-webkit-scrollbar {
-  display: none;
+  .fade-y {
+    mask-image: linear-gradient(
+      to top,
+      transparent 0%,
+      black 25%,
+      black 75%,
+      transparent 100%
+    );
+  }
+
+  .fade-top {
+    mask-image: linear-gradient(to bottom, transparent 0%, black 35%);
+  }
+
+  .fade-bottom {
+    mask-image: linear-gradient(to top, transparent 0%, black 35%);
+  }
+
+  .fade-top-lg {
+    mask-image: linear-gradient(to bottom, transparent 15%, black 100%);
+  }
+
+  .fade-bottom-lg {
+    mask-image: linear-gradient(to top, transparent 15%, black 100%);
+  }
+
+  .fade-left {
+    mask-image: linear-gradient(to right, transparent 0%, black 35%);
+  }
+
+  .fade-right {
+    mask-image: linear-gradient(to left, transparent 0%, black 35%);
+  }
+
+  .fade-left-lg {
+    mask-image: linear-gradient(to right, transparent 15%, black 100%);
+  }
+
+  .fade-right-lg {
+    mask-image: linear-gradient(to left, transparent 15%, black 100%);
+  }
 }

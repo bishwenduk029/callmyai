@@ -183,12 +183,12 @@ function NonLoggedInPricingSection(): JSX.Element {
                   "flex flex-col transition-all duration-1000 ease-out hover:-translate-y-3 hover:opacity-80"
                 )}
               >
-                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-white">
+                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-background">
                   <CardTitle className="font-urbanist text-2xl tracking-wide">
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
 
-                  <CardDescription className="text-neutral-3000 dark:text-muted-foreground text-sm">
+                  <CardDescription className="text-neutral-3000 text-sm">
                     <Balancer>{plan.description}</Balancer>
                   </CardDescription>
 
@@ -235,7 +235,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                     className={cn(
                       buttonVariants({
                         variant: plan.disable ? "disabledLink" : "default",
-                        className: "mt-4 w-full text-white",
+                        className: "mt-4 w-full text-background",
                       })
                     )}
                   >

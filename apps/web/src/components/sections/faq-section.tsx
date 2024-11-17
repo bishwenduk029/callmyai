@@ -9,11 +9,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Section } from "../ui/section"
 
 export function FAQSection() {
   return (
-    <section id="faq-section" aria-label="faq section" className="w-full mt-8">
-      <div className="container grid max-w-6xl gap-8 md:gap-16">
+    <Section id="faq-section" aria-label="faq section" className="w-full">
+      <div className="mx-auto flex max-w-container flex-col items-center gap-8">
         <div className="flex w-full flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
@@ -38,7 +39,7 @@ export function FAQSection() {
           </h3>
         </div>
 
-        <div className="grid gap-4 sm:gap-6 md:gap-8">
+        <div className="w-full gap-4 sm:gap-6 md:gap-8">
           {frequentlyAskedQuestions.map((item) => (
             <Accordion key={item.question} type="single" collapsible>
               <AccordionItem value={item.question}>
@@ -53,6 +54,6 @@ export function FAQSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

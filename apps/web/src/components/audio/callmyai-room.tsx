@@ -10,12 +10,13 @@ import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { Headset } from "@phosphor-icons/react/dist/ssr"
 import { motion } from "framer-motion"
 import { Howl } from "howler"
+import Balancer from "react-wrap-balancer"
 
 import { fontNunito } from "@/config/fonts"
 
 import { useToast } from "@/hooks/use-toast"
 
-import { Avatar, AvatarImage } from "../ui/avatar"
+import { Avatar } from "../ui/avatar"
 import { BackgroundGradient } from "../ui/background-gradient"
 import { Card, CardContent } from "../ui/card"
 import { LoadingSpinner } from "./chat-room-provider"
@@ -130,15 +131,15 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
   }, [isLoadingBot])
 
   return (
-    <div className="fixed w-full inset-0 flex flex-col items-center justify-center bg-gradient-to-r from-[#fbed96] to-[#abecd6] p-4 sm:p-0">
-      <BackgroundGradient className="dark:bg-zinc-900 w-full rounded-[22px] bg-white p-1">
-        <Card className="border-none py-4 shadow-xl">
-          <CardContent className="flex flex-col items-center">
+    <div className="absolute inset-0 z-10 flex h-full w-full flex-col items-center justify-center bg-gradient-to-r from-[#fbed96] to-[#abecd6] p-4 sm:p-0">
+      <BackgroundGradient className="h-full max-h-[500px] w-full rounded-[22px] bg-white p-1 dark:bg-zinc-900">
+        <Card className="h-full border-none py-4 shadow-xl">
+          <CardContent className="flex h-full flex-col items-center justify-between">
             {chatSession.avatar ? (
               <Avatar className="mb-4 size-24 rounded-full border-4 border-green-500 shadow-lg shadow-green-300">
                 (
                 <Image
-                  className="h-full w-full object-cove p-0"
+                  className="object-cove h-full w-full p-0"
                   src={chatSession.avatar!}
                   width={96}
                   height={96}
@@ -155,11 +156,13 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
               {chatSession.botName || "AI Call Screener"}
             </div>
             <div
-              className={`mb-8 text-lg font-semibold text-muted-foreground ${fontNunito.variable}`}
+              className={`mb-8 text-lg font-semibold text-muted-foreground ${fontNunito.variable} text-center`}
             >
-              {chatSession.description || "AI powered Call Assistant"}
+              <Balancer>
+                {chatSession.description || "AI powered Call Assistant"}
+              </Balancer>
             </div>
-            <div className="mb-4 flex flex-row items-baseline justify-center font-urbanist text-xl font-extrabold text-primary">
+            <div className="font-urbanist mb-4 flex flex-row items-baseline justify-center text-xl font-extrabold text-primary">
               {isListening && (
                 <div className="mr-2 h-4 w-4 animate-pulse rounded-full bg-red-500"></div>
               )}
@@ -176,22 +179,22 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
             />
             {!disablePhone && (
               <motion.button
-                className="rounded-full p-0.5 text-white transition-colors border-2 border-primary"
-                whileHover={{ scale: 0.90 }}
+                className="rounded-full border-2 border-primary p-0.5 text-white transition-colors"
+                whileHover={{ scale: 0.9 }}
                 onClick={toggleListening}
                 disabled={isLoadingBot}
               >
                 {isLoadingBot ? (
-                  <LoadingSpinner size={75} className="text-primary" />
+                  <LoadingSpinner size={75} className="text-background" />
                 ) : isListening ? (
                   <PhonePause
                     size={75}
-                    className="rounded-full bg-primary p-2 text-white"
+                    className="rounded-full bg-primary p-2 text-background"
                   />
                 ) : (
                   <PhoneCall
                     size={75}
-                    className="rounded-full bg-primary p-2 text-white"
+                    className="rounded-full bg-primary p-2 text-background"
                   />
                 )}
               </motion.button>

@@ -29,14 +29,15 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { assistantId, ...rest } = body.config
     const user = await getUserByAssistantId({ assistantId })
+    let results: Array<{ id: string }> = [];
 
-    if (!user) throw new Error("User not found")
-
-    const results = await psCreateChatForAssistant.execute({
-      userId: user.id,
-      visitorId: null,
-      assistantId,
-    })
+    if (user) {
+      results = await psCreateChatForAssistant.execute({
+        userId: user?.id,
+        visitorId: null,
+        assistantId,
+      })
+    }
 
     const response = await fetch(env.VOICE_BACKEND_URL, {
       method: "POST",

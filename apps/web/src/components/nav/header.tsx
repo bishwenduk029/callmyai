@@ -25,7 +25,7 @@ export async function Header({showThemeToggle = true}): Promise<JSX.Element> {
   const session = await auth()
 
   return (
-    <header className="sticky flex h-20 w-full bg-background bg-opacity-80 backdrop-blur-sm z-50">
+    <header className="fade-bottom sticky top-0 z-50 px-4 pb-4 backdrop-blur-lg">
       <div className="container flex items-center justify-between p-4">
         <Logo />
         <Navigation navItems={siteConfig.navItems} />
@@ -77,10 +77,10 @@ export async function Header({showThemeToggle = true}): Promise<JSX.Element> {
               <Link
                 aria-label="Sign Up"
                 href="/dashboard/settings"
-                className={`${cn(buttonVariants({ size: "md" }), "ml-2 text-background dark:text-foreground")} cursor-pointer`}
+                className={`${cn(buttonVariants({ size: "md", variant: "default" }), "ml-2")} cursor-pointer text-background`}
               >
                 Sign Up
-                <span className="sr-only">Sign Up</span>
+                <span className="sr-only text-background">Sign Up</span>
               </Link>
             )}
           </nav>
