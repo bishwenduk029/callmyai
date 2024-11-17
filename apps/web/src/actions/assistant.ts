@@ -15,6 +15,7 @@ import {
   psGetChatsByAssistantId,
   psGetUserByAssistantId,
   psUpdateAssistant,
+  psGetAssistantByPhone,
 } from "@/db/prepared/statements"
 import { Assistant } from "@/db/schema"
 
@@ -353,3 +354,46 @@ export interface TrialAssistant {
   name: string
   config: any
 }
+
+const getAssistantByPhoneSchema = z.object({
+  phone: z.string(),
+})
+
+export const getAssistantByPhone = actionClient
+  .schema(getAssistantByPhoneSchema)
+  .action(async ({ parsedInput: { phone } }) => {
+    try {
+      const [result] = await psGetAssistantByPhone.execute({ phone })
+      if (!result) return null
+
+      // Get the assistant configuration from Redis
+      const config: RtviConfig | null = await redis.get(`assistant:${result.id}`)
+      if (!config || Object.keys(config).length === 0) return null
+
+      return {
+        assistant: result,
+        config: {
+          ...config,
+          llm: {
+            ...config.llm,
+            messages: [
+              {
+                role: "system",
+                content: config?.description + "\n " + 
+                  (config?.llm?.messages?.[0]?.["content"]?.replace(
+                    /\${name}/g, 
+                    result.name!
+                  ) || "Hello! How can I help you today?"),
+              },
+            ],
+          },
+          assistantId: result.id,
+          userName: result.name,
+          actionsOwnerEmail: result.id,
+        }
+      }
+    } catch (error) {
+      console.error("Error getting assistant by phone:", error)
+      return null
+    }
+  })

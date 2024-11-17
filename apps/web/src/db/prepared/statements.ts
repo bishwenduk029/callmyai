@@ -1,7 +1,13 @@
 import { and, desc, eq, isNotNull, ne, sql } from "drizzle-orm"
 
 import { db } from "@/config/db"
-import { assistants, chats, integrations, newsletterSubscribers, users } from "@/db/schema"
+import {
+  assistants,
+  chats,
+  integrations,
+  newsletterSubscribers,
+  users,
+} from "@/db/schema"
 
 export const psGetUserById = db
   .select()
@@ -86,7 +92,6 @@ export const psGetUserByUsername = db
   .where(eq(users.username, sql.placeholder("username")))
   .limit(1)
   .prepare("psGetUserByUsername")
-
 
 export const psGetUserByPhone = db
   .select()
@@ -205,5 +210,11 @@ export const psGetAssistantById = db
 export const psGetIntegrationsByUserId = db
   .select()
   .from(integrations)
-  .where(eq(integrations.userId, sql.placeholder('userId')))
-  .prepare('psGetIntegrationsByUserId')
+  .where(eq(integrations.userId, sql.placeholder("userId")))
+  .prepare("psGetIntegrationsByUserId")
+
+export const psGetAssistantByPhone = db
+  .select()
+  .from(assistants)
+  .where(eq(assistants.phoneNumber, sql.placeholder("phone")))
+  .prepare("psGetAssistantByPhone")

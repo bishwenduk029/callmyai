@@ -3,18 +3,18 @@
 
 import { useEffect, useState } from "react"
 import {
+  DailyTransport,
   DailyVoiceClient,
   DailyVoiceClientAudio,
   DailyVoiceClientProvider,
-  DailyTransport
 } from "@callmyai/ai/ui"
 
 import { User } from "@/db/schema"
 
 import { cn } from "@/lib/utils"
 
-import { ChatRoomSession } from "./chat-room"
 import { CallMyAIRoom } from "./callmyai-room"
+import { ChatRoomSession } from "./chat-room"
 
 interface ChatRoomProps {
   visitor?: User | null | undefined
@@ -30,7 +30,7 @@ export const DailyChatRoomProvider = ({
   const [voiceClient, setVoiceClient] = useState<DailyVoiceClient | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
-  const dailyTransport = new DailyTransport();
+  const dailyTransport = new DailyTransport()
 
   useEffect(() => {
     const initializeVoiceClient = async () => {
@@ -43,6 +43,21 @@ export const DailyChatRoomProvider = ({
           },
           config: {
             ...configuration,
+            llm: {
+              ...configuration.llm,
+              messages: [
+                {
+                  role: "system",
+                  content:
+                    configuration.description +
+                    "\n " +
+                    (configuration.selectedPersona?.systemPrompt?.replace(
+                      /\${name}/g,
+                      configuration.name!
+                    ) || "Hello! How can I help you today?"),
+                },
+              ],
+            },
             assistantId: session.assistantId,
             userName: session.userName,
             actionsOwnerEmail: session.actionsOwnerEmail,

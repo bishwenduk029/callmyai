@@ -113,14 +113,12 @@ export function CreateAssistantNameForm({
             },
             messages: [
               {
-                role: "assistant",
+                role: "system",
                 content:
-                  values.description +
-                  "\n " +
-                  (selectedPersona?.systemPrompt?.replace(
+                  selectedPersona?.systemPrompt?.replace(
                     /\${name}/g,
                     values.name!
-                  ) || "Hello! How can I help you today?"),
+                  ) || "Hello! How can I help you today?",
               },
             ],
           },
@@ -161,7 +159,7 @@ export function CreateAssistantNameForm({
             },
             messages: [
               {
-                role: "assistant",
+                role: "system",
                 content:
                   values.description +
                   "\n " +
@@ -187,12 +185,15 @@ export function CreateAssistantNameForm({
       className="z-20 w-full space-y-10"
       {...form}
     >
-      <div className={isTrial ? "space-y-4 p-2 text-foreground dark:bg-background/5" : "space-y-4 p-2 text-foreground dark:bg-background/5"}>
+      <div
+        className={
+          isTrial
+            ? "space-y-4 p-2 text-foreground dark:bg-background/5"
+            : "space-y-4 p-2 text-foreground dark:bg-background/5"
+        }
+      >
         <div>
-          <label
-            htmlFor="persona"
-            className="my-1 block text-xl font-semibold"
-          >
+          <label htmlFor="persona" className="my-1 block text-xl font-semibold">
             Choose Persona
           </label>
           <p className="text-md mb-3 mt-1 text-muted-foreground">
@@ -222,10 +223,7 @@ export function CreateAssistantNameForm({
           )}
         </div>
         <div>
-          <label
-            htmlFor="name"
-            className="my-1 block text-xl font-semibold"
-          >
+          <label htmlFor="name" className="my-1 block text-xl font-semibold">
             Name
           </label>
           <p className="text-md mb-3 mt-1 text-muted-foreground">
@@ -277,10 +275,7 @@ export function CreateAssistantNameForm({
           </Avatar>
         </div>
         <div className="w-full">
-          <label
-            htmlFor="voice"
-            className="my-1 block text-lg font-semibold"
-          >
+          <label htmlFor="voice" className="my-1 block text-lg font-semibold">
             Voices
           </label>
           <p className="text-md mb-3 mt-1 text-muted-foreground">

@@ -168,7 +168,7 @@ export default async function AssistantsPage() {
               <CardFooter>
                 <Link
                   className={`${cn(buttonVariants({ size: "sm", variant: "default" }))}`}
-                  href={`${env.NEXT_PUBLIC_APP_URL}/dashboard/assistants/${assistant.id}`}
+                  href={`${env.NEXT_PUBLIC_APP_URL}/dashboard/assistants/${assistant.id}/settings`}
                 >
                   Update Settings
                 </Link>
