@@ -353,39 +353,3 @@ export interface TrialAssistant {
   name: string
   config: any
 }
-
-export const createTrialAssistant = actionClient
-  .schema(
-    z.object({
-      name: z.string(),
-      config: rtviConfigSchema,
-    })
-  )
-  .action(
-    async ({
-      parsedInput: { name, config },
-    }): Promise<ActionResponse> => {
-      try {
-        const id = nanoid()
-        const key = `trial:${id}`
-        
-        const assistantData: TrialAssistant = {
-          id,
-          name,
-          config,
-          createdAt: Date.now(),
-        }
-
-        await redis.set(key, JSON.stringify(assistantData), { ex: 60 * 3 })
-        return { success: true, data: assistantData }
-      } catch (error) {
-        console.error("Error creating trial assistant:", error)
-        return { success: false, error: "Unexpected error occurred" }
-      }
-    }
-  )
-
-export async function getTrialAssistant(id: string): Promise<TrialAssistant | null> {
-  const data = await redis.get(`trial:${id}`)
-  return data ? JSON.parse(data) : null
-}

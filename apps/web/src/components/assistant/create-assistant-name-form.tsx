@@ -1,29 +1,16 @@
 "use client"
 
-import { use, useState } from "react"
-import {
-  createAssistant,
-  createTrialAssistant,
-  TrialAssistant,
-} from "@/actions/assistant"
-import { getUserByEmail } from "@/actions/user"
+import { createAssistant, TrialAssistant } from "@/actions/assistant"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { Assistant } from "@/db/schema"
-
 import { useToast } from "@/hooks/use-toast"
-import auth from "@/lib/auth"
-import { falClient } from "@/lib/fal"
 import { personas } from "@/lib/personas"
 import { profiles } from "@/lib/profiles"
 import { voices } from "@/lib/voices"
 
-import { Button } from "@/components/ui/button"
-
-import { Icons } from "../icons"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Input } from "../ui/input"
 import {
@@ -90,7 +77,7 @@ export function CreateAssistantNameForm({
       } else {
         toast({
           title: "Assistant Created",
-          description: "Your assistant has been created successfully."
+          description: "Your assistant has been created successfully.",
         })
       }
     },
@@ -99,7 +86,7 @@ export function CreateAssistantNameForm({
       toast({
         title: "Error creating assistant",
         description: "We encountered some error when creating your assistant.",
-        variant: "destructive"
+        variant: "destructive",
       })
     },
   })
@@ -127,9 +114,13 @@ export function CreateAssistantNameForm({
             messages: [
               {
                 role: "assistant",
-                content: values.description + "\n " + 
-                  (selectedPersona?.systemPrompt?.replace(/\${name}/g, values.name!) || 
-                  "Hello! How can I help you today?"),
+                content:
+                  values.description +
+                  "\n " +
+                  (selectedPersona?.systemPrompt?.replace(
+                    /\${name}/g,
+                    values.name!
+                  ) || "Hello! How can I help you today?"),
               },
             ],
           },
@@ -152,45 +143,47 @@ export function CreateAssistantNameForm({
       title: "Assistant Created",
     })
 
-    onSuccess({
-      id: new Date().toISOString(),
-      name: values.name,
-      config: {
-        header: values.name,
-        description: values.description,
-        gender: values.gender,
-        ethnicity: values.ethnicity,
-        avatar: values.avatar,
-        tools: [],
-        llm: {
-          model: {
-            name: "gpt-4o-mini",
-            provider: "openai",
-          },
-          messages: [
-            {
-              role: "assistant",
-              content:
-                values.description +
-                "\n " +
-                (selectedPersona?.systemPrompt?.replace(
-                  /\${name}/g,
-                  values.name!
-                ) || "Hello! How can I help you today?"),
+    if (onSuccess) {
+      onSuccess({
+        id: new Date().toISOString(),
+        name: values.name,
+        config: {
+          header: values.name,
+          description: values.description,
+          gender: values.gender,
+          ethnicity: values.ethnicity,
+          avatar: values.avatar,
+          tools: [],
+          llm: {
+            model: {
+              name: "gpt-4o-mini",
+              provider: "openai",
             },
-          ],
+            messages: [
+              {
+                role: "assistant",
+                content:
+                  values.description +
+                  "\n " +
+                  (selectedPersona?.systemPrompt?.replace(
+                    /\${name}/g,
+                    values.name!
+                  ) || "Hello! How can I help you today?"),
+              },
+            ],
+          },
+          tts: {
+            provider: selectedVoice?.provider || "openai",
+            voice: values.voice,
+          },
         },
-        tts: {
-          provider: selectedVoice?.provider || "openai",
-          voice: values.voice,
-        },
-      },
-    })
+      })
+    }
   }
 
   return (
     <form
-      onSubmit={form.handleSubmit(onSubmit)}  // Changed from onTrialSubmit to onSubmit
+      onSubmit={form.handleSubmit(onSubmit)} // Changed from onTrialSubmit to onSubmit
       className="z-20 w-full space-y-10"
       {...form}
     >
@@ -273,7 +266,9 @@ export function CreateAssistantNameForm({
           )}
         </div>
         <div className="flex flex-col justify-center gap-6 align-baseline sm:flex-row sm:items-center">
-          <Avatar className={` ${isTrial ? 'h-48 w-48' : 'h-32 w-32'} flex-shrink-0`}>
+          <Avatar
+            className={` ${isTrial ? "h-48 w-48" : "h-32 w-32"} flex-shrink-0`}
+          >
             <AvatarImage
               src={form.watch("avatar")} // Change getValues to watch
               alt="@assistant"
