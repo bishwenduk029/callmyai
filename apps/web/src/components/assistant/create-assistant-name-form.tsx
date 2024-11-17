@@ -187,11 +187,11 @@ export function CreateAssistantNameForm({
       className="z-20 w-full space-y-10"
       {...form}
     >
-      <div className="space-y-4 p-2 text-background dark:bg-background/5 dark:text-foreground">
+      <div className={isTrial ? "space-y-4 p-2 text-foreground dark:bg-background/5" : "space-y-4 p-2 text-foreground dark:bg-background/5"}>
         <div>
           <label
             htmlFor="persona"
-            className="my-1 block text-xl font-semibold text-foreground"
+            className="my-1 block text-xl font-semibold"
           >
             Choose Persona
           </label>
@@ -224,7 +224,7 @@ export function CreateAssistantNameForm({
         <div>
           <label
             htmlFor="name"
-            className="my-1 block text-xl font-semibold text-foreground"
+            className="my-1 block text-xl font-semibold"
           >
             Name
           </label>
@@ -246,7 +246,7 @@ export function CreateAssistantNameForm({
         <div>
           <label
             htmlFor="description"
-            className="my-1 block text-lg font-semibold text-foreground"
+            className="my-1 block text-lg font-semibold"
           >
             Description
           </label>
@@ -279,7 +279,7 @@ export function CreateAssistantNameForm({
         <div className="w-full">
           <label
             htmlFor="voice"
-            className="my-1 block text-lg font-semibold text-foreground"
+            className="my-1 block text-lg font-semibold"
           >
             Voices
           </label>
