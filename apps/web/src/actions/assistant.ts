@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { redis } from "@callmyai/kv"
+import { nanoid } from "ai"
 import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"
 
@@ -15,7 +16,6 @@ import {
   psGetChatsByAssistantId,
   psGetUserByAssistantId,
   psUpdateAssistant,
-  psGetAssistantByPhone,
 } from "@/db/prepared/statements"
 import { Assistant } from "@/db/schema"
 
@@ -26,7 +26,8 @@ import type { ChatRoomSession } from "@/components/audio/callmyai-room"
 import { CallSummary } from "@/components/calls"
 
 import { getUserByEmail } from "./user"
-import { nanoid } from "ai"
+import { db } from "@/config/db"
+import { eq } from "drizzle-orm"
 
 const initiateNewSessionSchema = z.object({
   assistantId: z.string().uuid(),
@@ -65,14 +66,13 @@ export const initiateNewSessionforAssistant = actionClient
     }
   )
 
-  export const initiateTrialSessionforAssistant = actionClient
+export const initiateTrialSessionforAssistant = actionClient
   .schema(initiateNewSessionSchema)
   .action(
     async ({
       parsedInput: { assistantId, config },
     }): Promise<ChatRoomSession | null> => {
       try {
-
         const chatRoomSession: ChatRoomSession = {
           exhausted: false,
           duration: parseInt(env.CALLMYAI_AGENT_CALL_DURATION),
@@ -101,11 +101,15 @@ const rtviConfigSchema = z
     avatar: z.string().optional(),
     tools: z.array(z.string().optional()).optional(),
     actionsOwnerEmail: z.string().optional(),
-    dataSources: z.array(z.object({
-      fileId: z.number(),
-      sourceType: z.string(),
-      fileName: z.string(),
-    })).optional(), // Add this line for RAG fileIds
+    dataSources: z
+      .array(
+        z.object({
+          fileId: z.number(),
+          sourceType: z.string(),
+          fileName: z.string(),
+        })
+      )
+      .optional(), // Add this line for RAG fileIds
     llm: z.object({
       model: z.object({
         provider: z.string(),
@@ -305,10 +309,12 @@ export const getAssistantById = actionClient
         })
         if (!result) return null
 
-        const config: RtviConfig | null = await redis.get(`assistant:${assistantId}`)
-        
+        const config: RtviConfig | null = await redis.get(
+          `assistant:${assistantId}`
+        )
+
         if (!config) return null
-        
+
         return {
           assistant: result,
           config,
@@ -363,11 +369,15 @@ export const getAssistantByPhone = actionClient
   .schema(getAssistantByPhoneSchema)
   .action(async ({ parsedInput: { phone } }) => {
     try {
-      const [result] = await psGetAssistantByPhone.execute({ phone })
+      const result = await db.query.assistants.findFirst({
+        where: (assistant) => eq(assistant.phoneNumber, phone),
+      })
       if (!result) return null
 
       // Get the assistant configuration from Redis
-      const config: RtviConfig | null = await redis.get(`assistant:${result.id}`)
+      const config: RtviConfig | null = await redis.get(
+        `assistant:${result.id}`
+      )
       if (!config || Object.keys(config).length === 0) return null
 
       return {
@@ -379,9 +389,11 @@ export const getAssistantByPhone = actionClient
             messages: [
               {
                 role: "system",
-                content: config?.description + "\n " + 
+                content:
+                  config?.description +
+                  "\n " +
                   (config?.llm?.messages?.[0]?.["content"]?.replace(
-                    /\${name}/g, 
+                    /\${name}/g,
                     result.name!
                   ) || "Hello! How can I help you today?"),
               },
@@ -390,7 +402,7 @@ export const getAssistantByPhone = actionClient
           assistantId: result.id,
           userName: result.name,
           actionsOwnerEmail: result.id,
-        }
+        },
       }
     } catch (error) {
       console.error("Error getting assistant by phone:", error)

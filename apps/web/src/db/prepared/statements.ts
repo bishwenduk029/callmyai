@@ -212,9 +212,3 @@ export const psGetIntegrationsByUserId = db
   .from(integrations)
   .where(eq(integrations.userId, sql.placeholder("userId")))
   .prepare("psGetIntegrationsByUserId")
-
-export const psGetAssistantByPhone = db
-  .select()
-  .from(assistants)
-  .where(eq(assistants.phoneNumber, sql.placeholder("phone")))
-  .prepare("psGetAssistantByPhone")

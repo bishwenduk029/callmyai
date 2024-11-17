@@ -150,7 +150,7 @@ export const releasePhoneNumber = actionClient
   })
 
 const assistantPhoneSchema = z.object({
-  phoneNumber: z.string(),
+  phoneNumber: z.string().nullable(),
   assistantId: z.string(),
 })
 

@@ -2,9 +2,12 @@ import { headers } from "next/headers"
 import { getAssistantByPhone } from "@/actions/assistant"
 import { redis } from "@callmyai/kv"
 import { Ratelimit } from "@upstash/ratelimit"
+import { eq } from "drizzle-orm"
 
 import { env } from "@/env.mjs"
+import { db } from "@/config/db"
 import { psCreateChat } from "@/db/prepared/statements"
+import { assistants } from "@/db/schema"
 
 // Initialize rate limiter
 const ratelimit = new Ratelimit({

@@ -8,10 +8,11 @@ import { Assistant, User } from "@/db/schema"
 
 import auth from "@/lib/auth"
 
+import { AssistantPhoneNumberForm } from "../dashboard/assistant-phone-number-form"
+import { PhoneNumberForm } from "../dashboard/phone-number-form"
 import { UpdateAssistantDataSourcesForm } from "../data-sources/update-assistant-data-sources-form"
 import { AssistantSystemPromptForm } from "./assistant-system-prompt-form"
 import { UpdateAssistantDisplayDetails } from "./update-assistant-display-form"
-import { PhoneNumberForm } from "../dashboard/phone-number-form"
 
 interface SettingsProps {
   assistant: Assistant
@@ -33,7 +34,10 @@ export default function Settings({ assistant, config, user }: SettingsProps) {
         config={config}
         userEmail={user.email}
       />
-      <PhoneNumberForm user={user} />
+      <AssistantPhoneNumberForm
+        assistantId={assistant.id}
+        currentPhoneNumber={assistant.phoneNumber}
+      />
     </div>
   )
 }
