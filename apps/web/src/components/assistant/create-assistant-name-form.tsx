@@ -188,7 +188,7 @@ export function CreateAssistantNameForm({
       <div
         className={
           isTrial
-            ? "space-y-4 p-2 text-foreground dark:bg-background/5"
+            ? "space-y-4 text-background dark:text-foreground dark:bg-background/5"
             : "space-y-4 p-2 text-foreground dark:bg-background/5"
         }
       >
@@ -196,7 +196,7 @@ export function CreateAssistantNameForm({
           <label htmlFor="persona" className="my-1 block text-xl font-semibold">
             Choose Persona
           </label>
-          <p className="text-md mb-3 mt-1 text-muted-foreground">
+          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-foreground">
             What is the role of your CallMyAI Agent
           </p>
           <Select
@@ -226,7 +226,7 @@ export function CreateAssistantNameForm({
           <label htmlFor="name" className="my-1 block text-xl font-semibold">
             Name
           </label>
-          <p className="text-md mb-3 mt-1 text-muted-foreground">
+          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-background dark:text-muted-foreground">
             Enter the name of your CallMyAI Agent
           </p>
           <Input
@@ -248,7 +248,7 @@ export function CreateAssistantNameForm({
           >
             Description
           </label>
-          <p className="text-md mb-3 mt-1 text-muted-foreground">
+          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-background dark:text-muted-foreground">
             Add business context and brief details about your AI agent
           </p>
           <Input
@@ -278,7 +278,7 @@ export function CreateAssistantNameForm({
           <label htmlFor="voice" className="my-1 block text-lg font-semibold">
             Voices
           </label>
-          <p className="text-md mb-3 mt-1 text-muted-foreground">
+          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-foreground">
             Select the voice for your CallMyAI Agent
           </p>
           <Select

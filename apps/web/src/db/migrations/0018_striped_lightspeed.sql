@@ -1,1 +1,0 @@
-ALTER TABLE "integration" ALTER COLUMN "availableActions" SET DATA TYPE text[];

@@ -1,1 +1,0 @@
-ALTER TABLE "assistant" DROP COLUMN IF EXISTS "prompt";

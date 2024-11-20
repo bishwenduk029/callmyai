@@ -1,6 +1,4 @@
 // page.tsx
-import Link from "next/link"
-import { redirect } from "next/navigation"
 import { getAssistantsByUserId } from "@/actions/assistant"
 import { getUserByEmail, getUserSubscriptionByUserId } from "@/actions/user"
 import { auth } from "@/auth"
@@ -10,37 +8,32 @@ import {
   Headset,
   PhoneIncoming,
   PlugsConnected,
-  Plus,
-  PlusCircle,
+  PlusCircle
 } from "@phosphor-icons/react/dist/ssr"
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
-import { env } from "@/env.mjs"
 import { Assistant } from "@/db/schema"
+import { env } from "@/env.mjs"
 
 import { cn } from "@/lib/utils"
 
+import { AnimatedIconButton } from "@/components/animated/plus-icon"
+import { CreateAssistantNameForm } from "@/components/assistant/create-assistant-name-form"
+import { CopyButton } from "@/components/copy-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
-  CardTitle,
+  CardHeader
 } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog"
-import { AnimatedIconButton } from "@/components/animated/plus-icon"
-import { CreateAssistantNameForm } from "@/components/assistant/create-assistant-name-form"
-import { CopyButton } from "@/components/copy-button"
-import { ShareButton } from "@/components/share-button"
-import * as fal from '@fal-ai/serverless-client';
 
 export default async function AssistantsPage() {
   const session = await auth()

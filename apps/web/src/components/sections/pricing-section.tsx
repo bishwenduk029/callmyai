@@ -65,7 +65,7 @@ export async function PricingSection(): Promise<JSX.Element> {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 px-5 sm:px-0">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
@@ -175,7 +175,7 @@ function NonLoggedInPricingSection(): JSX.Element {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 px-5 sm:px-0">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}

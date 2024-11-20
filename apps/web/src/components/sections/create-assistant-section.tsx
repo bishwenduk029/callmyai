@@ -18,7 +18,7 @@ export function CreateAssistantSection() {
 
   return (
     <Section className="font-inter overflow-hidden">
-      <div className="mx-auto flex max-w-container flex-col gap-6 sm:gap-12">
+      <div className="mx-auto max-w-container grid gap-6 sm:gap-12 py-15">
         <div className="flex flex-col items-center gap-4 text-center sm:gap-8">
           <h2 className="font-heading inline-block animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight">
             Create CallMyAI voice agents that sound like humans
@@ -27,27 +27,29 @@ export function CreateAssistantSection() {
             Customize your AI assistant with natural voices and personalities
           </p>
         </div>
-        <div className="min-h-xl relative mx-auto flex h-[800px] w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-2xl border border-foreground/35 p-2">
+        <div className="min-h-xl relative mx-auto flex h-[800px] w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-2xl p-8">
           <Vortex
             backgroundColor="black"
             rangeY={800}
             particleCount={100}
             baseHue={120}
-            className="flex h-full w-full flex-col items-center justify-center px-2 py-4 md:px-10"
+            className="flex h-full w-full flex-col items-center justify-center"
           >
-            <div className="mb-1 w-full text-center">
-              <h3 className="mb-2 text-xl font-semibold text-white">
+            <div className="w-full text-center bg-black">
+              <h3 className="text-xl font-semibold text-white">
                 Quick Demo
               </h3>
             </div>
-            {createdAssistant ? (
-              <DemoCallMyAIAgent trialAssistant={createdAssistant} />
-            ) : (
-              <CreateAssistantNameForm
-                isTrial={true}
-                onSuccess={handleSuccess}
-              />
-            )}
+            <div className="flex-1 w-full flex items-center justify-center">
+              {createdAssistant ? (
+                <DemoCallMyAIAgent trialAssistant={createdAssistant} />
+              ) : (
+                <CreateAssistantNameForm
+                  isTrial={true}
+                  onSuccess={handleSuccess}
+                />
+              )}
+            </div>
           </Vortex>
         </div>
       </div>

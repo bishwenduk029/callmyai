@@ -3,11 +3,13 @@
 import { revalidatePath } from "next/cache"
 import { redis } from "@callmyai/kv"
 import { nanoid } from "ai"
+import { eq } from "drizzle-orm"
 import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"
 
 import { env } from "@/env.mjs"
 import type { ActionResponse } from "@/types/actions"
+import { db } from "@/config/db"
 import {
   psCreateAssistant,
   psDeleteAssistant,
@@ -17,7 +19,7 @@ import {
   psGetUserByAssistantId,
   psUpdateAssistant,
 } from "@/db/prepared/statements"
-import { Assistant } from "@/db/schema"
+import { Assistant, assistants } from "@/db/schema"
 
 import auth from "@/lib/auth"
 import { actionClient } from "@/lib/safe-action"
@@ -26,8 +28,6 @@ import type { ChatRoomSession } from "@/components/audio/callmyai-room"
 import { CallSummary } from "@/components/calls"
 
 import { getUserByEmail } from "./user"
-import { db } from "@/config/db"
-import { eq } from "drizzle-orm"
 
 const initiateNewSessionSchema = z.object({
   assistantId: z.string().uuid(),
@@ -171,15 +171,46 @@ export const createAssistant = actionClient
       try {
         const session = await auth()
         const user = await getUserByEmail({ email: session?.user?.email || "" })
+
         if (!user || !user.data)
           return { success: false, error: "User does not exist" }
+
+        // Get active subscription and plan
+        const activeSubscription = await db.query.subscriptions.findFirst({
+          where: (subscription) => eq(subscription.userId, user.data!.id),
+          with: {
+            plan: true,
+          },
+        })
+
+        if (!activeSubscription || !activeSubscription.plan) {
+          return { success: false, error: "No active subscription found" }
+        }
+
+        // Check number of existing assistants
+        const existingAssistants = await db.query.assistants.findMany({
+          where: (assistant) => eq(assistant.userId, user.data!.id),
+        })
+
+        if (
+          existingAssistants.length >= activeSubscription.plan.allowedAssistants
+        ) {
+          return {
+            success: false,
+            error: `Maximum number of assistants (${activeSubscription.plan.allowedAssistants}) reached`,
+          }
+        }
+
+        // Validate duration against plan
+        const planDuration = activeSubscription.plan.allowedDuration
+
         const assistantId = uuidv4()
 
         // Create assistant in the database
         const [createdAssistant] = await psCreateAssistant.execute({
           id: assistantId,
           name,
-          duration,
+          duration: Math.min(duration, planDuration), // Ensure duration doesn't exceed plan limit
           userId: user.data.id,
         })
 
@@ -407,5 +438,42 @@ export const getAssistantByPhone = actionClient
     } catch (error) {
       console.error("Error getting assistant by phone:", error)
       return null
+    }
+  })
+
+const checkAndDecrementCallLimitSchema = z.object({
+  assistantId: z.string().uuid(),
+})
+
+export const checkAndDecrementCallLimit = actionClient
+  .schema(checkAndDecrementCallLimitSchema)
+  .action(async ({ parsedInput: { assistantId } }): Promise<ActionResponse> => {
+    try {
+      const assistant = await db.query.assistants.findFirst({
+        where: eq(assistants.id, assistantId),
+      })
+
+      if (!assistant || assistant.callLimit <= 0) {
+        return { 
+          success: false, 
+          error: "Call limit exceeded for this assistant" 
+        }
+      }
+
+      await db
+        .update(assistants)
+        .set({ 
+          callLimit: assistant.callLimit - 1,
+          updatedAt: new Date()
+        })
+        .where(eq(assistants.id, assistantId))
+
+      return { success: true }
+    } catch (error) {
+      console.error("Error checking call limit:", error)
+      return { 
+        success: false, 
+        error: "Failed to check call limit" 
+      }
     }
   })

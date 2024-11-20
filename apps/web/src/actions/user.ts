@@ -3,6 +3,7 @@
 import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 import { openai } from "@ai-sdk/openai"
 import { CoreMessage, generateObject } from "ai"
+import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
 import { env } from "@/env.mjs"
@@ -22,6 +23,7 @@ import {
   psUpdateUserCalls,
   psUpdateUserUsername,
 } from "@/db/prepared/statements"
+import { subscriptions } from "@/db/schema"
 import {
   getUserByAssistantIdSchema,
   getUserByEmailSchema,
@@ -42,12 +44,10 @@ import { actionClient } from "@/lib/safe-action"
 
 import { ChatRoomSession } from "@/components/audio/chat-room"
 
+import { db } from "../config/db"
 import { User } from "../db/schema/index"
+import { GetUserByPhoneInput } from "../validations/user"
 import { getUserSubscriptions } from "./payments"
-import { GetUserByPhoneInput } from '../validations/user';
-import { subscriptions } from "@/db/schema"
-import { and, eq } from "drizzle-orm"
-import { db } from '../config/db';
 
 const systemPrompt = `
   You are an expert conversation analyst and summarizer. Your task is to create a brief, engaging summary of a conversation between an AI assistant and a caller. This summary should be easily digestible and help the user quickly determine the call's relevance and importance.
@@ -313,23 +313,19 @@ export async function createNewChatSession(
     await updateUserCalls(host.id, visitorCalls)
   }
 
-  // Fetch user subscriptions
-  const userSubscriptions = await getUserSubscriptions(host.id)
+  // Get active subscription and plan
+  const activeSubscription = await db.query.subscriptions.findFirst({
+    where: (subscription) =>
+      and(eq(subscription.userId, host.id), eq(subscription.status, "ACTIVE")),
+    with: {
+      plan: true,
+    },
+  })
 
-  // Define a mapping of variantIds to durations
-  const variantDurations: { [key: string]: number } = {
-    "450525": 75,
-    // Add more variants here in the future
-  }
-
-  // Determine the duration based on the subscription
-  let duration = 100 // Default duration
-  if (userSubscriptions.length > 0) {
-    const variantId = userSubscriptions[0]?.variantId
-    if (variantId && variantDurations[variantId]) {
-      duration = variantDurations[variantId] || 100
-    }
-  }
+  // Determine duration based on subscription plan
+  const duration =
+    activeSubscription?.plan?.allowedDuration ||
+    parseInt(env.CALLMYAI_AGENT_CALL_DURATION)
 
   return {
     baseUrl: "/api/bots/start",
@@ -423,16 +419,23 @@ export async function getUserByAssistantId(
   }
 }
 
-export async function getUserSubscriptionByUserId({userId}: {userId: string}) {
+export async function getUserSubscriptionByUserId({
+  userId,
+}: {
+  userId: string
+}) {
   try {
     noStore()
     const userSubscription = await db.query.subscriptions.findFirst({
-      where: and(eq(subscriptions.userId, userId), eq(subscriptions.status, "ACTIVE")),
+      where: and(
+        eq(subscriptions.userId, userId),
+        eq(subscriptions.status, "ACTIVE")
+      ),
       with: {
-        plan: true
-      }
+        plan: true,
+      },
     })
-    
+
     return userSubscription
   } catch (error) {
     console.error("Error fetching user subscriptions:", error)

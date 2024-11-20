@@ -20,6 +20,10 @@ import { Avatar } from "../ui/avatar"
 import { BackgroundGradient } from "../ui/background-gradient"
 import { Card, CardContent } from "../ui/card"
 import { LoadingSpinner } from "./chat-room-provider"
+import { assistants } from "@/db/schema" // Add this import
+import { eq } from "drizzle-orm" // Add this import
+import { db } from "@/config/db"
+import { checkAndDecrementCallLimit } from "@/actions/assistant"
 
 const ringtone = new Howl({
   src: ["/ringtone.mp3"],
@@ -88,6 +92,15 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
       setIsListening(false)
     } else {
       try {
+        // Check and decrement call limit using server action
+        const result = await checkAndDecrementCallLimit({
+          assistantId: chatSession.assistantId!
+        })
+
+        if (!result?.data?.success) {
+          throw new Error(result?.data?.error || "Call limit exceeded")
+        }
+
         await voiceClient?.connect()
         setIsListening(true)
       } catch (error) {
@@ -98,8 +111,11 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
           variant: "destructive",
         })
         setIsListening(false)
+        setIsLoadingBot(false)
+        return
       }
     }
+
     const actions = isListening
       ? {
           timer: stopTimer,

@@ -1,4 +1,5 @@
 import type { AdapterAccount } from "@auth/core/adapters"
+import { all } from "axios"
 import { InferModel, relations, sql } from "drizzle-orm"
 import {
   boolean,
@@ -152,6 +153,9 @@ export const assistants = pgTable(
     userId: text("userId")
       .notNull()
       .references(() => users.id),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+    callLimit: integer("callLimit").default(50).notNull(),
   },
   (assistant) => ({
     idIdx: index("assistant_id_idx").on(assistant.id),
@@ -204,8 +208,9 @@ export const newsletterSubscribers = pgTable("newsletterSubscriber", {
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
 })
 
+// Change webhookEvents table
 export const webhookEvents = pgTable("webhookEvent", {
-  id: serial("id").primaryKey(),
+  id: serial(), // instead of serial
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
   eventName: text("eventName").notNull(),
   processed: boolean("processed").default(false),
@@ -234,7 +239,7 @@ export const plans = pgTable("plan", {
 })
 
 export const subscriptions = pgTable("subscription", {
-  id: serial("id").primaryKey(),
+  id: serial(), // instead of serial
   lemonSqueezyId: text("lemonSqueezyId"),
   orderId: integer("orderId").notNull(),
   name: text("name").notNull(),
@@ -249,7 +254,6 @@ export const subscriptions = pgTable("subscription", {
   price: text("price").notNull(),
   isUsageBased: boolean("isUsageBased").default(false),
   isPaused: boolean("isPaused").default(false),
-  subscriptionItemId: serial("subscriptionItemId"),
   userId: text("userId")
     .notNull()
     .references(() => users.id),

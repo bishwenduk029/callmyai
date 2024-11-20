@@ -1,1 +1,0 @@
-ALTER TABLE "chat" DROP COLUMN IF EXISTS "duration";

@@ -1,7 +1,7 @@
 {
-  "id": "da48d2b6-2a49-4741-97f1-79fe5f061a59",
-  "prevId": "02638fdf-a8b2-4db6-85cb-8e5e48a26288",
-  "version": "6",
+  "id": "4a42466e-c1a4-4bd9-9a1f-e0a7f454e826",
+  "prevId": "35a76dd6-7616-4fb5-80bc-569baac4ce67",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.account": {
@@ -40,6 +40,12 @@
         },
         "handle": {
           "name": "handle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phoneNumber": {
+          "name": "phoneNumber",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -85,9 +91,17 @@
         "account_userId_idx": {
           "name": "account_userId_idx",
           "columns": [
-            "userId"
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -146,27 +160,70 @@
           "primaryKey": false,
           "notNull": true
         },
+        "phoneNumber": {
+          "name": "phoneNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "userId": {
           "name": "userId",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "callLimit": {
+          "name": "callLimit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 50
         }
       },
       "indexes": {
         "assistant_id_idx": {
           "name": "assistant_id_idx",
           "columns": [
-            "id"
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "assistant_userId_idx": {
           "name": "assistant_userId_idx",
           "columns": [
-            "userId"
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -253,23 +310,47 @@
         "chat_userId_idx": {
           "name": "chat_userId_idx",
           "columns": [
-            "userId"
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "chat_assistantId_idx": {
           "name": "chat_assistantId_idx",
           "columns": [
-            "assistantId"
+            {
+              "expression": "assistantId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "chat_visitorId_idx": {
           "name": "chat_visitorId_idx",
           "columns": [
-            "visitorId"
+            {
+              "expression": "visitorId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -339,11 +420,36 @@
           "primaryKey": false,
           "notNull": true
         },
-        "availableActions": {
-          "name": "availableActions",
-          "type": "json",
+        "appId": {
+          "name": "appId",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logo": {
+          "name": "logo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "availableActions": {
+          "name": "availableActions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{}'"
         },
         "createdAt": {
           "name": "createdAt",
@@ -364,9 +470,32 @@
         "integration_userId_idx": {
           "name": "integration_userId_idx",
           "columns": [
-            "userId"
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "integration_appId_idx": {
+          "name": "integration_appId_idx",
+          "columns": [
+            {
+              "expression": "appId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -416,7 +545,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -436,7 +565,7 @@
           "name": "variantId",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "name": {
           "name": "name",
@@ -492,20 +621,39 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "duration": {
+          "name": "duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "allowedApps": {
+          "name": "allowedApps",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "allowedFiles": {
+          "name": "allowedFiles",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "allowedCalls": {
+          "name": "allowedCalls",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "plan_variantId_unique": {
-          "name": "plan_variantId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "variantId"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.promptTemplate": {
       "name": "promptTemplate",
@@ -577,9 +725,17 @@
         "session_userId_idx": {
           "name": "session_userId_idx",
           "columns": [
-            "userId"
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -607,14 +763,14 @@
         "id": {
           "name": "id",
           "type": "serial",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
         "lemonSqueezyId": {
           "name": "lemonSqueezyId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "orderId": {
           "name": "orderId",
@@ -638,7 +794,8 @@
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'ACTIVE'"
         },
         "statusFormatted": {
           "name": "statusFormatted",
@@ -686,9 +843,13 @@
         },
         "subscriptionItemId": {
           "name": "subscriptionItemId",
-          "type": "serial",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "generated": {
+            "as": "nextval('subscription_item_id_seq')",
+            "type": "stored"
+          }
         },
         "userId": {
           "name": "userId",
@@ -698,7 +859,7 @@
         },
         "planId": {
           "name": "planId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         }
@@ -733,15 +894,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "subscription_lemonSqueezyId_unique": {
-          "name": "subscription_lemonSqueezyId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "lemonSqueezyId"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.user": {
       "name": "user",
@@ -763,6 +916,12 @@
         },
         "name": {
           "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -840,16 +999,32 @@
         "user_email_idx": {
           "name": "user_email_idx",
           "columns": [
-            "email"
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "user_username_idx": {
           "name": "user_username_idx",
           "columns": [
-            "username"
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -912,16 +1087,32 @@
         "verificationToken_identifier_idx": {
           "name": "verificationToken_identifier_idx",
           "columns": [
-            "identifier"
+            {
+              "expression": "identifier",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "verificationToken_token_idx": {
           "name": "verificationToken_token_idx",
           "columns": [
-            "token"
+            {
+              "expression": "token",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -942,8 +1133,8 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "serial",
+          "primaryKey": false,
           "notNull": true
         },
         "createdAt": {
@@ -996,6 +1187,7 @@
     }
   },
   "schemas": {},
+  "sequences": {},
   "_meta": {
     "columns": {},
     "schemas": {},

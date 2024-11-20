@@ -148,6 +148,20 @@
       "when": 1728709252566,
       "tag": "0020_mushy_daredevil",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1732131948274,
+      "tag": "0021_lyrical_bastion",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1732132544258,
+      "tag": "0022_gigantic_kylun",
+      "breakpoints": true
     }
   ]
 }

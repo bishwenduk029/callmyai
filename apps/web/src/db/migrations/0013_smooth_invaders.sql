@@ -1,1 +1,0 @@
-ALTER TABLE "chat" ALTER COLUMN "visitorId" DROP NOT NULL;

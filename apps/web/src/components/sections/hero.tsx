@@ -189,7 +189,7 @@ export default function Hero() {
                           <div key={index} className="flex items-start gap-4 text-left">
                             <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-foreground/10">
                               <Check
-                                className="h-4 w-4 text-background"
+                                className="h-4 w-4 text-background dark:text-foreground"
                                 weight="bold"
                               />
                             </div>
