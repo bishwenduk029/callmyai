@@ -193,7 +193,7 @@ export const createAssistant = actionClient
         })
 
         if (
-          existingAssistants.length >= activeSubscription.plan.allowedAssistants
+          existingAssistants.length >= (activeSubscription?.plan?.allowedAssistants ?? 0)
         ) {
           return {
             success: false,
@@ -210,7 +210,7 @@ export const createAssistant = actionClient
         const [createdAssistant] = await psCreateAssistant.execute({
           id: assistantId,
           name,
-          duration: Math.min(duration, planDuration), // Ensure duration doesn't exceed plan limit
+          duration: Math.min(duration, planDuration || 0), // Ensure duration doesn't exceed plan limit
           userId: user.data.id,
         })
 

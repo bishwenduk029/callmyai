@@ -236,6 +236,7 @@ export const plans = pgTable("plan", {
   allowedApps: integer("allowedApps").default(0),
   allowedFiles: integer("allowedFiles").default(0),
   allowedCalls: integer("allowedCalls").default(0),
+  allowedAssistants: integer("allowedAssistants").default(0),
 })
 
 export const subscriptions = pgTable("subscription", {
