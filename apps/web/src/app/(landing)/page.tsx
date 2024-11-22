@@ -16,7 +16,7 @@ export default async function LandingPage() {
   }
 
   return (
-    <div className="grid w-full grid-cols-1 items-center justify-center gap-16 font-urbanist">
+    <div className="grid w-full grid-cols-1 items-center justify-center gap-8 font-urbanist">
       <Hero />
       <CreateAssistantSection />
       <FeaturesSection />

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 
 import { AnimatedBeamActions } from "../fancy/animated-beams-actions"
 import { AnimatedBeamMultipleDataSources } from "../fancy/animated-beams-data"
+import { Section } from "../ui/section"
 
 export function FeaturesSection() {
   const features = [
@@ -51,14 +52,23 @@ export function FeaturesSection() {
     },
   ]
   return (
-    <div className="mt-100 relative z-10 mx-auto max-w-7xl py-10">
+    <Section className="font-urbanist overflow-hidden mx-auto">
+      <div className="mb-16 text-center">
+        <h2 className="font-heading inline-block animate-appear bg-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight">
+          Revolutionize Your Communication
+        </h2>
+        <p className="mx-auto max-w-2xl text-xl text-gray-600">
+          Discover how our AI-powered features can transform your business
+          communication and efficiency.
+        </p>
+      </div>
       <div className="grid grid-cols-1 gap-6 px-4 sm:px-6 md:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl p-6 sm:max-w-none sm:shadow-xl border"
+          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl border p-2 sm:max-w-none sm:p-6 sm:shadow-[0_20px_25px_-5px_rgb(0_0_0_/_0.1),_0_8px_10px_-6px_rgb(0_0_0_/_0.1)] dark:sm:shadow-[0_20px_25px_-5px_rgb(255_255_255_/_0.05),_0_8px_10px_-6px_rgb(255_255_255_/_0.05)]"
         >
           <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
             <h4 className="font-semibold text-primary">
@@ -76,8 +86,10 @@ export function FeaturesSection() {
               </h3>
               <ul className="text-md list-disc space-y-2 text-muted-foreground sm:pl-4 sm:text-lg">
                 <li>
-                  Seamlessly integrate with <span className="text-primary/75">Google Drive</span>, <span className="text-primary/75">Notion</span>, <span className="text-primary/75">Intercom</span> and
-                  more
+                  Seamlessly integrate with{" "}
+                  <span className="text-primary/75">Google Drive</span>,{" "}
+                  <span className="text-primary/75">Notion</span>,{" "}
+                  <span className="text-primary/75">Intercom</span> and more
                 </li>
                 <li>
                   AI Voice assistant learns from your documents and websites
@@ -93,9 +105,9 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl p-2 sm:max-w-none sm:p-6 sm:shadow-xl border"
+          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl border p-2 sm:max-w-none sm:p-6 sm:shadow-[0_20px_25px_-5px_rgb(0_0_0_/_0.1),_0_8px_10px_-6px_rgb(0_0_0_/_0.1)] dark:sm:shadow-[0_20px_25px_-5px_rgb(255_255_255_/_0.05),_0_8px_10px_-6px_rgb(255_255_255_/_0.05)]"
         >
-          <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 border-b">
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
             <h4 className="font-semibold text-primary">Workflow Automation</h4>
             <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
               Active
@@ -123,7 +135,7 @@ export function FeaturesSection() {
           <Feature key={feature.title} {...feature} index={index} />
         ))}
       </div>
-    </div>
+    </Section>
   )
 }
 
@@ -143,7 +155,7 @@ const Feature = ({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={cn(
-        "group/feature dark:border-neutral-800 relative z-0 flex flex-col py-10 text-center font-urbanist sm:text-left lg:border-r",
+        "group/feature font-urbanist relative z-0 flex flex-col py-10 text-center dark:border-neutral-800 sm:text-left lg:border-r",
         (index === 0 || index === 4) && "dark:border-neutral-800 lg:border-l",
         index < 4 && "dark:border-neutral-800 lg:border-b"
       )}
@@ -155,12 +167,12 @@ const Feature = ({
         <div className="dark:from-primary-800 from-primary-100 pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b to-transparent opacity-0 transition duration-200 group-hover/feature:opacity-100" />
       )}
       <div className="relative z-10 mb-2 px-4 text-xl font-bold sm:px-10">
-        <div className="dark:bg-neutral-700 absolute inset-y-0 left-0 hidden h-6 w-1 origin-center rounded-br-full rounded-tr-full bg-neutral-300 transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-green-500 sm:block" />
-        <span className="dark:text-primary inline-block text-primary transition duration-200 group-hover/feature:translate-x-2">
+        <div className="absolute inset-y-0 left-0 hidden h-6 w-1 origin-center rounded-br-full rounded-tr-full bg-neutral-300 transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-green-500 dark:bg-neutral-700 sm:block" />
+        <span className="inline-block text-primary transition duration-200 group-hover/feature:translate-x-2 dark:text-primary">
           {title}
         </span>
       </div>
-      <p className="text-lg relative z-10 mx-auto max-w-xs px-4 text-muted-foreground sm:mx-0 sm:px-10">
+      <p className="relative z-10 mx-auto max-w-xs px-4 text-lg text-muted-foreground sm:mx-0 sm:px-10">
         {description}
       </p>
     </motion.div>

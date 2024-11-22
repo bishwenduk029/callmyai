@@ -1,17 +1,15 @@
 "use client"
 
+import { Check } from "@phosphor-icons/react/dist/ssr"
 import Link from "next/link"
-import { ArrowRight, Check } from "@phosphor-icons/react/dist/ssr"
 import Balancer from "react-wrap-balancer"
 
 import { env } from "@/env.mjs"
-import { siteConfig } from "@/config/site"
 
 import { useMediaQuery } from "@/hooks/use-media"
 import { cn } from "@/lib/utils"
 
-import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import Glow from "@/components/ui/glow"
 import { Mockup, MockupFrame } from "@/components/ui/mockup"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -187,10 +185,11 @@ export default function Hero() {
                       <div className="grid gap-6">
                         {FEATURE_POINTS.map((point, index) => (
                           <div key={index} className="flex items-start gap-4 text-left">
-                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-foreground/10">
+                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white">
                               <Check
-                                className="h-4 w-4 text-background dark:text-foreground"
+                                className="h-4 w-4 text-primary"
                                 weight="bold"
+                                size={"2xl"}
                               />
                             </div>
                             <div className="flex flex-col gap-1">

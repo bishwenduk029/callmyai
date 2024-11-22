@@ -17,11 +17,11 @@ export function CreateAssistantSection() {
   }
 
   return (
-    <Section className="font-inter overflow-hidden">
-      <div className="mx-auto max-w-container grid gap-6 sm:gap-12 py-15">
+    <Section className="font-urbanist overflow-hidden">
+      <div className="mx-auto max-w-container grid gap-6 sm:gap-12 pb-8">
         <div className="flex flex-col items-center gap-4 text-center sm:gap-8">
-          <h2 className="font-heading inline-block animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight">
-            Create CallMyAI voice agents that sound like humans
+          <h2 className="font-heading inline-block animate-appear bg-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight">
+            Create AI voice agents that sound like humans
           </h2>
           <p className="font-urbanist animate-appear text-lg font-medium text-muted-foreground opacity-0 delay-100 sm:text-xl">
             Customize your AI assistant with natural voices and personalities

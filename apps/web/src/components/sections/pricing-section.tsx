@@ -7,6 +7,7 @@ import {
   getUserSubscriptionByUserId,
   updateUserCalls,
 } from "@/actions/user"
+import { Check, Cross } from "@phosphor-icons/react/dist/ssr"
 import Balancer from "react-wrap-balancer"
 
 import { siteConfig } from "@/config/site"
@@ -19,13 +20,15 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Icons } from "@/components/icons"
 
-import { buttonVariants } from "../ui/button"
 import { PricingButton } from "../pricing-button"
+import { Button, buttonVariants } from "../ui/button"
+import { Section } from "../ui/section"
 
 export async function PricingSection(): Promise<JSX.Element> {
   const session = await auth()
@@ -65,7 +68,7 @@ export async function PricingSection(): Promise<JSX.Element> {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 px-5 sm:px-0">
+          <div className="grid w-full grid-cols-1 gap-4 px-5 sm:px-0 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.name}
@@ -78,7 +81,7 @@ export async function PricingSection(): Promise<JSX.Element> {
                     <Balancer>{plan.name}</Balancer>
                   </CardTitle>
 
-                  <CardDescription className="text-sm text-muted-background">
+                  <CardDescription className="text-muted-background text-sm">
                     <Balancer>{plan.description}</Balancer>
                   </CardDescription>
 
@@ -155,12 +158,8 @@ export async function PricingSection(): Promise<JSX.Element> {
 
 function NonLoggedInPricingSection(): JSX.Element {
   return (
-    <section
-      id="pricing-section"
-      aria-label="pricing section"
-      className="mx-auto"
-    >
-      <div className="container grid gap-4 md:gap-8">
+    <Section id="pricing-section" aria-label="pricing section">
+      <div className="w-full px-4 md:px-6">
         <div className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
@@ -168,85 +167,79 @@ function NonLoggedInPricingSection(): JSX.Element {
             </Balancer>
           </h2>
           <h3 className="max-w-2xl text-muted-foreground sm:text-xl sm:leading-8">
-            <Balancer>
-              {siteConfig.name} is open source. Simple pricing for everyone.
-            </Balancer>
+            <Balancer>Simple Pricing for Everyone.</Balancer>
           </h3>
         </div>
 
-        <div className="flex justify-center">
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 px-5 sm:px-0">
+        <div className="flex justify-center mt-4">
+          <div className="grid w-full grid-cols-1 gap-4 px-5 sm:px-0 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
-                key={plan.name}
+                key={plan.id}
                 className={cn(
-                  "flex flex-col transition-all duration-1000 ease-out hover:-translate-y-3 hover:opacity-80"
+                  "flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg",
+                  plan.id === "premium" && "border-primary shadow-md"
                 )}
               >
-                <CardHeader className="overflow-hidden rounded-t-lg bg-primary text-background">
-                  <CardTitle className="font-urbanist text-2xl tracking-wide">
-                    <Balancer>{plan.name}</Balancer>
+                <CardHeader className="space-y-2 bg-secondary/90 dark:bg-secondary/50">
+                  {plan.id === "premium" && (
+                    <p className="inline-flex rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary-foreground">
+                      Recommended
+                    </p>
+                  )}
+                  <CardTitle className="text-2xl font-bold">
+                    {plan.name}
                   </CardTitle>
-
-                  <CardDescription className="text-neutral-3000 text-sm">
-                    <Balancer>{plan.description}</Balancer>
-                  </CardDescription>
-
-                  <div className="flex flex-col gap-4 py-2">
-                    <div className="flex gap-2 text-4xl font-semibold">
-                      <span className="flex items-center justify-center text-3xl font-normal">
-                        $
-                      </span>
-                      <span>{plan.disable ? "--" : plan.prices.monthly}</span>
-
-                      <span className="flex items-end text-lg font-semibold">
-                        / month
-                      </span>
-                    </div>
+                  <CardDescription>{plan.description}</CardDescription>
+                  <div className="text-4xl font-extrabold">
+                    ${plan.prices.monthly}
+                    <span className="text-xl font-normal text-muted-foreground">
+                      /{"month"}
+                    </span>
                   </div>
                 </CardHeader>
-
-                <CardContent className="flex flex-1 flex-col justify-between text-sm lg:text-base">
-                  <div className="grid gap-3 py-8">
-                    <ul className="flex flex-col gap-3">
-                      {plan.features.map((item) => (
-                        <li className="flex items-center gap-2" key={item}>
-                          <Icons.check className="size-4" />
-                          <Balancer>{item}</Balancer>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <ul className="flex flex-col gap-2">
-                      {plan.limitations.map((item) => (
+                <CardContent className="flex-1 p-6">
+                  <ul className="space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-center space-x-3">
+                        <Check className="h-5 w-5 flex-shrink-0 text-green-500" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter className="bg-secondary/25 dark:bg-secondary/5">
+                  <Button
+                    className="w-full"
+                    variant={plan.id === "premium" ? "default" : "outline"}
+                    disabled={plan.disable}
+                  >
+                    {plan.buttonText}
+                  </Button>
+                </CardFooter>
+                {plan.limitations.length > 0 && (
+                  <div className="px-6 pb-6">
+                    <p className="mb-2 text-sm font-medium text-muted-foreground">
+                      Limitations:
+                    </p>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      {plan.limitations.map((limitation) => (
                         <li
-                          key={item}
-                          className="flex items-center gap-3 text-muted-foreground"
+                          key={limitation}
+                          className="flex items-center space-x-3"
                         >
-                          <Icons.close className="size-4" />
-                          <Balancer>{item}</Balancer>
+                          <Cross className="h-4 w-4 flex-shrink-0 text-red-500" />
+                          <span>{limitation}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <Link
-                    href={plan.disable ? "" : "/signin"}
-                    type="submit"
-                    className={cn(
-                      buttonVariants({
-                        variant: plan.disable ? "disabledLink" : "default",
-                        className: "mt-4 w-full text-background",
-                      })
-                    )}
-                  >
-                    {plan.buttonText}
-                  </Link>
-                </CardContent>
+                )}
               </Card>
             ))}
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

@@ -16,7 +16,7 @@ export function Footer(): JSX.Element {
     <footer
       id="footer"
       aria-label="footer"
-      className="grid gap-8 bg-background pb-8 pt-16"
+      className="grid gap-8 bg-background pb-8 pt-16 mx-auto"
     >
       <div className="container flex flex-col gap-8 sm:flex-row">
         <div className="grid flex-1 grid-cols-3 gap-4 md:gap-8"></div>

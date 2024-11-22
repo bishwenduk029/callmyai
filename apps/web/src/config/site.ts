@@ -15,7 +15,7 @@ const links = {
 }
 
 export const siteConfig = {
-  name: "callmyai.app (beta)",
+  name: "callmyai.app",
   description: "AI Voice Assistant Platform",
   links,
   url: "https://callmyai.app",
@@ -37,7 +37,7 @@ export const siteConfig = {
     "twilio",
     "callmyai",
     "callmyai.app",
-    "callmyai.app (beta)",
+    "callmyai.app",
   ],
   navItems: [
     // {
