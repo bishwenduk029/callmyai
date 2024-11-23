@@ -25,7 +25,7 @@ export async function Header({showThemeToggle = true}): Promise<JSX.Element> {
   const session = await auth()
 
   return (
-    <header className="fade-bottom sticky top-0 z-50 px-4 pb-4 backdrop-blur-lg">
+    <header className="fade-bottom sticky top-0 z-50 px-4 pb-4 backdrop-blur-lg mx-auto">
       <div className="container flex items-center justify-between p-4">
         <Logo />
         <Navigation navItems={siteConfig.navItems} />

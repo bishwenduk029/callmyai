@@ -42,7 +42,7 @@ export const pricingPlans: PricingPlan[] = [
     ],
     polarPriceId: "62d50784-084f-4dbf-bef8-1392eee03062",
     lemonSqueezyVariantId: env.LEMONSQUEEZY_VARIANT_ID,
-    paddlePriceId: "pro_01jdc11915hwvrzyb24efe0nsg",
+    paddlePriceId: "pri_01jca76jv1yhkzw2zd1jrgvvt1",
     limitations: [],
     stripePriceId: "",
     prices: {
