@@ -7,7 +7,7 @@ import { Environments, initializePaddle } from "@paddle/paddle-js"
 
 import { cn } from "@/lib/utils"
 
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 
 interface PricingButtonProps {
   planId: string
@@ -91,18 +91,18 @@ export function PricingButton({
         handleSubscription()
       }}
     >
-      <button
+      <Button
         type="submit"
         disabled={isDisabled}
         className={cn(
           buttonVariants({
             variant: "default",
-            className: "mt-4 w-full text-foreground dark:text-background",
+            className: "mt-4 w-full text-secondary",
           })
         )}
       >
         {buttonText}
-      </button>
+      </Button>
     </form>
   )
 }

@@ -76,6 +76,7 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
   return (
     <html lang="en" className="overflow-x-hidden overflow-y-scroll">
       <head>
+        <title>CallMyAI - AI Voice Experiences</title>
         <meta property="og:type" content="website" />
         <meta property="og:url" content={siteConfig.url} />
         <meta property="og:title" content={siteConfig.name} />

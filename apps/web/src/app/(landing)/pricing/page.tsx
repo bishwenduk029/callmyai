@@ -1,5 +1,5 @@
 import { PricingSection } from "@/components/sections/pricing-section"
-import { PaidFeatureNotice } from "@/components/paid-feature-notice"
+import { PremiumFeatureNotice } from "@/components/paid-feature-notice"
 
 interface PricingPageProps {
   searchParams: {
@@ -13,7 +13,7 @@ export default function PricingPage({ searchParams }: PricingPageProps): JSX.Ele
   return (
     <div className="flex min-h-screen w-full flex-col items-center sm:my-10 justify-start gap-8">
       {feature && (
-        <PaidFeatureNotice 
+        <PremiumFeatureNotice 
           feature={feature as "createAssistant" | "externalApps" | "externalFiles"}
         />
       )}

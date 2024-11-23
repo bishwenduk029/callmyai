@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from "react"
-import Image from "next/image"
 import {
   DailyVoiceEvent,
   DailyVoiceVisualizer,
@@ -10,20 +8,19 @@ import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { Headset } from "@phosphor-icons/react/dist/ssr"
 import { motion } from "framer-motion"
 import { Howl } from "howler"
+import Image from "next/image"
+import { useEffect, useRef, useState } from "react"
 import Balancer from "react-wrap-balancer"
 
 import { fontNunito } from "@/config/fonts"
 
 import { useToast } from "@/hooks/use-toast"
 
+import { checkAndDecrementCallLimit } from "@/actions/assistant"
 import { Avatar } from "../ui/avatar"
 import { BackgroundGradient } from "../ui/background-gradient"
 import { Card, CardContent } from "../ui/card"
 import { LoadingSpinner } from "./chat-room-provider"
-import { assistants } from "@/db/schema" // Add this import
-import { eq } from "drizzle-orm" // Add this import
-import { db } from "@/config/db"
-import { checkAndDecrementCallLimit } from "@/actions/assistant"
 
 const ringtone = new Howl({
   src: ["/ringtone.mp3"],
@@ -195,7 +192,7 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
             />
             {!disablePhone && (
               <motion.button
-                className="rounded-full border-2 border-primary p-0.5 text-white transition-colors"
+                className="rounded-full border-2 border-green-600 dark:border-green-100 p-0.5 text-white transition-colors"
                 whileHover={{ scale: 0.9 }}
                 onClick={toggleListening}
                 disabled={isLoadingBot}
@@ -210,7 +207,7 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
                 ) : (
                   <PhoneCall
                     size={75}
-                    className="rounded-full bg-primary p-2 text-background"
+                    className="rounded-full bg-primary p-2 text-background dark:text-foreground"
                   />
                 )}
               </motion.button>

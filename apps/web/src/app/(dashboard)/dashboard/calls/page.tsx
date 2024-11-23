@@ -65,11 +65,6 @@ export default async function CallsPage() {
         >
           <Headset className="mr-2 h-5 w-5" />
           Assistants
-          {!subscription && (
-              <span className="ml-1 -mt-8 rounded bg-primary px-1.5 text-sm font-bolder text-primary-foreground">
-                $
-              </span>
-            )}
         </Link>
         <Link
           href={!subscription ? "/pricing?feature=externalApps" : "/dashboard/integrations"}
@@ -77,11 +72,6 @@ export default async function CallsPage() {
         >
           <PlugsConnected className="mr-2 h-5 w-5" />
           Connect Apps
-          {!subscription && (
-              <span className="ml-1 -mt-8 rounded bg-primary px-1.5 text-sm font-bolder text-primary-foreground">
-                $
-              </span>
-            )}
         </Link>
         <Link
           href={!subscription ? "/pricing?feature=externalFiles" : "/dashboard/data-sources"}
@@ -89,11 +79,6 @@ export default async function CallsPage() {
         >
           <Folders className="mr-2 h-5 w-5" />
           Data Sources
-          {!subscription && (
-              <span className="ml-1 -mt-8 rounded bg-primary px-1.5 text-sm font-bolder text-primary-foreground">
-                $
-              </span>
-            )}
         </Link>
       </nav>
       <Suspense fallback={<CallSummaryLoadingState />}>

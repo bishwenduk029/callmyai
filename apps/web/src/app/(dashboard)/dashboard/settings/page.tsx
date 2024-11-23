@@ -62,11 +62,6 @@ export default async function SettingsPage() {
           <Headset className="mr-2 h-5 w-5" />
           <div className="flex items-center">
             Assistants
-            {!subscription && (
-              <span className="font-bolder -mt-8 ml-1 rounded bg-primary px-1.5 text-sm text-primary-foreground">
-                $
-              </span>
-            )}
           </div>
         </Link>
         <Link
@@ -75,11 +70,6 @@ export default async function SettingsPage() {
         >
           <PlugsConnected className="mr-2 h-5 w-5" />
           Connect Apps
-          {!subscription && (
-            <span className="font-bolder -mt-8 ml-1 rounded bg-primary px-1.5 text-sm text-primary-foreground">
-              $
-            </span>
-          )}
         </Link>
         <Link
           href={!subscription ? "/pricing?feature=externalFiles" : "/dashboard/data-sources"}
@@ -87,11 +77,6 @@ export default async function SettingsPage() {
         >
           <Folders className="mr-2 h-5 w-5" />
           Data Sources
-          {!subscription && (
-            <span className="font-bolder -mt-8 ml-1 rounded bg-primary px-1.5 text-sm text-primary-foreground">
-              $
-            </span>
-          )}
         </Link>
       </nav>
       <Settings user={user.data} />
