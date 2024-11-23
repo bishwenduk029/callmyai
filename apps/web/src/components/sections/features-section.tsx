@@ -81,15 +81,15 @@ export function FeaturesSection() {
           <div className="flex max-w-sm flex-col gap-6 pt-16 sm:max-w-lg">
             <AnimatedBeamMultipleDataSources className="w-full" />
             <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-primary">
+              <h3 className="text-2xl font-bold text-foreground">
                 CallMyAI agents can learn from your data
               </h3>
               <ul className="text-md list-disc space-y-2 text-muted-foreground sm:pl-4 sm:text-lg">
                 <li>
                   Seamlessly integrate with{" "}
-                  <span className="text-primary/75">Google Drive</span>,{" "}
-                  <span className="text-primary/75">Notion</span>,{" "}
-                  <span className="text-primary/75">Intercom</span> and more
+                  <span className="text-primary">Google Drive</span>,{" "}
+                  <span className="text-primary">Notion</span>,{" "}
+                  <span className="text-primary">Intercom</span> and more
                 </li>
                 <li>
                   AI Voice assistant learns from your documents and websites
@@ -116,7 +116,7 @@ export function FeaturesSection() {
           <div className="flex max-w-sm flex-col gap-6 pt-16 sm:max-w-lg">
             <AnimatedBeamActions className="w-full" />
             <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-primary">
+              <h3 className="text-2xl font-bold text-foreground">
                 CallMyAI agents can act on your apps
               </h3>
               <ul className="my-4 list-disc space-y-2 pl-4 text-lg text-muted-foreground">
@@ -168,7 +168,7 @@ const Feature = ({
       )}
       <div className="relative z-10 mb-2 px-4 text-xl font-bold sm:px-10">
         <div className="absolute inset-y-0 left-0 hidden h-6 w-1 origin-center rounded-br-full rounded-tr-full bg-neutral-300 transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-green-500 dark:bg-neutral-700 sm:block" />
-        <span className="inline-block text-primary transition duration-200 group-hover/feature:translate-x-2 dark:text-primary">
+        <span className="inline-block text-foreground text-xl transition duration-200 group-hover/feature:translate-x-2 dark:text-foreground">
           {title}
         </span>
       </div>

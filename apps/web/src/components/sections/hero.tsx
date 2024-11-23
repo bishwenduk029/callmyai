@@ -1,7 +1,7 @@
 "use client"
 
-import { Check } from "@phosphor-icons/react/dist/ssr"
 import Link from "next/link"
+import { Check } from "@phosphor-icons/react/dist/ssr"
 import Balancer from "react-wrap-balancer"
 
 import { env } from "@/env.mjs"
@@ -53,7 +53,7 @@ export default function Hero() {
 
   return (
     <Section className="font-inter overflow-hidden pb-0 sm:pb-0 md:pb-0">
-      <div className="max-w-container mx-auto flex flex-col gap-12 sm:gap-24">
+      <div className="mx-auto flex max-w-container flex-col gap-12 sm:gap-24">
         <div className="flex flex-col items-center gap-6 text-center sm:gap-12">
           {/* <Badge variant="outline" className="animate-appear">
             <span className="text-muted-foreground">
@@ -64,13 +64,13 @@ export default function Hero() {
               <ArrowRight className="h-3 w-3" />
             </a>
           </Badge> */}
-          <h1 className="animate-appear inline-block bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-heading font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight">
+          <h1 className="font-heading inline-block animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight">
             <span className="font-heading">
               Craft AI Voice Experiences{" "}
               {/* <span className="underline decoration-primary">in minutes</span> */}
             </span>
           </h1>
-          <p className="text-lg animate-appear font-urbanist font-medium text-muted-foreground opacity-0 delay-100 sm:text-3xl">
+          <p className="font-urbanist animate-appear text-lg font-medium text-muted-foreground opacity-0 delay-100 sm:text-3xl">
             <Balancer>
               <span>
                 Create AI-Powered voice assistants for multiple roles: <br />
@@ -92,7 +92,7 @@ export default function Hero() {
               </span>
             </Balancer>
           </p>
-          <div className="animate-appear relative z-10 flex justify-center gap-4 opacity-0 delay-300">
+          <div className="relative z-10 flex animate-appear justify-center gap-4 opacity-0 delay-300">
             <div className="z-10 mx-auto flex w-full max-w-md flex-col items-center gap-4">
               <Input
                 placeholder={`${env.NEXT_PUBLIC_APP_URL}/your_name`}
@@ -102,7 +102,7 @@ export default function Hero() {
                 href="/dashboard/settings"
                 className={cn(buttonVariants({ size: "lg" }), "w-full")}
               >
-                <span className="dark:from-white dark:to-slate-900/10 whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-background dark:text-foreground lg:text-lg">
+                <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-background dark:from-white dark:to-slate-900/10 dark:text-foreground lg:text-lg">
                   Get Free CallMyAI Phone Screener
                 </span>
               </Link>
@@ -117,9 +117,9 @@ export default function Hero() {
               size="large"
             >
               <Mockup type="responsive" className="bg-background">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+                <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
                   {/* Left column - Demo */}
-                  <div className="lg:col-span-1 w-full min-w-0">
+                  <div className="w-full min-w-0 lg:col-span-1">
                     {isDesktop ? (
                       <div className="relative">
                         <Tabs defaultValue="aisha" className="relative w-full">
@@ -180,23 +180,20 @@ export default function Hero() {
                   </div>
 
                   {/* Right column - Feature points */}
-                  <div className="lg:col-span-1 flex flex-col justify-center gap-6 rounded-md bg-primary/95 text-xl text-background dark:text-foreground">
-                    <div className="rounded-xl border border-primary/20 p-6">
+                  <div className="flex flex-col justify-center gap-6 rounded-md bg-gradient-to-br from-green-900 to-emerald-900 text-xl text-background dark:text-foreground lg:col-span-1">
+                    <div className="rounded-xl p-6">
                       <div className="grid gap-6">
                         {FEATURE_POINTS.map((point, index) => (
-                          <div key={index} className="flex items-start gap-4 text-left">
-                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white">
-                              <Check
-                                className="h-4 w-4 text-primary"
-                                weight="bold"
-                                size={"2xl"}
-                              />
-                            </div>
+                          <div
+                            key={index}
+                            className="flex items-start gap-4 text-left"
+                          >
+                            <Check className="mr-2 mt-1 flex-shrink-0 text-green-400" />
                             <div className="flex flex-col gap-1">
                               <h3 className="font-extrabold leading-none">
                                 {point.title}
                               </h3>
-                              <p className="text-lg">{point.description}</p>
+                              <p className="text-lg text-green-100">{point.description}</p>
                             </div>
                           </div>
                         ))}

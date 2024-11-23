@@ -159,7 +159,7 @@ export async function PricingSection(): Promise<JSX.Element> {
 function NonLoggedInPricingSection(): JSX.Element {
   return (
     <Section id="pricing-section" aria-label="pricing section">
-      <div className="w-full px-4 md:px-6">
+      <div className="w-full md:px-6">
         <div className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
             <Balancer>
@@ -172,7 +172,7 @@ function NonLoggedInPricingSection(): JSX.Element {
         </div>
 
         <div className="flex justify-center mt-4">
-          <div className="grid w-full grid-cols-1 gap-4 px-5 sm:px-0 md:grid-cols-3 md:gap-8">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
                 key={plan.id}
