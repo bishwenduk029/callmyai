@@ -111,7 +111,7 @@ export function HeroSection() {
           </motion.div>
         </motion.div>
 
-        <div className="relative z-10 mt-14 md:grid w-full grid-cols-1 gap-8 border-t-primary bg-background p-2 md:grid-cols-2">
+        <div className="relative z-10 mt-14 md:grid w-full grid-cols-1 gap-8 border-t-primary p-2 md:grid-cols-2">
           {/* Left column - Demo */}
           <div className="relative order-2 lg:order-1">
             {isDesktop ? (

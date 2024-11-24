@@ -24,7 +24,7 @@ export function SubmitButton({
           <span>Saving...</span>
         </>
       ) : (
-        <span className="mr-2">{children}</span>
+        <span className="mr-2 flex flex-row justify-center align-baseline">{children}</span>
       )}
     </Button>
   )

@@ -40,7 +40,7 @@ export function CallMyAiMobilePreview({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="h-15 w-full my-5 text-foreground text-lg">
+        <Button className="h-15 w-full my-5 text-background text-lg">
           <Avatar className="m-2">
             <Image
               src="https://fal.media/files/zebra/Xmqc2PO33YrOLwztHSE_G.png"

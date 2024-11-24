@@ -116,7 +116,7 @@ export default function Hero() {
               className="animate-appear opacity-100 delay-700"
               size="large"
             >
-              <Mockup type="responsive" className="bg-background">
+              <Mockup type="responsive" className="bg-transparent sm:bg-background">
                 <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
                   {/* Left column - Demo */}
                   <div className="w-full min-w-0 lg:col-span-1">

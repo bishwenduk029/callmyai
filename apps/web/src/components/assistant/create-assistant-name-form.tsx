@@ -2,6 +2,7 @@
 
 import { createAssistant, TrialAssistant } from "@/actions/assistant"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Sparkle } from "@phosphor-icons/react/dist/ssr"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -185,85 +186,156 @@ export function CreateAssistantNameForm({
       className="z-20 w-full space-y-10"
       {...form}
     >
-      <div
-        className={
-          isTrial
-            ? "space-y-4 text-background dark:text-foreground dark:bg-background/5"
-            : "space-y-4 p-2 text-foreground dark:bg-background/5"
-        }
-      >
-        <div>
-          <label htmlFor="persona" className="my-1 block text-xl font-semibold">
-            Choose Persona
-          </label>
-          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-foreground">
-            What is the role of your CallMyAI Agent
-          </p>
-          <Select
-            onValueChange={(value) => {
-              form.setValue("persona", value)
-            }}
-            value={form.watch("persona")}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a persona" />
-            </SelectTrigger>
-            <SelectContent>
-              {personas.map((persona) => (
-                <SelectItem key={persona.role} value={persona.role}>
-                  {persona.role}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {form.formState.errors.persona && (
-            <p className="text-lg text-destructive">
-              {form.formState.errors.persona.message}
-            </p>
-          )}
+      <div className="grid grid-cols-1 gap-8 text-foreground md:grid-cols-2">
+        <div
+          className={
+            isTrial
+              ? "space-y-4 text-foreground dark:bg-background/5 dark:text-foreground"
+              : "space-y-4 p-2 text-foreground dark:bg-background/5"
+          }
+        >
+          <div className="space-y-6">
+            <div>
+              <label
+                htmlFor="persona"
+                className="my-1 block text-xl font-semibold"
+              >
+                Choose Persona
+              </label>
+              <p className="text-md text-muted-background mb-3 mt-1 dark:text-muted-foreground">
+                What is the role of your CallMyAI Agent
+              </p>
+              <Select
+                onValueChange={(value) => {
+                  form.setValue("persona", value)
+                }}
+                value={form.watch("persona")}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a persona" />
+                </SelectTrigger>
+                <SelectContent>
+                  {personas.map((persona) => (
+                    <SelectItem key={persona.role} value={persona.role}>
+                      {persona.role}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {form.formState.errors.persona && (
+                <p className="text-lg text-destructive">
+                  {form.formState.errors.persona.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label
+                htmlFor="name"
+                className="my-1 block text-xl font-semibold"
+              >
+                Name
+              </label>
+              <p className="text-md text-muted-background dark:text-muted-background mb-3 mt-1 dark:text-muted-foreground">
+                Enter the name of your CallMyAI Agent
+              </p>
+              <Input
+                id="name"
+                {...form.register("name")}
+                placeholder="Enter your preferred name"
+                className="w-full px-2 py-3"
+              />
+              {form.formState.errors.name && (
+                <p className="text-lg text-destructive">
+                  {form.formState.errors.name.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label
+                htmlFor="description"
+                className="my-1 block text-lg font-semibold"
+              >
+                Description
+              </label>
+              <p className="text-md text-muted-background dark:text-muted-background mb-3 mt-1 dark:text-muted-foreground">
+                Add business context and brief details about your AI agent
+              </p>
+              <Input
+                id="description"
+                {...form.register("description")}
+                placeholder="Add business context like name of your company, services offered, etc."
+                className="w-full px-2 py-3"
+              />
+              {form.formState.errors.description && (
+                <p className="text-lg text-destructive">
+                  {form.formState.errors.description.message}
+                </p>
+              )}
+            </div>
+
+            <div className="w-full">
+              <label
+                htmlFor="voice"
+                className="my-1 block text-lg font-semibold"
+              >
+                Voices
+              </label>
+              <p className="text-md text-muted-background mb-3 mt-1 dark:text-muted-foreground">
+                Select the voice for your CallMyAI Agent
+              </p>
+              <Select
+                onValueChange={(value) => {
+                  try {
+                    const selectedVoice = voices.find((v) => v.id === value)
+                    if (selectedVoice?.gender) {
+                      const matchingProfiles = profiles.filter(
+                        (p) => p.gender === selectedVoice.gender
+                      )
+                      if (matchingProfiles.length > 0) {
+                        const randomProfile =
+                          matchingProfiles[
+                            Math.floor(Math.random() * matchingProfiles.length)
+                          ]
+
+                        form.setValue("voice", value)
+                        form.setValue("gender", selectedVoice.gender)
+                        form.setValue("avatar", randomProfile?.source || "")
+                        form.setValue(
+                          "ethnicity",
+                          randomProfile?.ethnicity || ""
+                        )
+                      }
+                    }
+                  } catch (error) {
+                    toast({
+                      title: "Error",
+                      description: "Failed to update assistant appearance",
+                      variant: "destructive",
+                    })
+                  }
+                }}
+                value={form.watch("voice")}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select voice" />
+                </SelectTrigger>
+                <SelectContent>
+                  {voices.map((voice) => (
+                    <SelectItem key={voice.id} value={voice.id}>
+                      {voice.name} - {voice.description}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {form.formState.errors.voice && (
+                <p className="text-lg text-destructive">
+                  {form.formState.errors.voice.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
-        <div>
-          <label htmlFor="name" className="my-1 block text-xl font-semibold">
-            Name
-          </label>
-          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-background dark:text-muted-foreground">
-            Enter the name of your CallMyAI Agent
-          </p>
-          <Input
-            id="name"
-            {...form.register("name")}
-            placeholder="Enter your preferred name"
-            className="w-full px-2 py-3"
-          />
-          {form.formState.errors.name && (
-            <p className="text-lg text-destructive">
-              {form.formState.errors.name.message}
-            </p>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="description"
-            className="my-1 block text-lg font-semibold"
-          >
-            Description
-          </label>
-          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-background dark:text-muted-foreground">
-            Add business context and brief details about your AI agent
-          </p>
-          <Input
-            id="description"
-            {...form.register("description")}
-            placeholder="Add business context like name of your company, services offered, etc."
-            className="w-full px-2 py-3"
-          />
-          {form.formState.errors.description && (
-            <p className="text-lg text-destructive">
-              {form.formState.errors.description.message}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-col justify-center gap-6 align-baseline sm:flex-row sm:items-center">
+        <div className="flex flex-col items-center justify-center space-y-6">
           <Avatar
             className={` ${isTrial ? "h-48 w-48" : "h-32 w-32"} flex-shrink-0`}
           >
@@ -274,66 +346,17 @@ export function CreateAssistantNameForm({
             <AvatarFallback>BOT</AvatarFallback>
           </Avatar>
         </div>
-        <div className="w-full">
-          <label htmlFor="voice" className="my-1 block text-lg font-semibold">
-            Voices
-          </label>
-          <p className="text-md mb-3 mt-1 text-muted-background dark:text-muted-foreground">
-            Select the voice for your CallMyAI Agent
-          </p>
-          <Select
-            onValueChange={(value) => {
-              try {
-                const selectedVoice = voices.find((v) => v.id === value)
-                if (selectedVoice?.gender) {
-                  const matchingProfiles = profiles.filter(
-                    (p) => p.gender === selectedVoice.gender
-                  )
-                  if (matchingProfiles.length > 0) {
-                    const randomProfile =
-                      matchingProfiles[
-                        Math.floor(Math.random() * matchingProfiles.length)
-                      ]
+      </div>
 
-                    form.setValue("voice", value)
-                    form.setValue("gender", selectedVoice.gender)
-                    form.setValue("avatar", randomProfile?.source || "")
-                    form.setValue("ethnicity", randomProfile?.ethnicity || "")
-                  }
-                }
-              } catch (error) {
-                toast({
-                  title: "Error",
-                  description: "Failed to update assistant appearance",
-                  variant: "destructive",
-                })
-              }
-            }}
-            value={form.watch("voice")}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select voice" />
-            </SelectTrigger>
-            <SelectContent>
-              {voices.map((voice) => (
-                <SelectItem key={voice.id} value={voice.id}>
-                  {voice.name} - {voice.description}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {form.formState.errors.voice && (
-            <p className="text-lg text-destructive">
-              {form.formState.errors.voice.message}
-            </p>
-          )}
-        </div>
+      <div className="mt-8 text-center">
         <SubmitButton
-          className="w-full"
+          className="w-full text-lg sm:w-auto"
+          size={"lg"}
           isDisabled={false}
           isSubmitting={false}
         >
-          Create New Assistant
+          <Sparkle className="mr-2 h-5 w-5" />
+          Create New Voice Agent
         </SubmitButton>
       </div>
     </form>

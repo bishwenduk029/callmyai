@@ -5,6 +5,7 @@ import { TrialAssistant } from "@/actions/assistant"
 
 import { CreateAssistantNameForm } from "../assistant/create-assistant-name-form"
 import DemoCallMyAIAgent from "../demo-callmyai-agent"
+import { Card, CardContent } from "../ui/card"
 import { Section } from "../ui/section"
 import { Vortex } from "../ui/vortex"
 
@@ -18,40 +19,30 @@ export function CreateAssistantSection() {
 
   return (
     <Section className="font-urbanist overflow-hidden">
-      <div className="mx-auto max-w-container grid gap-6 sm:gap-12 pb-8">
-        <div className="flex flex-col items-center gap-4 text-center sm:gap-8">
-          <h2 className="font-heading inline-block animate-appear bg-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight">
-            Create AI voice agents that sound like humans
+      <div className="container mx-auto px-4">
+        <div className="mb-16 text-center">
+          <h2 className="mb-4 text-4xl font-bold tracking-tight text-foreground">
+            Create Your AI Voice Assistant
           </h2>
-          <p className="font-urbanist animate-appear text-lg font-medium text-muted-foreground opacity-0 delay-100 sm:text-xl">
+          <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
             Customize your AI assistant with natural voices and personalities
+            that sound just like humans
           </p>
         </div>
-        <div className="min-h-xl relative mx-auto flex h-[800px] w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-2xl p-8">
-          <Vortex
-            backgroundColor="black"
-            rangeY={800}
-            particleCount={100}
-            baseHue={120}
-            className="flex h-full w-full flex-col items-center justify-center"
-          >
-            <div className="w-full text-center bg-black">
-              <h3 className="text-xl font-semibold text-white">
-                Quick Demo
-              </h3>
-            </div>
-            <div className="flex-1 w-full flex items-center justify-center">
-              {createdAssistant ? (
+        <Card className="mx-auto w-full max-w-4xl border-primary/20 bg-card/50 backdrop-blur-sm">
+          <CardContent className={createdAssistant ? "p-0" : "p-8"}>
+            {createdAssistant ? (
+              <div className="relative h-[700px]">
                 <DemoCallMyAIAgent trialAssistant={createdAssistant} />
-              ) : (
-                <CreateAssistantNameForm
-                  isTrial={true}
-                  onSuccess={handleSuccess}
-                />
-              )}
-            </div>
-          </Vortex>
-        </div>
+              </div>
+            ) : (
+              <CreateAssistantNameForm
+                isTrial={true}
+                onSuccess={handleSuccess}
+              />
+            )}
+          </CardContent>
+        </Card>
       </div>
     </Section>
   )
