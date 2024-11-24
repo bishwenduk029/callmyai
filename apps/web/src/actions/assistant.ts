@@ -175,43 +175,42 @@ export const createAssistant = actionClient
         if (!user || !user.data)
           return { success: false, error: "User does not exist" }
 
-        // Get active subscription and plan
+        // Get active subscription
         const activeSubscription = await db.query.subscriptions.findFirst({
-          where: (subscription) => eq(subscription.userId, user.data!.id),
-          with: {
-            plan: true,
-          },
+          where: (subscription) => 
+            eq(subscription.userId, user.data!.id) && 
+            eq(subscription.status, "ACTIVE")
         })
 
-        if (!activeSubscription || !activeSubscription.plan) {
+        if (!activeSubscription) {
           return { success: false, error: "No active subscription found" }
         }
 
-        // Check number of existing assistants
+        // Check number of existing assistants against subscription limit
         const existingAssistants = await db.query.assistants.findMany({
           where: (assistant) => eq(assistant.userId, user.data!.id),
         })
 
-        if (
-          existingAssistants.length >= (activeSubscription?.plan?.allowedAssistants ?? 0)
-        ) {
+        if (existingAssistants.length >= (activeSubscription.allowedAssistants ?? 0)) {
           return {
             success: false,
-            error: `Maximum number of assistants (${activeSubscription.plan.allowedAssistants}) reached`,
+            error: `Maximum number of assistants (${activeSubscription.allowedAssistants}) reached`,
           }
         }
 
-        // Validate duration against plan
-        const planDuration = activeSubscription.plan.allowedDuration
+        // Validate duration against subscription limit
+        const maxDuration = activeSubscription.allowedDuration ?? 0
+        const finalDuration = Math.min(duration, maxDuration)
 
         const assistantId = uuidv4()
 
-        // Create assistant in the database
+        // Create assistant with subscription-based limits
         const [createdAssistant] = await psCreateAssistant.execute({
           id: assistantId,
           name,
-          duration: Math.min(duration, planDuration || 0), // Ensure duration doesn't exceed plan limit
+          duration: finalDuration,
           userId: user.data.id,
+          callLimit: activeSubscription.allowedCalls ?? 50, // Set call limit from subscription
         })
 
         if (!createdAssistant) {

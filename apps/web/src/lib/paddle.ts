@@ -115,17 +115,20 @@ export class ProcessWebhook {
     allowedCalls,
     allowedAssistants,
   }: ProcessSubscriptionParams) {
+    const customerData = await this.fetchPaddleCustomer(paddleCustomerId);
+    const email = customerData.data.email;
+
     const existingSub = await db
       .select()
       .from(subscriptions)
-      .where(eq(subscriptions.email, paddleCustomerId))
-      .limit(1)
+      .where(eq(subscriptions.email, email))
+      .limit(1);
 
     if (existingSub.length > 0) {
       await this.updateExistingSubscription({
         id,
-        priceId,
         price,
+        priceId,
         paddleCustomerId,
         status,
         currentPeriodEnd,
@@ -134,8 +137,8 @@ export class ProcessWebhook {
         allowedFiles,
         allowedCalls,
         allowedAssistants,
-      })
-      return
+      });
+      return;
     }
 
     await this.createNewSubscription({
@@ -151,7 +154,7 @@ export class ProcessWebhook {
       allowedFiles,
       allowedCalls,
       allowedAssistants,
-    })
+    });
   }
 
   private async updateExistingSubscription({

@@ -47,7 +47,6 @@ import { ChatRoomSession } from "@/components/audio/chat-room"
 import { db } from "../config/db"
 import { User } from "../db/schema/index"
 import { GetUserByPhoneInput } from "../validations/user"
-import { getUserSubscriptions } from "./payments"
 
 const systemPrompt = `
   You are an expert conversation analyst and summarizer. Your task is to create a brief, engaging summary of a conversation between an AI assistant and a caller. This summary should be easily digestible and help the user quickly determine the call's relevance and importance.

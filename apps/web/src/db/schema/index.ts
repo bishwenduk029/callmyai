@@ -240,7 +240,7 @@ export const plans = pgTable("plan", {
 })
 
 export const subscriptions = pgTable("subscription", {
-  id: serial(), // instead of serial
+  id: serial(),
   lemonSqueezyId: text("lemonSqueezyId"),
   orderId: integer("orderId").notNull(),
   name: text("name").notNull(),
@@ -253,17 +253,31 @@ export const subscriptions = pgTable("subscription", {
   endsAt: text("endsAt"),
   trialEndsAt: text("trialEndsAt"),
   price: text("price").notNull(),
+  planId: text("planId").references(() => plans.id), // Optional reference to plan
   isUsageBased: boolean("isUsageBased").default(false),
   isPaused: boolean("isPaused").default(false),
-  allowedDuration: integer("duration"),
-  allowedApps: integer("allowedApps").default(0),
-  allowedFiles: integer("allowedFiles").default(0),
-  allowedCalls: integer("allowedCalls").default(0),
-  allowedAssistants: integer("allowedAssistants").default(0),
+  // Direct limits stored in subscription
+  allowedDuration: integer("duration").notNull().default(75),
+  allowedApps: integer("allowedApps").notNull().default(5),
+  allowedFiles: integer("allowedFiles").notNull().default(5),
+  allowedCalls: integer("allowedCalls").notNull().default(200),
+  allowedAssistants: integer("allowedAssistants").notNull().default(3),
   userId: text("userId")
     .notNull()
     .references(() => users.id)
 })
+
+// Modify subscriptions relations to make plan optional
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  user: one(users, {
+    fields: [subscriptions.userId],
+    references: [users.id],
+  }),
+  plan: one(plans, {
+    fields: [subscriptions.planId],
+    references: [plans.id],
+  }),
+}))
 
 export const promptTemplates = pgTable("promptTemplate", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
@@ -301,17 +315,6 @@ export const integrationsRelations = relations(integrations, ({ one }) => ({
   user: one(users, {
     fields: [integrations.userId],
     references: [users.id],
-  }),
-}))
-
-export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
-  user: one(users, {
-    fields: [subscriptions.userId],
-    references: [users.id],
-  }),
-  plan: one(plans, {
-    fields: [subscriptions.planId],
-    references: [plans.id],
   }),
 }))
 
