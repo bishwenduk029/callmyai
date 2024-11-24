@@ -7,7 +7,6 @@ import { CreateAssistantNameForm } from "../assistant/create-assistant-name-form
 import DemoCallMyAIAgent from "../demo-callmyai-agent"
 import { Card, CardContent } from "../ui/card"
 import { Section } from "../ui/section"
-import { Vortex } from "../ui/vortex"
 
 export function CreateAssistantSection() {
   const [createdAssistant, setCreatedAssistant] =

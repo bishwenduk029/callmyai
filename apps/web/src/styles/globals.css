@@ -34,12 +34,12 @@
     --brand-foreground: 120 70% 60%;
   }
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
+    --background: 222 47% 11%; /* changed to slate black */
+    --foreground: 210 40% 98%; /* slightly adjusted for better contrast */
+    --card: 217 33% 17%; /* darker slate for cards */
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
     --primary: 142.1 70.6% 45.3%;
     --primary-foreground: 144.9 80.4% 10%;
     --secondary: 240 3.7% 15.9%;
@@ -50,7 +50,7 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
+    --border: 240 5% 26%; /* increased saturation and lightness for better visibility */
     --input: 240 3.7% 15.9%;
     --ring: 142.4 71.8% 29.2%;
     --chart-1: 220 70% 50%;

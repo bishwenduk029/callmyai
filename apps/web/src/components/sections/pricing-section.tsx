@@ -116,7 +116,7 @@ export async function PricingSection(): Promise<JSX.Element> {
         {hasActiveSubscription && (
           <div className="mt-8 flex w-full flex-row justify-center">
             <Link
-              href="https://callmyai.lemonsqueezy.com/billing"
+              href="https://customer-portal.paddle.com/cpl_01jan7kp06bpccv2e3wcfm14e1"
               className={cn(
                 buttonVariants({
                   variant: "default",

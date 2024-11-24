@@ -40,7 +40,7 @@ const config = {
           DEFAULT: "hsl(var(--brand))",
           foreground: "hsl(var(--brand-foreground))",
         },
-        border: "hsl(var(--border) / 0.1)",
+        border: "hsl(var(--border) / 0.2)", // increased opacity from 0.1 to 0.2
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {

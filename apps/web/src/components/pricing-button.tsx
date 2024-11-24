@@ -76,7 +76,7 @@ export function PricingButton({
           displayMode: "overlay",
           theme: "light",
           locale: "en",
-          successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings`,
+          // successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings`,
         },
       })
     } catch (error) {

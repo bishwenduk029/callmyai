@@ -255,12 +255,14 @@ export const subscriptions = pgTable("subscription", {
   price: text("price").notNull(),
   isUsageBased: boolean("isUsageBased").default(false),
   isPaused: boolean("isPaused").default(false),
+  allowedDuration: integer("duration"),
+  allowedApps: integer("allowedApps").default(0),
+  allowedFiles: integer("allowedFiles").default(0),
+  allowedCalls: integer("allowedCalls").default(0),
+  allowedAssistants: integer("allowedAssistants").default(0),
   userId: text("userId")
     .notNull()
-    .references(() => users.id),
-  planId: text("planId")
-    .notNull()
-    .references(() => plans.id),
+    .references(() => users.id)
 })
 
 export const promptTemplates = pgTable("promptTemplate", {
