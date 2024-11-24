@@ -429,10 +429,7 @@ export async function getUserSubscriptionByUserId({
       where: and(
         eq(subscriptions.userId, userId),
         eq(subscriptions.status, "ACTIVE")
-      ),
-      with: {
-        plan: true,
-      },
+      )
     })
 
     return userSubscription

@@ -169,6 +169,13 @@
       "when": 1732135234380,
       "tag": "0023_living_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1732463736134,
+      "tag": "0024_crazy_virginia_dare",
+      "breakpoints": true
     }
   ]
 }
