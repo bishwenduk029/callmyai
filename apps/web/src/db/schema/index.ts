@@ -219,9 +219,9 @@ export const webhookEvents = pgTable("webhookEvent", {
 })
 
 export const subscriptions = pgTable("subscription", {
-  id: serial(),
+  id: text("id").notNull().primaryKey(),
   lemonSqueezyId: text("lemonSqueezyId"),
-  orderId: integer("orderId").notNull(),
+  orderId: text("orderId").notNull(),
   name: text("name").notNull(),
   email: text("email").notNull(),
   status: text("status", { enum: ["ACTIVE", "CANCELLED"] })

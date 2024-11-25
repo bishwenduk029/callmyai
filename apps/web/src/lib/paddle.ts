@@ -230,7 +230,8 @@ export class ProcessWebhook {
 
     await db.insert(subscriptions).values({
       userId: user.id,
-      orderId: parseInt(id),
+      orderId: id,
+      id,
       name: customerData.data.name || "Unknown",
       email,
       status: status === "active" ? "ACTIVE" : "CANCELLED",
