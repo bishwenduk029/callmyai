@@ -316,14 +316,11 @@ export async function createNewChatSession(
   const activeSubscription = await db.query.subscriptions.findFirst({
     where: (subscription) =>
       and(eq(subscription.userId, host.id), eq(subscription.status, "ACTIVE")),
-    with: {
-      plan: true,
-    },
   })
 
   // Determine duration based on subscription plan
   const duration =
-    activeSubscription?.plan?.allowedDuration ||
+    activeSubscription?.allowedDuration ||
     parseInt(env.CALLMYAI_AGENT_CALL_DURATION)
 
   return {
@@ -429,7 +426,7 @@ export async function getUserSubscriptionByUserId({
       where: and(
         eq(subscriptions.userId, userId),
         eq(subscriptions.status, "ACTIVE")
-      )
+      ),
     })
 
     return userSubscription

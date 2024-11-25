@@ -183,6 +183,13 @@
       "when": 1732559918825,
       "tag": "0025_aromatic_sprite",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1732561036701,
+      "tag": "0026_vengeful_vulcan",
+      "breakpoints": true
     }
   ]
 }

@@ -218,27 +218,6 @@ export const webhookEvents = pgTable("webhookEvent", {
   processingError: text("processingError"),
 })
 
-export const plans = pgTable("plan", {
-  id: text("id").notNull().primaryKey(),
-  productId: integer("productId").notNull(),
-  productName: text("productName"),
-  variantId: integer("variantId"),
-  name: text("name").notNull(),
-  description: text("description"),
-  price: text("price").notNull(),
-  isUsageBased: boolean("isUsageBased").default(false),
-  interval: text("interval"),
-  intervalCount: integer("intervalCount"),
-  trialInterval: text("trialInterval"),
-  trialIntervalCount: integer("trialIntervalCount"),
-  sort: integer("sort"),
-  allowedDuration: integer("duration"),
-  allowedApps: integer("allowedApps").default(0),
-  allowedFiles: integer("allowedFiles").default(0),
-  allowedCalls: integer("allowedCalls").default(0),
-  allowedAssistants: integer("allowedAssistants").default(0),
-})
-
 export const subscriptions = pgTable("subscription", {
   id: serial(),
   lemonSqueezyId: text("lemonSqueezyId"),
@@ -265,18 +244,6 @@ export const subscriptions = pgTable("subscription", {
     .notNull()
     .references(() => users.id)
 })
-
-// Modify subscriptions relations to make plan optional
-export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
-  user: one(users, {
-    fields: [subscriptions.userId],
-    references: [users.id],
-  }),
-  plan: one(plans, {
-    fields: [subscriptions.planId],
-    references: [plans.id],
-  }),
-}))
 
 export const promptTemplates = pgTable("promptTemplate", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
@@ -338,7 +305,6 @@ export type NewChat = typeof chats.$inferInsert
 export type PromptTemplate = typeof promptTemplates.$inferSelect
 export type NewPromptTemplate = typeof promptTemplates.$inferInsert
 
-export type NewPlan = typeof plans.$inferInsert
 export type NewWebhookEvent = typeof webhookEvents.$inferInsert
 export type NewSubscription = typeof subscriptions.$inferInsert
 
