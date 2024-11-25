@@ -253,7 +253,6 @@ export const subscriptions = pgTable("subscription", {
   endsAt: text("endsAt"),
   trialEndsAt: text("trialEndsAt"),
   price: text("price").notNull(),
-  planId: text("planId").references(() => plans.id), // Optional reference to plan
   isUsageBased: boolean("isUsageBased").default(false),
   isPaused: boolean("isPaused").default(false),
   // Direct limits stored in subscription

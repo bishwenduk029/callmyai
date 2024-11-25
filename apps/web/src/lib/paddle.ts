@@ -276,18 +276,28 @@ export class ProcessWebhook {
   private extractSubscriptionData(
     eventData: SubscriptionCreatedEvent | SubscriptionUpdatedEvent
   ): ProcessSubscriptionParams {
-    const subscription = eventData.data
-    if (!subscription?.customerId) throw new Error("Invalid subscription data")
+    const subscription = eventData.data;
+    console.log('Raw subscription data:', JSON.stringify(subscription, null, 2));
+    
+    if (!subscription?.customerId) throw new Error("Invalid subscription data");
 
-    const item = subscription.items[0]
-    if (!item) throw new Error("No subscription items found")
+    const item = subscription.items[0];
+    if (!item) throw new Error("No subscription items found");
 
-    const price = item.price
-    if (!price) throw new Error("No price information found")
+    const price = item.price;
+    if (!price) throw new Error("No price information found");
 
-    // Extract custom_data from product with default values
-    const productCustomData =
-      (item.product?.customData as Record<string, string>) || {}
+    const productCustomData = (item.product?.customData as Record<string, string>) || {};
+    
+    // Log parsed values
+    const parsed = {
+      allowedDuration: parseInt(productCustomData.allowedDuration || "75"),
+      allowedApps: parseInt(productCustomData.allowedApps || "5"),
+      allowedFiles: parseInt(productCustomData.allowedFiles || "5"), 
+      allowedCalls: parseInt(productCustomData.allowedCalls || "200"),
+      allowedAssistants: parseInt(productCustomData.allowedAssistants || "3")
+    };
+    console.log('Parsed integer values:', parsed);
 
     return {
       paddleCustomerId: subscription.customerId,
@@ -297,11 +307,7 @@ export class ProcessWebhook {
       currentPeriodEnd: subscription.currentBillingPeriod?.endsAt || "",
       priceId: price.id,
       price: price.unitPrice?.amount || "0",
-      allowedDuration: parseInt(productCustomData.allowedDuration || "75"),
-      allowedApps: parseInt(productCustomData.allowedApps || "5"),
-      allowedFiles: parseInt(productCustomData.allowedFiles || "5"),
-      allowedCalls: parseInt(productCustomData.allowedCalls || "200"),
-      allowedAssistants: parseInt(productCustomData.allowedAssistants || "3"),
-    }
+      ...parsed
+    };
   }
 }
