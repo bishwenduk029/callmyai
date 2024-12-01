@@ -30,6 +30,7 @@ export default function DemoCallMyAIAgent({
       <DailyChatRoomProvider
         configuration={trialAssistant.config}
         session={chatRoomSession}
+        isTrial={true}
       />
     </div>
   )

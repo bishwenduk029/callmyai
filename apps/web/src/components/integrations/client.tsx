@@ -117,7 +117,7 @@ export default function IntegrationsClient({
 
   return (
     <>
-      <div className="flex w-full flex-col flex-wrap">
+      <div className="flex w-full flex-col flex-wrap p-2 sm:p-0">
         <Dialog>
           <DialogTrigger asChild>
             <AnimatedIconButton

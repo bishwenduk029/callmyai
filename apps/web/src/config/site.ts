@@ -16,7 +16,7 @@ const links = {
 
 export const siteConfig = {
   name: "callmyai.app",
-  description: "AI Voice Assistant Platform",
+  description: "AI Phone Answering Assistant",
   links,
   url: "https://callmyai.app",
   ogImage: links.openGraphImage,
@@ -30,6 +30,10 @@ export const siteConfig = {
     "ai",
     "chatbot",
     "call-assistant",
+    "AI Phone Answering Assistant",
+    "AI Phone",
+    "phone",
+    "inbound calls",
     "AI voice",
     "AI voice assistant",
     "AI voice assistant platform",

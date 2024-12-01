@@ -39,7 +39,7 @@ export default async function DataSourcesPage() {
 
   return (
     <>
-      <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-muted-foreground sm:grid sm:w-1/6">
+      <nav className="text-md mx-3 mt-3 hidden max-h-5 gap-4 text-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
           className="flex items-center hover:underline"

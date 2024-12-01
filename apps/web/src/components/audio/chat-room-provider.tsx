@@ -20,12 +20,14 @@ interface ChatRoomProps {
   visitor?: User | null | undefined
   session: ChatRoomSession
   configuration: any
+  isTrial?: boolean
 }
 
 export const DailyChatRoomProvider = ({
   visitor,
   session,
   configuration,
+  isTrial = false,
 }: ChatRoomProps) => {
   const [voiceClient, setVoiceClient] = useState<DailyVoiceClient | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -82,7 +84,7 @@ export const DailyChatRoomProvider = ({
   return (
     <DailyVoiceClientProvider client={voiceClient!}>
       <div>
-        <CallMyAIRoom chatSession={session} />
+        <CallMyAIRoom chatSession={session} isTrial={isTrial} />
         <DailyVoiceClientAudio />
       </div>
     </DailyVoiceClientProvider>

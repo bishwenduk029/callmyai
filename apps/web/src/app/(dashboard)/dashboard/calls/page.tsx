@@ -44,7 +44,7 @@ export default async function CallsPage() {
 
   return (
     <div className="h-full w-full">
-      <nav className="mx-3 mt-3 hidden max-h-5 gap-4 text-md text-muted-foreground sm:grid sm:w-1/6">
+      <nav className="mx-3 mt-3 hidden max-h-5 gap-4 text-md text-foreground sm:grid sm:w-1/6">
         <Link
           href="/dashboard/settings"
           className="flex items-center hover:underline"

@@ -15,6 +15,7 @@ import { ThemeProvider } from "@/providers/theme-provider"
 import { PostHogProvider } from "@/providers/posthog-provider"
 
 import { Toaster } from "@/components/ui/toaster"
+import { Assistant } from '@/db/schema';
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -76,7 +77,7 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
   return (
     <html lang="en" className="overflow-x-hidden overflow-y-scroll">
       <head>
-        <title>CallMyAI - AI Voice Experiences</title>
+        <title>CallMyAI - AI Phone Answering Assistant</title>
         <meta property="og:type" content="website" />
         <meta property="og:url" content={siteConfig.url} />
         <meta property="og:title" content={siteConfig.name} />

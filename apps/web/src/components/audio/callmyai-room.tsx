@@ -1,3 +1,6 @@
+import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
+import { checkAndDecrementCallLimit } from "@/actions/assistant"
 import {
   DailyVoiceEvent,
   DailyVoiceVisualizer,
@@ -8,15 +11,12 @@ import { PhoneCall, PhonePause } from "@phosphor-icons/react"
 import { Headset } from "@phosphor-icons/react/dist/ssr"
 import { motion } from "framer-motion"
 import { Howl } from "howler"
-import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
 import Balancer from "react-wrap-balancer"
 
 import { fontNunito } from "@/config/fonts"
 
 import { useToast } from "@/hooks/use-toast"
 
-import { checkAndDecrementCallLimit } from "@/actions/assistant"
 import { Avatar } from "../ui/avatar"
 import { BackgroundGradient } from "../ui/background-gradient"
 import { Card, CardContent } from "../ui/card"
@@ -44,9 +44,13 @@ export interface ChatRoomSession {
 
 interface CallMyAIRoomProps {
   chatSession: ChatRoomSession
+  isTrial?: boolean
 }
 
-export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
+export const CallMyAIRoom = ({
+  chatSession,
+  isTrial = false,
+}: CallMyAIRoomProps) => {
   const [isListening, setIsListening] = useState(false)
   const [isLoadingBot, setIsLoadingBot] = useState(false)
   const [elapsedTime, setElapsedTime] = useState(0)
@@ -89,9 +93,14 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
       setIsListening(false)
     } else {
       try {
+        if (isTrial) {
+          await voiceClient?.connect()
+          setIsListening(true)
+          return
+        }
         // Check and decrement call limit using server action
         const result = await checkAndDecrementCallLimit({
-          assistantId: chatSession.assistantId!
+          assistantId: chatSession.assistantId!,
         })
 
         if (!result?.data?.success) {
@@ -192,13 +201,13 @@ export const CallMyAIRoom = ({ chatSession }: CallMyAIRoomProps) => {
             />
             {!disablePhone && (
               <motion.button
-                className="rounded-full border-2 border-green-600 dark:border-green-100 p-0.5 text-white transition-colors"
+                className="rounded-full border-2 border-green-600 p-0.5 text-white transition-colors dark:border-green-100"
                 whileHover={{ scale: 0.9 }}
                 onClick={toggleListening}
                 disabled={isLoadingBot}
               >
                 {isLoadingBot ? (
-                  <LoadingSpinner size={75} className="text-background" />
+                  <LoadingSpinner size={75} className="text-foreground" />
                 ) : isListening ? (
                   <PhonePause
                     size={75}
