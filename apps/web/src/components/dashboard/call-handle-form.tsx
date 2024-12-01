@@ -94,25 +94,24 @@ export default function CallHandleForm({ user }: CallHandleFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-1">
-          <div className="flex w-full items-center rounded-md border-2 border-slate-900">
-            <span className="bg-primary px-2 py-2 text-primary-foreground font-semibold rounded-lg">
+          <div className="flex w-full items-center space-x-0 rounded-md border border-input bg-background hover:border-accent">
+            <span className="flex h-10 items-center rounded-l-md border-r bg-primary px-3 text-md text-background dark:text-foreground">
               callmyai.app/
             </span>
             <Input
               id="username"
               {...form.register("username")}
-              placeholder="Enter your handle here"
-              className="flex-1 rounded-none border-none px-2 py-3 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              placeholder="Enter your handle"
+              className="flex-1 rounded-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
             />
-
             <Button
               variant="ghost"
               size="icon"
               type="button"
               onClick={copyToClipboard}
-              className="ml-4"
+              className="rounded-l-none h-10 w-10"
             >
-              <Copy size={25} />
+              <Copy className="h-4 w-4" />
             </Button>
           </div>
           {form.formState.errors && (

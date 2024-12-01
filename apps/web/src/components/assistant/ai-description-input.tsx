@@ -106,7 +106,7 @@ export default function AIDescriptionInput({
               value={completion}
               onChange={(e) => onChange?.(e.target.value)}
               disabled={true}
-              rows={8}
+              rows={2}
             />
           </div>
         ) : (
@@ -116,10 +116,10 @@ export default function AIDescriptionInput({
             </Label>
             <Textarea
               id="description"
-              placeholder="Enter your description here..."
+              placeholder="Enter your business description here..."
               value={value || ""}
               onChange={(e) => onChange?.(e.target.value)}
-              rows={8}
+              rows={2}
             />
           </div>
         )}
