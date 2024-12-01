@@ -31,7 +31,7 @@ export function CallMyAiMobilePreview({
 
   if (isDesktop) {
     return (
-      <div className="top-50 fixed right-5 h-5/6 w-1/4">
+      <div className="top-50 fixed right-5 h-full w-1/4">
         <AssistantIframe assistantId={assistantId} />
       </div>
     )

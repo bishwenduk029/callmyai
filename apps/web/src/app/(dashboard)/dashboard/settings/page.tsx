@@ -64,13 +64,13 @@ export default async function SettingsPage() {
             Assistants
           </div>
         </Link>
-        <Link
+        {/* <Link
           href={!subscription ? "/pricing?feature=externalApps" : "/dashboard/integrations"}
           className="flex items-center hover:underline"
         >
           <PlugsConnected className="mr-2 h-5 w-5" />
           Connect Apps
-        </Link>
+        </Link> */}
         <Link
           href={!subscription ? "/pricing?feature=externalFiles" : "/dashboard/data-sources"}
           className="flex items-center hover:underline"

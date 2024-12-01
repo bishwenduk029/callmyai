@@ -62,13 +62,13 @@ export function FeaturesSection() {
           communication and efficiency.
         </p>
       </div>
-      <div className="grid grid-cols-1 gap-6 px-4 sm:px-6 md:grid-cols-2">
+      {/* <div className="grid grid-cols-1 gap-6 px-4 sm:px-6 md:grid-cols-2"> */}
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="group relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl border p-2 sm:max-w-none sm:p-6 sm:shadow-[0_20px_25px_-5px_rgb(0_0_0_/_0.1),_0_8px_10px_-6px_rgb(0_0_0_/_0.1)] dark:sm:shadow-[0_20px_25px_-5px_rgb(255_255_255_/_0.05),_0_8px_10px_-6px_rgb(255_255_255_/_0.05)]"
+          className="group relative w-3/4 mx-auto max-w-[400px] overflow-hidden rounded-3xl border p-2 sm:max-w-none sm:p-6 sm:shadow-[0_20px_25px_-5px_rgb(0_0_0_/_0.1),_0_8px_10px_-6px_rgb(0_0_0_/_0.1)] dark:sm:shadow-[0_20px_25px_-5px_rgb(255_255_255_/_0.05),_0_8px_10px_-6px_rgb(255_255_255_/_0.05)]"
         >
           <div className="absolute inset-x-0 top-0 flex items-center justify-between border-b p-4">
             <h4 className="font-semibold text-primary">
@@ -78,8 +78,8 @@ export function FeaturesSection() {
               Connected
             </span>
           </div>
-          <div className="flex max-w-sm flex-col gap-6 pt-16 sm:max-w-lg">
-            <AnimatedBeamMultipleDataSources className="w-full" />
+          <div className="flex w-full flex-row justify-center items-baseline pt-8">
+            <AnimatedBeamMultipleDataSources className="w-[60%]" />
             <div className="space-y-4">
               <h3 className="text-2xl font-bold text-foreground">
                 CallMyAI agents can learn from your data
@@ -100,7 +100,7 @@ export function FeaturesSection() {
           </div>
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -128,7 +128,7 @@ export function FeaturesSection() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </div> */}
 
       <div className="mt-12 grid grid-cols-1 gap-y-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:gap-y-0">
         {features.map((feature, index) => (

@@ -50,7 +50,7 @@ export default function AIDescriptionInput({
     <Card className="m-0 w-full border-0 shadow-none">
       <CardHeader className="p-1">
         <CardTitle className="flex items-center justify-between">
-          <span className="text-lg">About Business</span>
+          <span className="">About Business</span>
           <div className="flex items-center space-x-2">
             <Label
               htmlFor="ai-mode"
@@ -111,7 +111,7 @@ export default function AIDescriptionInput({
           </div>
         ) : (
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-md">
+            <Label htmlFor="description" className="">
               Brief about your business
             </Label>
             <Textarea

@@ -61,13 +61,13 @@ export default async function DataSourcesPage() {
           <Headset className="mr-2 h-5 w-5" />
           Assistants
         </Link>
-        <Link
+        {/* <Link
           href="/dashboard/integrations"
           className="flex items-center hover:underline"
         >
           <Plugs className="mr-2 h-5 w-5" />
           Connect Apps
-        </Link>
+        </Link> */}
         <Link
           href="/dashboard/data-sources"
           className="flex items-center font-semibold text-primary hover:underline"

@@ -185,72 +185,74 @@ export function CreateAssistantNameForm({
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="z-20 w-full space-y-10"
+        className="z-20 w-full space-y-4"
       >
-        <div className="grid grid-cols-1 gap-8 text-foreground md:grid-cols-2">
-          <div
-            className={
-              isTrial
-                ? "space-y-4 text-foreground dark:bg-background/5 dark:text-foreground"
-                : "space-y-4 p-2 text-foreground dark:bg-background/5"
-            }
-          >
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="persona"
-                  className="my-1 block text-xl font-semibold"
-                >
-                  Choose Persona
-                </label>
-                <p className="text-md text-muted-background mb-3 mt-1 dark:text-muted-foreground">
-                  What is the role of your CallMyAI Agent
-                </p>
-                <Select
-                  onValueChange={(value) => {
-                    form.setValue("persona", value)
-                  }}
-                  value={form.watch("persona")}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a persona" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {personas.map((persona) => (
-                      <SelectItem key={persona.role} value={persona.role}>
-                        {persona.role}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {form.formState.errors.persona && (
-                  <p className="text-lg text-destructive">
-                    {form.formState.errors.persona.message}
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className={`flex-1 space-y-4 ${
+            isTrial
+              ? "text-foreground dark:bg-background/5 dark:text-foreground"
+              : "p-2 text-foreground dark:bg-background/5"
+          }`}>
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Persona and Name group */}
+              <div className="flex-1 space-y-6">
+                <div>
+                  <label htmlFor="persona" className="my-1 block font-semibold">
+                    Choose Persona
+                  </label>
+                  <p className="text-muted-background mb-3 mt-1 dark:text-muted-foreground">
+                    What is the role of your CallMyAI Agent
                   </p>
-                )}
+                  <Select
+                    onValueChange={(value) => {
+                      form.setValue("persona", value)
+                    }}
+                    value={form.watch("persona")}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a persona" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {personas.map((persona) => (
+                        <SelectItem key={persona.role} value={persona.role}>
+                          {persona.role}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.persona && (
+                    <p className="text-lg text-destructive">
+                      {form.formState.errors.persona.message}
+                    </p>
+                  )}
+                </div>
               </div>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="my-1 block text-xl font-semibold"
-                >
-                  Name
-                </label>
-                <p className="text-md text-muted-background dark:text-muted-background mb-3 mt-1 dark:text-muted-foreground">
-                  Enter the name of your CallMyAI Agent
-                </p>
-                <Input
-                  id="name"
-                  {...form.register("name")}
-                  placeholder="Enter your preferred name"
-                  className="w-full px-2 py-3"
-                />
-                {form.formState.errors.name && (
-                  <p className="text-lg text-destructive">
-                    {form.formState.errors.name.message}
+
+              <div className="flex-1 space-y-6">
+                <div>
+                  <label htmlFor="name" className="my-1 block font-semibold">
+                    Name
+                  </label>
+                  <p className="text-muted-background dark:text-muted-background mb-3 mt-1 dark:text-muted-foreground">
+                    Enter the name of your CallMyAI Agent
                   </p>
-                )}
+                  <Input
+                    id="name"
+                    {...form.register("name")}
+                    placeholder="Enter your preferred name"
+                    className="w-full px-2 py-3"
+                  />
+                  {form.formState.errors.name && (
+                    <p className="text-lg text-destructive">
+                      {form.formState.errors.name.message}
+                    </p>
+                  )}
+                </div>
               </div>
+            </div>
+
+            {/* Description and Voice group */}
+            <div className="space-y-8">
               <div>
                 <Controller
                   name="description"
@@ -270,13 +272,10 @@ export function CreateAssistantNameForm({
               </div>
 
               <div className="w-full">
-                <label
-                  htmlFor="voice"
-                  className="my-1 block text-lg font-semibold"
-                >
+                <label htmlFor="voice" className="my-1 block font-semibold">
                   Voices
                 </label>
-                <p className="text-md text-muted-background mb-3 mt-1 dark:text-muted-foreground">
+                <p className="text-muted-background mb-3 mt-1 dark:text-muted-foreground">
                   Select the voice for your CallMyAI Agent
                 </p>
                 <Select
@@ -333,14 +332,13 @@ export function CreateAssistantNameForm({
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center space-y-6">
+
+          {/* Avatar section */}
+          <div className="flex items-center justify-center lg:w-1/3">
             <Avatar
-              className={` ${isTrial ? "h-48 w-48" : "h-32 w-32"} flex-shrink-0`}
+              className={`${isTrial ? "h-48 w-48" : "h-32 w-32"} flex-shrink-0`}
             >
-              <AvatarImage
-                src={form.watch("avatar")} // Change getValues to watch
-                alt="@assistant"
-              />
+              <AvatarImage src={form.watch("avatar")} alt="@assistant" />
               <AvatarFallback>BOT</AvatarFallback>
             </Avatar>
           </div>
@@ -348,7 +346,7 @@ export function CreateAssistantNameForm({
 
         <div className="mt-8 text-center">
           <SubmitButton
-            className="w-full text-lg sm:w-auto"
+            className="w-full sm:w-auto"
             size={"lg"}
             isDisabled={false}
             isSubmitting={false}

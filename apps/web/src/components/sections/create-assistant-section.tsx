@@ -28,7 +28,7 @@ export function CreateAssistantSection() {
             that sound just like humans
           </p>
         </div>
-        <Card className="mx-auto w-full max-w-4xl border-primary/20 bg-card/50 backdrop-blur-sm">
+        <Card className="mx-auto w-full max-w-4xl border-primary/20 bg-background backdrop-blur-sm">
           <CardContent className={createdAssistant ? "p-0" : "p-8"}>
             {createdAssistant ? (
               <div className="relative h-[700px]">
