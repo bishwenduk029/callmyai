@@ -153,9 +153,9 @@ export function AssistantSystemPromptForm({
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
       <Card>
         <CardHeader>
-          <CardTitle>System Prompt</CardTitle>
+          <CardTitle>AI Voice Assistant Instructions</CardTitle>
           <CardDescription>
-            Enter the system prompt for your assistant
+            Enter additional instructions for your assistant
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">

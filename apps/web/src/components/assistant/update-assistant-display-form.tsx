@@ -1,10 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { RtviConfig, updateAssistant } from "@/actions/assistant"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AvatarFallback } from "@radix-ui/react-avatar"
 import { useAction } from "next-safe-action/hooks"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { useToast } from "@/hooks/use-toast"
@@ -20,7 +21,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import { useState } from "react"
 import { Assistant } from "../../db/schema/index"
 import { Icons } from "../icons"
 import { Avatar, AvatarImage } from "../ui/avatar"
@@ -34,6 +34,8 @@ import {
   SelectValue,
 } from "../ui/select"
 import { SubmitButton } from "../ui/submit-button"
+import { Textarea } from "../ui/textarea"
+import AIDescriptionInput from "./ai-description-input"
 
 interface UpdateAssistantNameFormProps {
   assistant: Assistant
@@ -104,8 +106,8 @@ export function UpdateAssistantDisplayDetails({
   })
 
   const onSubmit = async (values: z.infer<typeof assistantConfigSchema>) => {
-    const selectedVoice = voices.find(v => v.id === values.voice)
-    
+    const selectedVoice = voices.find((v) => v.id === values.voice)
+
     updateAssistantAction.execute({
       id: assistant.id,
       name: values.name,
@@ -120,7 +122,7 @@ export function UpdateAssistantDisplayDetails({
         tts: {
           ...config?.tts,
           provider: selectedVoice?.provider || "openai",
-          voice: values.voice!
+          voice: values.voice!,
         },
         llm: config?.llm || {
           model: {
@@ -128,7 +130,7 @@ export function UpdateAssistantDisplayDetails({
             provider: "openai",
           },
           messages: [],
-        }
+        },
       },
     })
   }
@@ -137,7 +139,7 @@ export function UpdateAssistantDisplayDetails({
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
       <Card>
         <CardHeader>
-          <CardTitle>Assistant Display Details</CardTitle>
+          <CardTitle>AI Voice Agent Details</CardTitle>
           <CardDescription>Update details as needed</CardDescription>
         </CardHeader>
         <CardContent>
@@ -163,18 +165,15 @@ export function UpdateAssistantDisplayDetails({
               )}
             </div>
             <div>
-              <label
-                htmlFor="botDescription"
-                className="my-1 block text-sm font-semibold text-foreground"
-              >
-                Description
-              </label>
-              <Input
-                id="botDescription"
-                {...form.register("description")}
-                placeholder="Enter a description for your assistant"
-                className="w-full px-2 py-3"
-                defaultValue={config?.description}
+              <Controller
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <AIDescriptionInput
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
               />
               {form.formState.errors.description && (
                 <p className="text-sm text-destructive">
@@ -202,7 +201,7 @@ export function UpdateAssistantDisplayDetails({
                 </p>
               )}
             </div>
-            <div className="flex flex-col gap-6 justify-between align-baseline sm:flex-row">
+            <div className="flex flex-col justify-between gap-6 align-baseline sm:flex-row">
               <Avatar className="h-48 w-48 flex-shrink-0">
                 <AvatarImage
                   src={form.getValues("avatar") || config?.avatar}
@@ -210,7 +209,7 @@ export function UpdateAssistantDisplayDetails({
                 />
                 <AvatarFallback>BOT</AvatarFallback>
               </Avatar>
-              <div className="space-y-6 flex-1">
+              <div className="flex-1 space-y-6">
                 <div className="w-full">
                   <label
                     htmlFor="ethnicity"
@@ -234,9 +233,13 @@ export function UpdateAssistantDisplayDetails({
                       <SelectItem value="African">African</SelectItem>
                       <SelectItem value="Asian">Asian</SelectItem>
                       <SelectItem value="Hispanic">Hispanic</SelectItem>
-                      <SelectItem value="Middle Eastern">Middle Eastern</SelectItem>
+                      <SelectItem value="Middle Eastern">
+                        Middle Eastern
+                      </SelectItem>
                       <SelectItem value="South Asian">South Asian</SelectItem>
-                      <SelectItem value="Pacific Islander">Pacific Islander</SelectItem>
+                      <SelectItem value="Pacific Islander">
+                        Pacific Islander
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   {form.formState.errors.ethnicity && (
@@ -255,10 +258,12 @@ export function UpdateAssistantDisplayDetails({
                   </label>
                   <Select
                     {...form.register("voice")}
-                    defaultValue={voices.find(v => v.id === config?.tts?.voice)?.id}
+                    defaultValue={
+                      voices.find((v) => v.id === config?.tts?.voice)?.id
+                    }
                     onValueChange={(value) => {
                       form.setValue("voice", value)
-                      const selectedVoice = voices.find(v => v.id === value)
+                      const selectedVoice = voices.find((v) => v.id === value)
                       if (selectedVoice?.gender)
                         form.setValue("gender", selectedVoice.gender)
                     }}

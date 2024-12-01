@@ -1,14 +1,11 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { redis } from "@callmyai/kv"
-import { nanoid } from "ai"
 import { eq } from "drizzle-orm"
+import { revalidatePath } from "next/cache"
 import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"
 
-import { env } from "@/env.mjs"
-import type { ActionResponse } from "@/types/actions"
 import { db } from "@/config/db"
 import {
   psCreateAssistant,
@@ -20,6 +17,8 @@ import {
   psUpdateAssistant,
 } from "@/db/prepared/statements"
 import { Assistant, assistants } from "@/db/schema"
+import { env } from "@/env.mjs"
+import type { ActionResponse } from "@/types/actions"
 
 import auth from "@/lib/auth"
 import { actionClient } from "@/lib/safe-action"
@@ -177,9 +176,9 @@ export const createAssistant = actionClient
 
         // Get active subscription
         const activeSubscription = await db.query.subscriptions.findFirst({
-          where: (subscription) => 
-            eq(subscription.userId, user.data!.id) && 
-            eq(subscription.status, "ACTIVE")
+          where: (subscription) =>
+            eq(subscription.userId, user.data!.id) &&
+            eq(subscription.status, "ACTIVE"),
         })
 
         if (!activeSubscription) {
@@ -191,7 +190,10 @@ export const createAssistant = actionClient
           where: (assistant) => eq(assistant.userId, user.data!.id),
         })
 
-        if (existingAssistants.length >= (activeSubscription.allowedAssistants ?? 0)) {
+        if (
+          existingAssistants.length >=
+          (activeSubscription.allowedAssistants ?? 0)
+        ) {
           return {
             success: false,
             error: `Maximum number of assistants (${activeSubscription.allowedAssistants}) reached`,
@@ -453,26 +455,26 @@ export const checkAndDecrementCallLimit = actionClient
       })
 
       if (!assistant || assistant.callLimit <= 0) {
-        return { 
-          success: false, 
-          error: "Call limit exceeded for this assistant" 
+        return {
+          success: false,
+          error: "Call limit exceeded for this assistant",
         }
       }
 
       await db
         .update(assistants)
-        .set({ 
+        .set({
           callLimit: assistant.callLimit - 1,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         })
         .where(eq(assistants.id, assistantId))
 
       return { success: true }
     } catch (error) {
       console.error("Error checking call limit:", error)
-      return { 
-        success: false, 
-        error: "Failed to check call limit" 
+      return {
+        success: false,
+        error: "Failed to check call limit",
       }
     }
   })

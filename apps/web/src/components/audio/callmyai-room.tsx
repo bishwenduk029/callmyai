@@ -181,7 +181,13 @@ export const CallMyAIRoom = ({
               className={`mb-8 text-lg font-semibold text-muted-foreground ${fontNunito.variable} text-center`}
             >
               <Balancer>
-                {chatSession.description || "AI powered Call Assistant"}
+                {(chatSession.description || "AI powered Call Assistant")
+                  .split(" ")
+                  .slice(0, 6)
+                  .join(" ")
+                  .concat(
+                    (chatSession.description ?? "").split(" ").length > 6 ? "..." : ""
+                  )}
               </Balancer>
             </div>
             <div className="font-urbanist mb-4 flex flex-row items-baseline justify-center text-xl font-extrabold text-primary">

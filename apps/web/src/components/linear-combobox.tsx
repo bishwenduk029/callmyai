@@ -44,6 +44,7 @@ export function LinearCombobox({ userEmail, onLinkGenerated }: LinearComboboxPro
     result,
     status,
   } = useAction(fetchExternalAppsAction)
+  
   const {
     execute: createLink,
     result: createLinkResult,
@@ -122,7 +123,7 @@ export function LinearCombobox({ userEmail, onLinkGenerated }: LinearComboboxPro
             />
             <CommandList>
               <CommandGroup>
-                {apps.map((app: ExternalApp) => (
+                {apps.filter((app: ExternalApp) => !app.enabled).map((app: ExternalApp) => (
                   <CommandItem
                     key={app.appId}
                     value={app.name}
@@ -162,7 +163,8 @@ export function LinearCombobox({ userEmail, onLinkGenerated }: LinearComboboxPro
       </Popover>
       {(composioLink || isLoadingAppLink) && (
         <Button
-          className="mt-4"
+          variant={composioLink ? "outline" : "default"}
+          className="mt-4 p-8"
           onClick={composioLink && !isLoadingAppLink ? () => window.open(composioLink, "_blank") : undefined}
           disabled={isLoadingAppLink}
         >

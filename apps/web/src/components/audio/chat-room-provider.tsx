@@ -51,12 +51,14 @@ export const DailyChatRoomProvider = ({
                 {
                   role: "system",
                   content:
-                    configuration.description +
+                    `You are ${configuration.name!}` +
                     "\n " +
                     (configuration.selectedPersona?.systemPrompt?.replace(
                       /\${name}/g,
                       configuration.name!
-                    ) || "Hello! How can I help you today?"),
+                    ) || "Hello! How can I help you today?") +
+                    "\n" +
+                    configuration.description,
                 },
               ],
             },

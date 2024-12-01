@@ -15,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea"
 
 import { Integration } from "../../db/schema/index"
 import { getCaretCoordinates, getCurrentWord, replaceWord } from "./utils"
-import { ActionsControllerV1Service } from "composio-core/lib/src/sdk/client"
 
 interface Props {
   textValue: string

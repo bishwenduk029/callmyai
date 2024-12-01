@@ -13,7 +13,7 @@ export const voices: Voice[] = [
     id: "nova",
     gender: "female",
     accent: "American",
-    description: "Professional female voice with an American accent",
+    description: "Professional female voice, American",
     name: "Nova",
     provider: "openai"
   },
@@ -21,7 +21,7 @@ export const voices: Voice[] = [
     id: "onyx",
     gender: "male", 
     accent: "British",
-    description: "Male, warm and authoritative voice with a British accent",
+    description: "Warm and authoritative male voice, British",
     name: "Onyx",
     provider: "openai"
   },
@@ -29,7 +29,7 @@ export const voices: Voice[] = [
     id: "shimmer",
     gender: "female",
     accent: "American",
-    description: "Female with energetic voice with an American accent",
+    description: "Energetic female voice, American",
     name: "Shimmer",
     provider: "openai"
   },
@@ -37,7 +37,7 @@ export const voices: Voice[] = [
     id: "echo",
     gender: "male",
     accent: "American", 
-    description: "Male, deep and engaging voice with an American accent",
+    description: "Deep and engaging male voice, American",
     name: "Echo",
     provider: "openai"
   },
@@ -45,7 +45,7 @@ export const voices: Voice[] = [
     id: "alloy",
     gender: "female",
     accent: "American",
-    description: "Male, youthful and upbeat voice with an American accent",
+    description: "Upbeat male voice, American",
     name: "Alloy",
     provider: "openai"
   },
@@ -53,7 +53,7 @@ export const voices: Voice[] = [
     id: "s3://voice-cloning-zero-shot/0b29eab5-834f-4463-b3ad-4e6177d2b145/flynnsaad/manifest.json",
     gender: "male",
     accent: "British",
-    description: "Energetic British male voice with fast paced delivery",
+    description: "Fast-paced male voice, British",
     name: "Flynn",
     language: "English (US)",
     provider: "playht"
@@ -62,7 +62,7 @@ export const voices: Voice[] = [
     id: "s3://voice-cloning-zero-shot/fdb74aec-ede9-45f8-ad87-71cb45f01816/original/manifest.json",
     gender: "female", 
     accent: "Mexican",
-    description: "Warm Mexican-accented female voice",
+    description: "Warm female voice, Mexican accent",
     name: "Mexican Female",
     provider: "playht"
   },
@@ -70,7 +70,7 @@ export const voices: Voice[] = [
     id: "s3://voice-cloning-zero-shot/b3def996-302e-486f-a234-172fa0279f0e/anthonysaad/manifest.json",
     gender: "male",
     accent: "American", 
-    description: "Clear American male voice with slower paced delivery",
+    description: "Clear male voice, American",
     name: "Anthony",
     provider: "playht"
   },
@@ -78,7 +78,7 @@ export const voices: Voice[] = [
     id: "s3://peregrine-voices/barry ads parrot saad/manifest.json",
     gender: "male",
     accent: "Australian",
-    description: "Engaging Australian male voice optimized for advertising",
+    description: "Engaging male voice, Australian",
     name: "Australian Male",
     provider: "playht"
   },
@@ -86,7 +86,7 @@ export const voices: Voice[] = [
     id: "s3://peregrine-voices/barry narrative parrot saad/manifest.json",
     gender: "male", 
     accent: "Australian",
-    description: "Natural Australian male voice suited for storytelling",
+    description: "Storytelling male voice, Australian",
     name: "Australian Male",
     provider: "playht"
   },
@@ -94,7 +94,7 @@ export const voices: Voice[] = [
     id: "s3://voice-cloning-zero-shot/7bad42d5-52be-4687-9a07-7891f31daa6b/logansaad/manifest.json",
     gender: "male",
     accent: "British",
-    description: "Mature British male voice with rich tone",
+    description: "Rich-toned male voice, British",
     name: "British Male",
     provider: "playht"
   },
@@ -104,7 +104,7 @@ export const voices: Voice[] = [
     accent: "British",
     gender: "male",
     language: "English (US)",
-    description: "Low-key British male voice ideal for video content",
+    description: "Casual male voice, British",
     provider: "playht"
   },
   {
@@ -113,7 +113,7 @@ export const voices: Voice[] = [
     accent: "American",
     gender: "male",
     language: "English (US)",
-    description: "Youthful American male voice perfect for storytelling",
+    description: "Youthful male voice, American",
     provider: "playht"
   },
   {
@@ -122,7 +122,7 @@ export const voices: Voice[] = [
     accent: "American",
     gender: "male",
     language: "English (US)",
-    description: "Mature American male voice with distinctive gravelly texture",
+    description: "Gravelly male voice, American",
     provider: "playht"
   },
   {
@@ -131,7 +131,7 @@ export const voices: Voice[] = [
     accent: "American",
     gender: "female",
     language: "English (US)",
-    description: "Energetic young female voice",
+    description: "Young female voice, American",
     provider: "playht"
   }
 ]
