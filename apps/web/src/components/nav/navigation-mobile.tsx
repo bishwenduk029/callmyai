@@ -113,14 +113,14 @@ export function NavigationMobile({ navItems }: NavigationMobileProps) {
             </span>
           </MobileLink>
           <MobileLink
-            key={"integrations"}
-            href="/dashboard/integrations"
+            key={"data-sources"}
+            href="/dashboard/data-sources"
             segment={String(segment)}
             setIsOpen={setIsOpen}
           >
             <span className="flex flex-row items-center gap-2">
               <Headset className="size-5" />
-              <span>Integrations</span>
+              <span>Connect Data</span>
             </span>
           </MobileLink>
           <Separator />

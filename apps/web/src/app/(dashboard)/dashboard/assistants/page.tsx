@@ -1,4 +1,6 @@
 // page.tsx
+import Link from "next/link"
+import { redirect } from "next/navigation"
 import { getAssistantsByUserId } from "@/actions/assistant"
 import { getUserByEmail, getUserSubscriptionByUserId } from "@/actions/user"
 import { auth } from "@/auth"
@@ -8,32 +10,21 @@ import {
   Headset,
   PhoneIncoming,
   PlugsConnected,
-  PlusCircle
+  PlusCircle,
 } from "@phosphor-icons/react/dist/ssr"
-import Link from "next/link"
-import { redirect } from "next/navigation"
 
-import { Assistant } from "@/db/schema"
 import { env } from "@/env.mjs"
+import { Assistant } from "@/db/schema"
 
 import { cn } from "@/lib/utils"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { buttonVariants } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { AnimatedIconButton } from "@/components/animated/plus-icon"
 import { CreateAssistantNameForm } from "@/components/assistant/create-assistant-name-form"
 import { CopyButton } from "@/components/copy-button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { buttonVariants } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader
-} from "@/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger
-} from "@/components/ui/dialog"
 
 export default async function AssistantsPage() {
   const session = await auth()
@@ -99,9 +90,9 @@ export default async function AssistantsPage() {
       </nav>
       <div className="flex w-full flex-col flex-wrap">
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger asChild className="w-full p-2 sm:w-auto">
             <AnimatedIconButton
-              className="mb-4 ml-auto"
+              className="mb-4 ml-auto w-full"
               iconPlacement="left"
               IconComponent={<PlusCircle size={20} weight="bold" />}
             >
@@ -113,7 +104,7 @@ export default async function AssistantsPage() {
           </DialogContent>
         </Dialog>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 p-4 sm:p-0 md:grid-cols-2 lg:grid-cols-3">
           {assistantsResponse?.data?.map((assistant: Assistant) => (
             <Card
               key={assistant.id}
@@ -127,7 +118,9 @@ export default async function AssistantsPage() {
                       src={assistant.config?.imageUrl || ""}
                       alt={assistant.name}
                     />
-                    <AvatarFallback className="bg-primary/25">{assistant.name[0]}</AvatarFallback>
+                    <AvatarFallback className="bg-primary/25">
+                      {assistant.name[0]}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <Link

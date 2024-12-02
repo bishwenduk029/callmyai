@@ -1,16 +1,17 @@
 "use client"
 
 import * as React from "react"
+import { IconProps } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
+
 import { Button, ButtonProps } from "@/components/ui/button"
-import { IconProps } from "@phosphor-icons/react"
 
 interface AnimatedIconButtonProps extends ButtonProps {
   iconSize?: number
   iconPlacement?: "left" | "right"
-  IconComponent?: React.ReactElement<IconProps>;
+  IconComponent?: React.ReactElement<IconProps>
 }
 
 export function AnimatedIconButton({
@@ -23,7 +24,7 @@ export function AnimatedIconButton({
 }: AnimatedIconButtonProps) {
   const iconVariants = {
     initial: { x: 0 },
-    hover: { x: [-40, -5, 0] }
+    hover: { x: [-40, -5, 0] },
   }
 
   const iconElement = IconComponent && (
@@ -42,7 +43,7 @@ export function AnimatedIconButton({
       whileHover="hover"
       className={cn("flex items-center gap-2", className)}
     >
-      <Button {...props}>
+      <Button {...props} className="w-full sm:w-auto">
         {iconPlacement === "left" && iconElement}
         <span>{children}</span>
         {iconPlacement === "right" && iconElement}

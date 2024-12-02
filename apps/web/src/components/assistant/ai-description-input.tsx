@@ -76,16 +76,20 @@ export default function AIDescriptionInput({
       <CardContent className="space-y-4 p-1">
         {isAIMode ? (
           <div className="space-y-4">
-            <div className="flex space-x-2">
+            <div className="flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:space-x-2 mt-1">
               <Input
                 type="url"
                 placeholder="Enter website URL"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="flex-grow"
+                className="flex-grow items-baseline"
                 disabled={isLoading}
               />
-              <Button onClick={handleAIFetch} disabled={isLoading || !url}>
+              <Button
+                onClick={handleAIFetch}
+                disabled={isLoading || !url}
+                className="w-full sm:w-auto"
+              >
                 {isLoading ? (
                   <LoadingSpinner
                     className="mr-2 h-4 w-4 animate-spin"
