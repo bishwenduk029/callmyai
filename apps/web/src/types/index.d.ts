@@ -37,7 +37,7 @@ export interface BlogPostParamsProps {
 }
 
 export interface PricingPlan {
-  id: "basic" | "standard" | "premium" | "enterprises" | "free"
+  id: "basic" | "standard" | "premium" | "enterprises" | "free" | "business"
   name: string
   description: string
   features: string[]
@@ -45,17 +45,13 @@ export interface PricingPlan {
   polarPriceId?: string
   paddlePriceId?: string
   limitations: string[]
-  stripePriceId: string
   prices: {
     monthly: number | string
     yearly: number
   }
-  stripeIds: {
-    monthly?: string
-    yearly?: string
-  },
   buttonText: string
   disable: boolean
+  contactEmail?: string
 }
 
 export interface UserSubscriptionPlan extends SubscriptionPlan {

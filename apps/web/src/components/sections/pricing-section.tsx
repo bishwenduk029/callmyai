@@ -1,10 +1,8 @@
 "use server"
 
-import {
-  getUserSubscriptionByUserId
-} from "@/actions/user"
-import { Check, Cross } from "@phosphor-icons/react/dist/ssr"
 import Link from "next/link"
+import { getUserSubscriptionByUserId } from "@/actions/user"
+import { Check, Cross, Info, X } from "@phosphor-icons/react/dist/ssr"
 import Balancer from "react-wrap-balancer"
 
 import { siteConfig } from "@/config/site"
@@ -22,6 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import { CopyButton } from "../copy-button"
 import { PricingButton } from "../pricing-button"
 import { Button, buttonVariants } from "../ui/button"
 import { Section } from "../ui/section"
@@ -47,7 +46,7 @@ export async function PricingSection(): Promise<JSX.Element> {
     <section
       id="pricing-section"
       aria-label="pricing section"
-      className="mx-auto"
+      className="sm:mx-auto"
     >
       <div className="container grid gap-4 md:gap-8">
         <div className="flex flex-col items-center gap-6 text-center">
@@ -57,9 +56,7 @@ export async function PricingSection(): Promise<JSX.Element> {
             </Balancer>
           </h2>
           <h3 className="max-w-2xl text-muted-foreground sm:text-xl sm:leading-8">
-            <Balancer>
-              {siteConfig.name} is open source. Simple pricing for everyone.
-            </Balancer>
+            <Balancer>Simple pricing for everyone. Cancel Anytime</Balancer>
           </h3>
         </div>
 
@@ -67,48 +64,55 @@ export async function PricingSection(): Promise<JSX.Element> {
           <div className="grid w-full grid-cols-1 gap-4 px-5 sm:px-0 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
-              key={plan.id}
-              className={cn(
-                "flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg",
-                plan.id === "premium" && "border-primary shadow-md"
-              )}
-            >
-              <CardHeader className="space-y-2 bg-secondary/90 dark:bg-secondary/50">
-                {plan.id === "premium" && (
-                  <p className="inline-flex rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary-foreground">
-                    Recommended
-                  </p>
+                key={plan.id}
+                className={cn(
+                  "flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg",
+                  plan.id === "premium" && "border-primary shadow-md"
                 )}
-                <CardTitle className="text-2xl font-bold">
-                  {plan.name}
-                </CardTitle>
-                <CardDescription>{plan.description}</CardDescription>
-                <div className="text-4xl font-extrabold">
-                  ${plan.prices.monthly}
-                  <span className="text-xl font-normal text-muted-foreground">
-                    /{"month"}
-                  </span>
+              >
+                <CardHeader className="space-y-2 bg-secondary/90 dark:bg-secondary/50">
+                  {/* {plan.id === "premium" && (
+                    <p className="inline-flex rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary-foreground">
+                      Recommended
+                    </p>
+                  )} */}
+                  <CardTitle className="text-2xl font-bold">
+                    {plan.name}
+                  </CardTitle>
+                  <CardDescription>{plan.description}</CardDescription>
+                  <div className="text-4xl font-extrabold">
+                    ${plan.prices.monthly}
+                    <span className="text-xl font-normal text-muted-foreground">
+                      /{"month"}
+                    </span>
+                  </div>
+                </CardHeader>
+                <div className="mx-6 my-4 flex items-center rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground sm:max-w-sm">
+                  <Info className="mr-2 h-5 w-5 flex-shrink-0" />
+                  <p>
+                    You need to use your own Twilio account provisioned phone
+                    numbers to connect our agents.
+                  </p>
                 </div>
-              </CardHeader>
-              <CardContent className="flex-1 p-6">
-                <ul className="space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center space-x-3">
-                      <Check className="h-5 w-5 flex-shrink-0 text-green-500" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-                  {!hasActiveSubscription && (
-                    <PricingButton
-                      planId={plan.id}
-                      paddlePriceId={plan.paddlePriceId}
-                      buttonText={plan.buttonText}
-                      isDisabled={plan.disable}
-                      userEmail={session.user.email || ""}
-                    />
-                  )}
+                <CardContent className="flex-1 p-6">
+                  <ul className="space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-center space-x-3">
+                        <Check className="h-5 w-5 flex-shrink-0 text-green-500" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                {!hasActiveSubscription && (
+                  <PricingButton
+                    planId={plan.id}
+                    paddlePriceId={plan.paddlePriceId}
+                    buttonText={plan.buttonText}
+                    isDisabled={plan.disable}
+                    userEmail={session.user.email || ""}
+                  />
+                )}
               </Card>
             ))}
           </div>
@@ -135,7 +139,11 @@ export async function PricingSection(): Promise<JSX.Element> {
 
 function NonLoggedInPricingSection(): JSX.Element {
   return (
-    <Section id="pricing-section" aria-label="pricing section">
+    <Section
+      id="pricing-section"
+      aria-label="pricing section"
+      className="sm:mx-auto"
+    >
       <div className="w-full md:px-6">
         <div className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-urbanist text-4xl font-extrabold tracking-tight sm:text-5xl">
@@ -144,11 +152,11 @@ function NonLoggedInPricingSection(): JSX.Element {
             </Balancer>
           </h2>
           <h3 className="max-w-2xl text-muted-foreground sm:text-xl sm:leading-8">
-            <Balancer>Simple Pricing for Everyone.</Balancer>
+            <Balancer>Simple pricing for everyone. Cancel Anytime.</Balancer>
           </h3>
         </div>
 
-        <div className="flex justify-center mt-4">
+        <div className="mt-4 flex justify-center">
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             {pricingPlans.map((plan) => (
               <Card
@@ -159,11 +167,11 @@ function NonLoggedInPricingSection(): JSX.Element {
                 )}
               >
                 <CardHeader className="space-y-2 bg-secondary/90 dark:bg-secondary/50">
-                  {plan.id === "premium" && (
+                  {/* {plan.id === "premium" && (
                     <p className="inline-flex rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary-foreground">
                       Recommended
                     </p>
-                  )}
+                  )} */}
                   <CardTitle className="text-2xl font-bold">
                     {plan.name}
                   </CardTitle>
@@ -175,6 +183,13 @@ function NonLoggedInPricingSection(): JSX.Element {
                     </span>
                   </div>
                 </CardHeader>
+                <div className="mx-6 my-4 flex items-center rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground sm:max-w-sm">
+                  <Info className="mr-2 h-5 w-5 flex-shrink-0" />
+                  <p>
+                    You need to use your own Twilio account provisioned phone
+                    numbers to connect our agents.
+                  </p>
+                </div>
                 <CardContent className="flex-1 p-6">
                   <ul className="space-y-3">
                     {plan.features.map((feature) => (
@@ -205,7 +220,7 @@ function NonLoggedInPricingSection(): JSX.Element {
                           key={limitation}
                           className="flex items-center space-x-3"
                         >
-                          <Cross className="h-4 w-4 flex-shrink-0 text-red-500" />
+                          <X className="h-4 w-4 flex-shrink-0 text-red-500" />
                           <span>{limitation}</span>
                         </li>
                       ))}

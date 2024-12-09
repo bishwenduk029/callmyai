@@ -76,7 +76,7 @@ export default async function DataSourcesPage() {
           Data Sources
         </Link>
       </nav>
-      <DataSources userEmail={user.data.email} userId={user.data.id} />
+      <DataSources userEmail={user.data.email} userId={user.data.id} allowedFiles={subscription.allowedFiles} allowedPagesToScrape={subscription.allowedApps} />
     </>
   )
 }

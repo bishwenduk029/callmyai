@@ -3,14 +3,14 @@
 import * as React from "react"
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons"
 
+import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 
 import { Button, type ButtonProps } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
 
 const CopyButton = React.forwardRef<
   React.ElementRef<typeof Button>,
-  ButtonProps & { value: string, display: string }
+  ButtonProps & { value: string; display?: string }
 >(({ value, display, className, ...props }, ref) => {
   const [isCopied, setIsCopied] = React.useState(false)
   const { toast } = useToast()
@@ -21,7 +21,8 @@ const CopyButton = React.forwardRef<
     void window.navigator.clipboard.writeText(value)
     toast({
       title: "Link copied!",
-      description: `${display}'s link has been copied to your clipboard.`,
+      description:
+        display && `${display}'s link has been copied to your clipboard.`,
     })
     setTimeout(() => setIsCopied(false), 2000)
   }

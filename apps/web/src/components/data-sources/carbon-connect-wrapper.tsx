@@ -1,26 +1,27 @@
 "use client"
 
-import { getCarbonAccessToken, fetchDataSources } from "@/actions/data-sources"
+import { fetchDataSources, getCarbonAccessToken } from "@/actions/data-sources"
+import { all } from "axios"
 import {
-  AutoSyncedSourceTypes,
   CarbonConnect,
   EmbeddingGenerators,
   IntegrationName,
 } from "carbon-connect"
-import { Carbon } from "carbon-typescript-sdk"
-
-import { integrations } from "../../db/schema/index"
 
 interface CarbonConnectWrapperProps {
   userEmail: string
   isOpen: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  allowedFiles: number
+  allowedPagesToScrape: number
 }
 
 export function CarbonConnectWrapper({
   userEmail,
   isOpen,
   setOpen,
+  allowedFiles,
+  allowedPagesToScrape,
 }: CarbonConnectWrapperProps) {
   const tokenFetcher = async (): Promise<{ access_token: string }> => {
     try {
@@ -83,8 +84,7 @@ export function CarbonConnectWrapper({
     }
   }
 
-  const handleSuccess = (data: any) => {
-  }
+  const handleSuccess = (data: any) => {}
 
   const handleError = (error: any) => {
     console.log("Data on Error: ", error)
@@ -98,16 +98,12 @@ export function CarbonConnectWrapper({
       brandIcon="/images/headset.png"
       embeddingModel={EmbeddingGenerators.OPENAI}
       tokenFetcher={tokenFetcher}
-      tags={{
-        tag1: "tag1_value",
-        tag2: "tag2_value",
-        tag3: "tag3_value",
-      }}
-      maxFileSize={10000000}
+      maxFileSize={5000000} // Set max file size to 5MB
       enabledIntegrations={[
         {
           id: IntegrationName.LOCAL_FILES,
-          maxFileSize: 20000000,
+          maxFileSize: 5000000, // Set max file size to 5MB
+          maxFilesCount: allowedFiles,
           allowedFileTypes: [
             {
               extension: "csv",
@@ -125,12 +121,20 @@ export function CarbonConnectWrapper({
         },
         {
           id: IntegrationName.WEB_SCRAPER,
+          recursionDepth: allowedPagesToScrape,
+          maxPagesToScrape: allowedPagesToScrape,
         },
         {
           id: IntegrationName.GOOGLE_DRIVE,
         },
         {
           id: IntegrationName.INTERCOM,
+        },
+        {
+          id: IntegrationName.FRESHDESK,
+        },
+        {
+          id: IntegrationName.SERVICENOW,
         },
       ]}
       onSuccess={handleSuccess}

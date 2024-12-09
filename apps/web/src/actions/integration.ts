@@ -21,6 +21,7 @@ interface ExternalApp {
   categories: string
   enabled: boolean
   no_auth: boolean
+  auth_schemes: string
 }
 
 interface ExternalAppsResponse {

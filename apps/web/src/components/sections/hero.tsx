@@ -64,7 +64,7 @@ export default function Hero() {
               <ArrowRight className="h-3 w-3" />
             </a>
           </Badge> */}
-          <h1 className="font-heading inline-block animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight">
+          <h1 className="font-heading inline-block animate-appear bg-gradient-to-b from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight">
             <span className="font-heading">
               Craft AI Voice Experiences{" "}
               {/* <span className="underline decoration-primary">in minutes</span> */}
