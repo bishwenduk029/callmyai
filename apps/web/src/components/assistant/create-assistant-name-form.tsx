@@ -103,6 +103,7 @@ export function CreateAssistantNameForm({
         duration: 300, // Default duration in seconds
         config: {
           header: values.name,
+          name: values.name,
           description: values.description,
           gender: values.gender,
           ethnicity: values.ethnicity,
@@ -110,7 +111,7 @@ export function CreateAssistantNameForm({
           tools: [],
           llm: {
             model: {
-              name: "gpt-4-turbo",
+              name: "gpt-4o-mini",
               provider: "openai",
             },
             messages: [
@@ -149,6 +150,7 @@ export function CreateAssistantNameForm({
         name: values.name,
         config: {
           header: values.name,
+          name: values.name,
           description: values.description,
           gender: values.gender,
           ethnicity: values.ethnicity,

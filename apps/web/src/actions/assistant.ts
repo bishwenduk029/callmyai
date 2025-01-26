@@ -94,6 +94,7 @@ export const initiateTrialSessionforAssistant = actionClient
 const rtviConfigSchema = z
   .object({
     header: z.string().optional(),
+    name: z.string().optional(),
     description: z.string().optional(),
     gender: z.string().optional(),
     ethnicity: z.string().optional(),

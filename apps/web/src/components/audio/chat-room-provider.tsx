@@ -36,6 +36,7 @@ export const DailyChatRoomProvider = ({
 
   useEffect(() => {
     const initializeVoiceClient = async () => {
+      console.log(configuration)
       try {
         const client = new DailyVoiceClient({
           transport: dailyTransport,

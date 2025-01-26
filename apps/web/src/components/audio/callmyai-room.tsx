@@ -154,7 +154,7 @@ export const CallMyAIRoom = ({
 
   return (
     <div className="absolute inset-0 flex h-full w-full flex-col items-center justify-center bg-gradient-to-r from-[#fbed96] to-[#abecd6]">
-      <BackgroundGradient className="h-full w-full rounded-[22px] bg-white p-1 dark:bg-zinc-900">
+      <BackgroundGradient className="h-full rounded-[22px] bg-white p-1 dark:bg-zinc-900">
         <Card className="h-full border-none py-4 shadow-xl">
           <CardContent className="flex h-full flex-col items-center justify-between">
             {chatSession.avatar ? (
